@@ -10,20 +10,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9734a54-7afe-48e7-9ede-22da39e3ae0a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/META-INF/context.xml" afterDir="false" />
+    <list default="true" id="f9734a54-7afe-48e7-9ede-22da39e3ae0a" name="Changes" comment="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto">
       <change afterPath="$PROJECT_DIR$/src/main/webapp/logIn.jsp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/webapp/static/images/chemo_logo_and_name-horizontal-one-color-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/form.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/page.css" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/header.html" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/userHeader.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Chemo_Web_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Chemo_Web_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/form.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/styles/index.css" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,8 +215,16 @@
       <workItem from="1673006995660" duration="313000" />
       <workItem from="1673103053741" duration="543000" />
       <workItem from="1673104168945" duration="897000" />
-      <workItem from="1673105478133" duration="6931000" />
+      <workItem from="1673105478133" duration="7405000" />
     </task>
+    <task id="LOCAL-00001" summary="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto">
+      <created>1673112669167</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1673112669167</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -241,6 +244,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Modifiche iniziali per settare la repo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modifiche iniziali per settare la repo" />
+    <MESSAGE value="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto" />
   </component>
 </project>
