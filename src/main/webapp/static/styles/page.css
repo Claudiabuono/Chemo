@@ -26,16 +26,10 @@ body {
     background: var(--main-color);
 }
 
-#user-header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#user-header img {
-    margin: 20px 20px 0px 20px;
+.logo {
+    margin: 10px;
     padding: 10px;
-    width: 300px;
+    width: 100px;
     height: auto;
 }
 

@@ -1,0 +1,65 @@
+#welcome-header {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: var(--neutral-color);
+}
+
+#welcome-header .logo {
+    margin: 0px;
+    margin-top: 5px;
+    padding: 5px;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#welcome-header .logo img {
+    margin: 0px;
+    height: 64px;
+    width: auto;
+}
+
+#welcome-header nav {
+    margin: 0px 20px 0px auto;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#welcome-header nav a {
+    padding: 16px;
+    border: none;
+    border-bottom: 5px solid var(--transparent);
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    vert-align: middle;
+    color: var(--accent-color);
+}
+#welcome-header nav a:hover {
+    color: var(--accent-color-light);
+    border-bottom: 5px solid var(--accent-color-light);
+}
+
+
+
+#user-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#user-header .logo {
+    margin: 20px 20px 0px 20px;
+    width: auto;
+}
+#user-header .logo img {
+    margin: 0;
+    width: 300px;
+}

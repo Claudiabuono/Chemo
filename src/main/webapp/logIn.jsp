@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo</title>
-    <link rel="stylesheet" href="static/styles/page.css">
-    <link rel="stylesheet" href="./static/styles/form.css">
 </head>
 <body>
 <header>

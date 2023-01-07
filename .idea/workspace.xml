@@ -10,15 +10,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9734a54-7afe-48e7-9ede-22da39e3ae0a" name="Changes" comment="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/logIn.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/images/chemo_logo_and_name-horizontal-one-color-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/form.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/page.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/header.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/userHeader.html" afterDir="false" />
+    <list default="true" id="f9734a54-7afe-48e7-9ede-22da39e3ae0a" name="Changes" comment="Aggiunta pagina del log in e file associati&#10;Implementata la pagina di log in in logIn.jsp.&#10;Aggiunto l'header delle pagine utente in userHeader.html.&#10;Rinominato index.css in page.css e aggiunto parte dello stile di base delle pagine.&#10;Aggiunto form.css per lo stile dei form.&#10;Aggiunta l'immagine del logo Chemo per l'header utente">
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/images/chemo_logo_and_name-horizontal-one-color-blue.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/header.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/styles/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/logIn.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/logIn.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/styles/page.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/static/styles/page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/templates/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/static/templates/userHeader.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/static/templates/userHeader.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +30,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="CSS File" />
         <option value="Jsp File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -82,7 +83,7 @@
       <command value="mvn compile" />
     </option>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 9.0.44">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 9.0.70">
     <configuration name="Prova" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="Chemo-C13" />
@@ -103,7 +104,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Tomcat 9.0.44" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.44" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
+    <configuration name="Tomcat 9.0.70" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.70" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17" nameIsGenerated="true">
       <option name="BROWSER_ID" value="a7bb68e0-33c0-4d6f-a81a-aac1fdb870c8" />
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
@@ -199,7 +200,7 @@
     </configuration>
     <list>
       <item itemvalue="Application.Prova" />
-      <item itemvalue="Tomcat Server.Tomcat 9.0.44" />
+      <item itemvalue="Tomcat Server.Tomcat 9.0.70" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -215,7 +216,7 @@
       <workItem from="1673006995660" duration="313000" />
       <workItem from="1673103053741" duration="543000" />
       <workItem from="1673104168945" duration="897000" />
-      <workItem from="1673105478133" duration="7405000" />
+      <workItem from="1673105478133" duration="22119000" />
     </task>
     <task id="LOCAL-00001" summary="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto">
       <created>1673112669167</created>
@@ -224,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1673112669167</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Aggiunta pagina del log in e file associati&#10;Implementata la pagina di log in in logIn.jsp.&#10;Aggiunto l'header delle pagine utente in userHeader.html.&#10;Rinominato index.css in page.css e aggiunto parte dello stile di base delle pagine.&#10;Aggiunto form.css per lo stile dei form.&#10;Aggiunta l'immagine del logo Chemo per l'header utente">
+      <created>1673113081641</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1673113081641</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,6 +253,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Modifiche iniziali per settare la repo" />
     <MESSAGE value="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modifiche delle impostazioni del progetto&#10;Modificati alcuni parametri delle impostazioni del progetto" />
+    <MESSAGE value="Aggiunta pagina del log in e file associati&#10;Implementata la pagina di log in in logIn.jsp.&#10;Aggiunto l'header delle pagine utente in userHeader.html.&#10;Rinominato index.css in page.css e aggiunto parte dello stile di base delle pagine.&#10;Aggiunto form.css per lo stile dei form.&#10;Aggiunta l'immagine del logo Chemo per l'header utente" />
+    <option name="LAST_COMMIT_MESSAGE" value="Aggiunta pagina del log in e file associati&#10;Implementata la pagina di log in in logIn.jsp.&#10;Aggiunto l'header delle pagine utente in userHeader.html.&#10;Rinominato index.css in page.css e aggiunto parte dello stile di base delle pagine.&#10;Aggiunto form.css per lo stile dei form.&#10;Aggiunta l'immagine del logo Chemo per l'header utente" />
   </component>
 </project>
