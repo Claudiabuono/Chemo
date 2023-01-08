@@ -1,0 +1,33 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.form label {
+    margin: 10px 0px 5px 0px;
+    font-weight: bold;
+    color: var(--medium-text);
+}
+
+.form .input-field {
+    margin: 5px 0px 15px 0px;
+    padding: 0px;
+    width: 100%;
+    border-radius: 0px;
+    border: 0;
+    border-bottom: 2px solid var(--medium-text);
+}
+.form .input-field:focus {
+    outline: none;
+    caret-color: var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+}
+
+.form .submit-button {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    width: 100%;
+    border-radius: 10px;
+    font-size: large;
+}

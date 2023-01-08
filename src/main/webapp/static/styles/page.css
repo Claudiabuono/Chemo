@@ -1,0 +1,82 @@
+/*** Base Colours, Style and Typography used in the website ***/
+/*Colours used in the website*/
+:root {
+    /*Basic colours used in the website*/
+    --main-color: #003366;
+    --main-color-light: #073765;    /*Used for hover*/
+    --main-color-dark: #00284d;     /*Used for inactive elements*/
+    --accent-color: #0059B3;
+    --accent-color-light: #0e62b6;  /*Used for hover*/
+    --accent-color-dark: #014993;   /*Used for inactive elements*/
+    --neutral-color: #FFFFFF;
+    /*Colours for text*/
+    --light-text: #F5F5F0;
+    --medium-text: #5A6772;
+    --dark-text: #1C2024;
+    /*Colours fot shadows and transparent elements*/
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --transparent: rgba(0, 0, 0, 0);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Titillium Web", sans-serif;
+    color: var(--dark-text);
+    background: var(--main-color);
+}
+
+.logo {
+    margin: 10px;
+    padding: 10px;
+    width: 100px;
+    height: auto;
+}
+
+#page-content {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--main-color);
+}
+
+h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h2, h3, h4, h5, h6 {
+
+}
+
+/*** UI elements used in different pages ***/
+.box {
+    margin: 20px;
+    padding: 20px;
+    height: auto;
+    width: 35%;
+    border-radius: 10px;
+    color: var(--dark-text);
+    background: var(--neutral-color);
+    box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
+.title {
+    margin-top: 0px;
+}
+
+.button-primary-m {
+    margin: 0;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: medium;
+    font-weight: bold;
+    color: var(--light-text);
+    background:  var(--accent-color);
+}
+.button-primary-m:hover {
+    background:  var(--accent-color-light);
+}

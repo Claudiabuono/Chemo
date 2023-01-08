@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Chemo:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Chemo</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="Chemo/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Chemo" />
+          <element id="module-output" name="progetto-is-gps" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="progetto-is-gps/web/Web" />
+    </root>
+  </artifact>
+</component>
