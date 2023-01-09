@@ -9,6 +9,7 @@
     height: 130px;
     width: 130px;
     border-radius: 10px;
+    border: 1px solid var(--neutral-color);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,9 +19,16 @@
 }
 .grid-item:hover {
     color: var(--accent-color-light);
+    border: 1px solid var(--accent-color-light);
+    box-shadow: 0 4px 4px 0 var(--accent-shadow-color), 0 4px 20px 0 var(--accent-shadow-color);
 }
 .grid-item:visited {
     color: var(--accent-color);
+}
+.grid-item:visited:hover {
+    color: var(--accent-color-light);
+    border: 1px solid var(--accent-color-light);
+    box-shadow: 0 4px 4px 0 var(--accent-shadow-color), 0 4px 20px 0 var(--accent-shadow-color);
 }
 .grid-item i {
 
@@ -34,3 +42,5 @@
     grid-column-end: 4;
     width: auto;
 }
+
+

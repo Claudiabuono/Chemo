@@ -19,8 +19,7 @@
     <div id="user-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Benvenuta, Lucia</h1>
-            <a id="user-details-link" class="icon" href="./userDetails.jsp"><i class="fa-regular fa-user fa-2x"></i></a>
-            <a id="user-logout-link" class="icon" href="#"><i class="fa-solid fa-arrow-right-from-bracket fa-2x"></i></a>
+            <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
         <div id="dashboard-links" class="grid-container">
             <a id="add-patient-link" class="grid-item item1" href="./addPatient.jsp">
