@@ -21,7 +21,7 @@
             <h1 class="title">Benvenuta, Lucia</h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
-        <div id="dashboard-links" class="grid-container">
+        <div id="dashboard-links-medic" class="grid-container">
             <a id="add-patient-link" class="grid-item item1" href="./addPatient.jsp">
                 <i class="fa-solid fa-plus fa-6x"></i>
                 <label>Aggiunta paziente</label>
@@ -39,6 +39,21 @@
                 <label>Nuove sedute</label>
             </a>
             <a id="planner-link" class="grid-item item5" href="./planner.jsp">
+                <i class="fa-regular fa-calendar fa-6x"></i>
+                <label>Calendario sedute</label>
+            </a>
+        </div>
+
+        <div id="dashboard-links-storage" class="grid-container">
+            <a id="add-medicine-link" class="grid-item item1" href="./addMedicines.jsp">
+                <i class="fa-solid fa-plus fa-6x"></i>
+                <label>Nuovo medicinale</label>
+            </a>
+            <a id="medicines-list-link" class="grid-item item2" href="./medicinesList.jsp">
+                <i class="fa-solid fa-pills fa-6x"></i>
+                <label>Medicinali</label>
+            </a>
+            <a id="planner-link" class="grid-item item3" href="./planner.jsp">
                 <i class="fa-regular fa-calendar fa-6x"></i>
                 <label>Calendario sedute</label>
             </a>

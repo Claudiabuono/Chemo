@@ -37,10 +37,24 @@
     margin-top: auto;
     font-weight: bold;
 }
-.item5 {
+#dashboard-links-medic .item5 {
     grid-column-start: 2;
     grid-column-end: 4;
     width: auto;
 }
 
+/* ELIMINARE DOPO L'IMPLEMPLEMENTAZIONE FINALE DI DASHBOARD.JSP */
+#dashboard-links-storage {
+    display: none;
+}
 
+#dashboard-links-storage .item2 {
+    grid-column-start: 2;
+    grid-column-end: 4;
+    width: auto;
+}
+#dashboard-links-storage .item3 {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    width: auto;
+}
