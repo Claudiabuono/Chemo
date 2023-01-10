@@ -1,4 +1,4 @@
-package storage;
+package connector;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientSettings;
