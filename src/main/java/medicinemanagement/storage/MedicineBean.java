@@ -9,7 +9,7 @@ public class MedicineBean {
     private String nome;
     private String ingredienti;
     private int quantita;
-    private ArrayList<StockBean> lotti;
+    private ArrayList<Stock> lotti;
 
 
     //Costruttori
@@ -17,7 +17,7 @@ public class MedicineBean {
         lotti = new ArrayList<>();
     }
 
-    public MedicineBean(String id, String nome, String ingredienti, int quantita, ArrayList<StockBean> lotti) {
+    public MedicineBean(String id, String nome, String ingredienti, int quantita, ArrayList<Stock> lotti) {
         this.id = id;
         this.nome = nome;
         this.ingredienti = ingredienti;
@@ -42,7 +42,7 @@ public class MedicineBean {
         return quantita;
     }
 
-    public ArrayList<StockBean> getLotti() {
+    public ArrayList<Stock> getLotti() {
         return lotti;
     }
 
@@ -63,7 +63,7 @@ public class MedicineBean {
         this.quantita = quantita;
     }
 
-    public void setLotti(ArrayList<StockBean> lotti) {
+    public void setLotti(ArrayList<Stock> lotti) {
         this.lotti = lotti;
     }
 
@@ -80,7 +80,7 @@ public class MedicineBean {
     }
 
     //Altri metodi
-    public void addLotto(StockBean stock) {
+    public void addLotto(Stock stock) {
         lotti.add(stock);
     }
 }

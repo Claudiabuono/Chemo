@@ -2,7 +2,7 @@ package medicinemanagement.storage;
 
 import java.util.Date;
 
-public class StockBean {
+class Stock {
 
     //Parametri
     private boolean stato;
@@ -11,10 +11,10 @@ public class StockBean {
     private String idLotto;
 
     //Costruttori
-    public StockBean() {
+    Stock() {
     }
 
-    public StockBean(boolean stato, Date scadenza, int capacita, String idLotto) {
+    Stock(boolean stato, Date scadenza, int capacita, String idLotto) {
         this.stato = stato;
         this.scadenza = scadenza;
         this.capacita = capacita;
@@ -23,37 +23,37 @@ public class StockBean {
 
     //Getters
 
-    public boolean getStato() {
+    boolean getStato() {
         return stato;
     }
 
-    public Date getScadenza() {
+    Date getScadenza() {
         return scadenza;
     }
 
-    public int getCapacita() {
+    int getCapacita() {
         return capacita;
     }
 
-    public String getIdLotto() {
+    String getIdLotto() {
         return idLotto;
     }
 
 
     //Setters
-    public void setStato(boolean stato) {
+    void setStato(boolean stato) {
         this.stato = stato;
     }
 
-    public void setScadenza(Date scadenza) {
+    void setScadenza(Date scadenza) {
         this.scadenza = scadenza;
     }
 
-    public void setCapacita(int capacita) {
+    void setCapacita(int capacita) {
         this.capacita = capacita;
     }
 
-    public void setIdLotto(String idLotto) {
+    void setIdLotto(String idLotto) {
         this.idLotto = idLotto;
     }
 
