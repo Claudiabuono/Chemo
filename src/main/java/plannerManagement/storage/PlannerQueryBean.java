@@ -65,12 +65,19 @@ public class PlannerQueryBean {
     }
 
     //Ricerca documento nella collection per una data coppia (chiave, valore)
-    public Iterator<Document> findDocument(String chiave, String valore){
+    public ArrayList<PlannerBean> findDocument(String chiave, String valore){
         MongoCollection<Document> collection = getCollection();
         FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
-        Iterator<Document> doc = iterDoc.iterator();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PlannerBean> planners = new ArrayList<>();
 
-        return doc;
+        while(it.hasNext()){
+            Document document = (Document) it.next();
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
+            PlannerBean planner = new PlannerBean(document.getString("id"), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            planners.add(planner);
+        }
+        return planners;
     }
 
     private MongoCollection<Document> getCollection(){
@@ -91,5 +98,14 @@ public class PlannerQueryBean {
                 .append("appuntamenti", app);
 
         return doc;
+    }
+
+    private ArrayList<AppointmentBean> convertToArray(List<AppointmentBean> list){
+        ArrayList<AppointmentBean> appointments = new ArrayList<>();
+        for(AppointmentBean app : list){
+            appointments.add(app);
+        }
+
+        return appointments;
     }
 }

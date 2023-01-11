@@ -51,12 +51,18 @@ public class UserQueryBean {
     }
 
     //Ricerca documento nella collection per una data coppia (chiave, valore)
-    public Iterator<Document> findDocument(String chiave, String valore){
+    public ArrayList<UserBean> findDocument(String chiave, String valore){
         MongoCollection<Document> collection = getCollection();
         FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
-        Iterator<Document> doc = iterDoc.iterator();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<UserBean> utenti = new ArrayList<>();
 
-        return doc;
+        while(it.hasNext()){
+            Document document = (Document) it.next();
+            UserBean user = new UserBean(document.getString("id"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"), document.getString("birthplace"), document.getString("username"), document.getString("password"), document.getString("specialization"), document.getInteger("type"));
+            utenti.add(user);
+        }
+        return utenti;
     }
 
     //Effettuo la connessione con il db, recupero la collection dal db e la restituisco
