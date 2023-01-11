@@ -1,11 +1,11 @@
 .grid-container {
     display: grid;
     grid-template-columns: auto auto auto;
-    gap: 10px;
+    gap: 50px;
 }
 .grid-item {
-    margin: 10px;
-    padding: 10px;
+    margin: 0;
+    padding: 9.2px;
     height: 130px;
     width: 130px;
     border-radius: 10px;

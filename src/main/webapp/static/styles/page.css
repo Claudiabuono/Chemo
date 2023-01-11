@@ -80,14 +80,18 @@ a:visited:hover {
 
 /*** UI elements used in different pages ***/
 .box {
-    margin: 20px;
+    margin: 20px auto;
     padding: 20px;
     height: auto;
-    width: 35%;
+    width: 550px;
     border-radius: 10px;
     color: var(--dark-text);
     background: var(--neutral-color);
     box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
+
+#box-name-row {
+    margin-bottom: 10px;
 }
 
 #box-name-row .title {
