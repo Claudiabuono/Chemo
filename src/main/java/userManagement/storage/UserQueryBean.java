@@ -55,14 +55,14 @@ public class UserQueryBean {
         MongoCollection<Document> collection = getCollection();
         FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
         Iterator<Document> it = iterDoc.iterator();
-        ArrayList<UserBean> utenti = new ArrayList<>();
+        ArrayList<UserBean> users = new ArrayList<>();
 
         while(it.hasNext()){
             Document document = (Document) it.next();
             UserBean user = new UserBean(document.getString("id"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"), document.getString("birthplace"), document.getString("username"), document.getString("password"), document.getString("specialization"), document.getInteger("type"));
-            utenti.add(user);
+            users.add(user);
         }
-        return utenti;
+        return users;
     }
 
     //Effettuo la connessione con il db, recupero la collection dal db e la restituisco

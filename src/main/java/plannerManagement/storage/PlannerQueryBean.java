@@ -69,15 +69,15 @@ public class PlannerQueryBean {
         MongoCollection<Document> collection = getCollection();
         FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
         Iterator<Document> it = iterDoc.iterator();
-        ArrayList<PlannerBean> planners = new ArrayList<>();
+        ArrayList<PlannerBean> p = new ArrayList<>();
 
         while(it.hasNext()){
             Document document = (Document) it.next();
             ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
             PlannerBean planner = new PlannerBean(document.getString("id"), document.getDate("startDate"), document.getDate("endDate"), appointments);
-            planners.add(planner);
+            p.add(planner);
         }
-        return planners;
+        return p;
     }
 
     private MongoCollection<Document> getCollection(){

@@ -9,10 +9,9 @@ import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Filter;
+import java.util.List;
 
 public class MedicineQueryBean {
 
@@ -77,17 +76,19 @@ public class MedicineQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-    public Iterator<Document> findDocument(String key, String value) {
-        //Recupera la Collection
+    public ArrayList<MedicineBean> findDocument(String chiave, String valore){
         MongoCollection<Document> collection = getCollection();
+        FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
 
-        //Crea il filtro
-        Bson filter = Filters.eq(key, value);
-
-        //Cerca il documento
-        FindIterable<Document> iterDoc = collection.find(filter);
-
-        return iterDoc.iterator();
+        while(it.hasNext()){
+            Document document = (Document) it.next();
+            ArrayList<Stock> stocks = convertToArray(document.getList("stocks", Stock.class));
+            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("nome"), document.getString("ingredienti"),document.getInteger("quantita"), stocks);
+            medicines.add(medicine);
+        }
+        return medicines;
     }
 
 
@@ -106,5 +107,14 @@ public class MedicineQueryBean {
                 .append("ingredienti", medicine.getIngredienti())
                 .append("quantita", medicine.getQuantita())
                 .append("lotto", medicine.getLotti());
+    }
+
+    private ArrayList<Stock> convertToArray(List<Stock> list){
+        ArrayList<Stock> stocks = new ArrayList<>();
+        for(Stock st : list){
+            stocks.add(st);
+        }
+
+        return stocks;
     }
 }
