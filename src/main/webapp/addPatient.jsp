@@ -57,7 +57,7 @@
       <div class="input-fields-row">
         <div class="field left">
           <label for="phone-number">Numero di telefono</label>
-          <input required id="phone-number" class="input-field" type="number" name="phoneNumber">
+          <input required id="phone-number" class="input-field" type="tel" name="phoneNumber">
         </div>
       </div>
       <div class="title-section">

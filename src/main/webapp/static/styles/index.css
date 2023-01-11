@@ -73,8 +73,10 @@
     color: var(--light-text);
 }
 #home-info .left {
-    margin: 0 auto 0 0;
+    margin-right: auto;
+    margin-left: 5%;
 }
 #home-info .right {
-    margin: 0 0 0 auto;
+    margin-left: auto;
+    margin-right: 5%;
 }
