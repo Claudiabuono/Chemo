@@ -9,6 +9,9 @@
     --accent-color-light: #0e62b6;  /*Used for hover*/
     --accent-color-dark: #014993;   /*Used for inactive elements*/
     --neutral-color: #FFFFFF;
+    --secondary-color: #5C6F82;
+    --secondary-color-light: #686f7c;
+    --secondary-color-dark: #38444F;
     /*Colours for text*/
     --light-text: #F5F5F0;
     --medium-text: #5A6772;
@@ -17,6 +20,10 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --accent-shadow-color: rgba(0, 89, 179, 0.2);
     --transparent: rgba(0, 0, 0, 0);
+    /*Colours fot status*/
+    --avaliable: green;
+    --unavaliable: red;
+    --warning: yellow;
 }
 
 body {
@@ -78,16 +85,31 @@ a:visited:hover {
     flex-direction: column;
 }
 
+.status-avaliable {
+    color: var(--avaliable);
+}
+.status-unavaliable {
+    color: var(--unavaliable);
+}
+
+.hidden {
+    display: none;
+}
+
 /*** UI elements used in different pages ***/
 .box {
     margin: 20px auto;
     padding: 20px;
     height: auto;
-    width: 550px;
+    width: auto;
     border-radius: 10px;
     color: var(--dark-text);
     background: var(--neutral-color);
     box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
+
+#page-content > .box {
+    width: 550px;
 }
 
 #box-name-row {
@@ -144,4 +166,65 @@ a:visited:hover {
 }
 .button-primary-m:hover {
     background:  var(--accent-color-light);
+}
+
+.button-secondary-m {
+    margin: 0;
+    padding: 13px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: medium;
+    font-weight: bold;
+    color: var(--accent-color);
+    background: var(--neutral-color);
+    border: 2px solid var(--accent-color);
+}
+.button-secondary-m:hover {
+    color: var(--light-text);
+    background: var(--accent-color);
+}
+.button-secondary-s {
+    margin: 0;
+    padding: 13px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: small;
+    font-weight: bold;
+    color: var(--accent-color);
+    background: var(--neutral-color);
+    border: 2px solid var(--accent-color);
+}
+.button-secondary-s:hover {
+    color: var(--light-text);
+    background: var(--accent-color);
+}
+
+.button-tertiary-m {
+    margin: 0;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: medium;
+    font-weight: bold;
+    color: var(--light-text);
+    background:  var(--secondary-color);
+}
+.button-tertiary-m:hover {
+    background:  var(--secondary-color-light);
+}
+
+.button-tertiary-s {
+    margin: 0;
+    padding: 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: small;
+    font-weight: bold;
+    color: var(--light-text);
+    background:  var(--secondary-color);
+}
+.button-tertiary-s:hover {
+    background:  var(--secondary-color-light);
 }
