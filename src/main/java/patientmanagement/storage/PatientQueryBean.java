@@ -1,4 +1,4 @@
-package patientmanagement;
+package patientmanagement.storage;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -9,8 +9,10 @@ import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class PatientQueryBean {
 
@@ -75,7 +77,7 @@ public class PatientQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-    public Iterator<Document> findDocument(String key, String value) {
+    public ArrayList<PatientBean> findDocument(String key, String value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -85,7 +87,19 @@ public class PatientQueryBean {
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find(filter);
 
-        return iterDoc.iterator();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PatientBean> patients = new ArrayList<>();
+
+        while(it.hasNext()) {
+            Document document = (Document) it.next();
+            ArrayList<Therapy> therapies = convertToArray(document.getList("therapy", Therapy.class));
+            PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), therapies);
+
+            patients.add(patient);
+        }
+
+        return patients;
     }
 
 
@@ -107,5 +121,11 @@ public class PatientQueryBean {
                 .append("numTelefono", patient.getNumTelefono())
                 .append("stato", patient.getStato())
                 .append("patologia", patient.getPatologia());
+    }
+
+    private ArrayList<Therapy> convertToArray(List<Therapy> list) {
+
+        return new ArrayList<>(list);
+
     }
 }
