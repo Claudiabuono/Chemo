@@ -1,4 +1,4 @@
-package patientmanagement;
+package patientmanagement.storage;
 
 class Medicines {
 
