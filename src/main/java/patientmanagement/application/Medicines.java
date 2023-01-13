@@ -1,4 +1,4 @@
-package patientmanagement.storage;
+package patientmanagement.application;
 
 class Medicines {
 
@@ -8,31 +8,31 @@ class Medicines {
 
     //Costruttori
 
-    Medicines() {
+    public Medicines() {
     }
 
-    Medicines(String idMedicinale, int dose) {
+    public Medicines(String idMedicinale, int dose) {
         this.idMedicinale = idMedicinale;
         this.dose = dose;
     }
 
     //Getters
 
-    String getIdMedicinale() {
+    public String getIdMedicinale() {
         return idMedicinale;
     }
 
-    int getDose() {
+    public int getDose() {
         return dose;
     }
 
     //Setters
 
-     void setIdMedicinale(String idMedicinale) {
+    public void setIdMedicinale(String idMedicinale) {
         this.idMedicinale = idMedicinale;
     }
 
-    void setDose(int dose) {
+    public void setDose(int dose) {
         this.dose = dose;
     }
 
