@@ -3,8 +3,8 @@ package connector;
 import medicinemanagement.storage.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
 import org.bson.Document;
-import patientmanagement.PatientBean;
-import patientmanagement.PatientQueryBean;
+import patientmanagement.storage.PatientBean;
+import patientmanagement.storage.PatientQueryBean;
 import plannerManagement.storage.PlannerBean;
 import plannerManagement.storage.PlannerQueryBean;
 import userManagement.storage.UserBean;
@@ -152,6 +152,17 @@ public class Facade {
     };
 
     //modificare il metodo in patientQueryBean in modo che restituisca ArrayList<PatientBean>
-    public Iterator<Document> findPatients(String key, String value){return patientQueryBean.findDocument(key, value);};
+    public ArrayList<PatientBean> findPatients(String key, String value, UserBean user){
+        ArrayList<PatientBean> patients = new ArrayList<>();
+        try{
+            if(isUserAuthorized(user.getUsername(), 1))
+                return patients = patientQueryBean.findDocument(key,value);
+            else
+                throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return patients;
+    };
 
 }
