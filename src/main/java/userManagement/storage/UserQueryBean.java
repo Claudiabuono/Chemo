@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import connector.DatabaseConnector;
+import userManagement.application.UserBean;
 
 import java.util.ArrayList;
 import java.util.Iterator;

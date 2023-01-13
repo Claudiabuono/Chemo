@@ -1,4 +1,6 @@
-package plannerManagement.storage;
+package plannerManagement.application;
+
+import plannerManagement.application.AppointmentBean;
 
 import java.util.ArrayList;
 import java.util.Date;
