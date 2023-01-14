@@ -8,8 +8,9 @@ import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import patientmanagement.application.PatientBean;
+import patientmanagement.application.Therapy;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +95,7 @@ public class PatientQueryBean {
             Document document = (Document) it.next();
             ArrayList<Therapy> therapies = convertToArray(document.getList("therapy", Therapy.class));
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
-                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), therapies);
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapies);
 
             patients.add(patient);
         }
@@ -113,14 +114,16 @@ public class PatientQueryBean {
     }
 
     private Document createDocument(PatientBean patient) {
-        return new Document("codiceFiscale", patient.getCodiceFiscale())
-                .append("nome", patient.getNome())
-                .append("cognome", patient.getCognome())
-                .append("dataNascita", patient.getDataNascita())
-                .append("cittaNascita", patient.getCittaNascita())
-                .append("numTelefono", patient.getNumTelefono())
-                .append("stato", patient.getStato())
-                .append("patologia", patient.getPatologia());
+        return new Document("taxCode", patient.getTaxCode())
+                .append("name", patient.getName())
+                .append("surname", patient.getSurname())
+                .append("birthDate", patient.getBirthDate())
+                .append("city", patient.getCity())
+                .append("phoneNumber", patient.getPhoneNumber())
+                .append("status", patient.getStatus())
+                .append("condition", patient.getCondition())
+                .append("notes", patient.getNotes())
+                .append("therapy", patient.getTherapy());
     }
 
     private ArrayList<Therapy> convertToArray(List<Therapy> list) {
