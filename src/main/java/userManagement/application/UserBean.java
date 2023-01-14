@@ -1,4 +1,4 @@
-package userManagement.storage;
+package userManagement.application;
 
 import java.util.Date;
 

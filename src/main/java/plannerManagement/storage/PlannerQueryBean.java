@@ -7,6 +7,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
+import plannerManagement.application.AppointmentBean;
+import plannerManagement.application.PlannerBean;
 
 import java.util.ArrayList;
 import java.util.Iterator;
