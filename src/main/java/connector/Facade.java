@@ -3,9 +3,9 @@ package connector;
 import medicinemanagement.storage.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
 import medicinemanagement.storage.Stock;
-import patientmanagement.storage.PatientBean;
+import patientmanagement.application.PatientBean;
 import patientmanagement.storage.PatientQueryBean;
-import patientmanagement.storage.Therapy;
+import patientmanagement.application.Therapy;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
 import org.bson.Document;
@@ -157,9 +157,9 @@ public class Facade {
         }
     };
 
-    public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, UserBean user){
+    public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
         try{
-            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, new ArrayList<Therapy>());
+            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<Therapy>());
             if(isUserAuthorized(user.getUsername(), 1))
                 patientQueryBean.insertDocument(patient);
             else
