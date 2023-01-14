@@ -8,6 +8,7 @@ import patientmanagement.storage.PatientQueryBean;
 import patientmanagement.storage.Therapy;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
+import org.bson.Document;
 import plannerManagement.storage.PlannerQueryBean;
 import userManagement.application.UserBean;
 import userManagement.storage.UserQueryBean;
@@ -206,7 +207,9 @@ public class Facade {
         ArrayList<PatientBean> patients = new ArrayList<>();
         try{
             if(isUserAuthorized(user.getUsername(), 1))
+
                 return patients = patientQueryBean.findDocument(key, value);
+
             else
                 throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
         }catch(Exception e){
