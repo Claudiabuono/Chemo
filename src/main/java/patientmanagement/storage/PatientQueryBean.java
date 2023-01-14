@@ -95,7 +95,7 @@ public class PatientQueryBean {
             Document document = (Document) it.next();
             ArrayList<Therapy> therapies = convertToArray(document.getList("therapy", Therapy.class));
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
-                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), therapies);
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapies);
 
             patients.add(patient);
         }
@@ -121,7 +121,9 @@ public class PatientQueryBean {
                 .append("city", patient.getCity())
                 .append("phoneNumber", patient.getPhoneNumber())
                 .append("status", patient.getStatus())
-                .append("condition", patient.getCondition());
+                .append("condition", patient.getCondition())
+                .append("notes", patient.getNotes())
+                .append("therapy", patient.getTherapy());
     }
 
     private ArrayList<Therapy> convertToArray(List<Therapy> list) {

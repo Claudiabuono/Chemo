@@ -13,14 +13,16 @@ public class PatientBean {
     private String phoneNumber;
     private boolean status;
     private String condition;
+    private String notes;
     private ArrayList<Therapy> therapy;
 
     //Costruttori
 
     public PatientBean() {
+        this.therapy = null;
     }
 
-    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, ArrayList<Therapy> therapy) {
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, ArrayList<Therapy> therapy) {
         this.taxCode = taxCode;
         this.name = name;
         this.surname = surname;
@@ -30,6 +32,7 @@ public class PatientBean {
         this.status = status;
         this.condition = condition;
         this.therapy = therapy;
+        this.notes = notes;
     }
 
     //Getters
@@ -70,6 +73,9 @@ public class PatientBean {
         return therapy;
     }
 
+    public String getNotes() {
+        return notes;
+    }
     //Setters
 
     public void setTaxCode(String taxCode) {
@@ -108,6 +114,7 @@ public class PatientBean {
         this.therapy = therapy;
     }
 
+
     //Metodi ereditati da Object
 
     @Override
@@ -121,6 +128,7 @@ public class PatientBean {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", status=" + status +
                 ", condition='" + condition + '\'' +
+                ", notes='" + notes + '\'' +
                 ", therapy=" + therapy +
                 '}';
     }
