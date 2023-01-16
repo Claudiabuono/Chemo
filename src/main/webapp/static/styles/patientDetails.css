@@ -9,7 +9,23 @@
     width: 200px;
 }
 
-#edit-patien-data-button {
+#patient-data-buttons {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#patient-data-buttons #save-patient-button {
+    margin-right: 0px;
     margin-left: 10px;
+}
+#patient-status-button {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#therapy-buttons {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#delete-therapy-button {
+    margin-right: 10px;
 }
 

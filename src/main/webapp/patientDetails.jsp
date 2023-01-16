@@ -10,6 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Pagina paziente</title>
+    <script src="./static/scripts/patientDetails.js"></script>
 </head>
 <body>
 <header>
@@ -24,8 +25,13 @@
         <div id="patient-data-form" class="form">
             <div class="title-section">
                 <h2 class="title">Anagrafica</h2>
-                <input type="button" id="delete-patient-button" class="button-tertiary-m edit-button" value="Elimina paziente">
-                <input type="button" id="edit-patien-data-button" class="button-secondary-s edit-button" value="Modifica">
+                <div id="patient-data-buttons">
+                    <input type="button" id="delete-patient-button" class="button-tertiary-m edit-button" value="Elimina paziente">
+                    <%--
+                    <input type="button" id="save-patient-button" class="button-primary-m edit-button" value="Salva">
+                    <input type="button" id="edit-patient-data-button" class="button-secondary-s edit-button" value="Modifica">
+                    --%>
+                </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
@@ -69,6 +75,9 @@
             <input required id="notes" class="input-field inactive" type="text" name="notes" value="Intolleranza al lattosio">
             <div class="title-section">
                 <h2 class="title">Stato</h2>
+                <div id="patient-status-button">
+                    <input type="button" id="edit-patient-status-button" class="button-secondary-s edit-button" value="Modifica" onclick="editStatusButton('id')">
+                </div>
             </div>
             <div class="input-fields-row">
                 <div id="status-icon" class="status-avaliable">
@@ -79,29 +88,10 @@
                     <option value="nonDisponibile">Non disponibile</option>
                 </select>
             </div>
-            <div id="therapy-section" class="hidden">
-                <div class="title-section">
-                    <h2 class="title">Terapia</h2>
-                </div>
-                <label for="condition">Patologia</label>
-                <input required id="condition" class="input-field inactive" type="text" name="condition" value="Tumore al pancreas">
-                <label for="sessions-number">Numero di sedute</label>
-                <input required id="sessions-number" class="input-field inactive" type="text" name="sessionNumber" value="6">
-                <div id="medicines">
-                    <div id="medicine-item-1" class="input-fields-row">
-                        <div class="field left">
-                            <label for="medicine-name-item-1">Medicinale</label>
-                            <input required id="medicine-name-item-1" class="input-field inactive" type="text" name="medicineName1" value="5-fluorouracile">
-                        </div>
-                        <div class="field right">
-                            <label for="medicine-dose-item-1">Dose</label>
-                            <input required id="medicine-dose-item-1" class="input-field inactive" type="text" name="medicineDose1" value="100 ml">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <input type="button" class="button-primary-m submit-button" value="Aggiungi terapia">
-            <div id="new-therapy-section" class="box hidden">
+            <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+            <%-- Se il paziente non ha una terapia far vedere questa parte --%>
+            <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
+            <div id="new-therapy-form" class="box hidden">
                 <div class="title-section">
                     <h2 class="title">Aggiunta terapia</h2>
                 </div>
@@ -124,8 +114,34 @@
                         </div>
                     </div>
                 </div>
-                <input type="button" class="button-secondary-s edit-button" value="Aggiungi medicinale">
+                <input type="button" id="add-medicine-new" class="button-secondary-s edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
                 <input type="button" class="button-primary-m submit-button" value="Salva terapia">
+            </div>
+            <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+            <%-- Se il paziente ha una terapia far vedere questa parte --%>
+            <div id="therapy-section" class="hidden">
+                <div class="title-section">
+                    <h2 class="title">Terapia</h2>
+                    <div id="therapy-buttons">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
+                    </div>
+                </div>
+                <label for="condition">Patologia</label>
+                <input required id="condition" class="input-field inactive" type="text" name="condition" value="Tumore al pancreas">
+                <label for="sessions-number">Numero di sedute</label>
+                <input required id="sessions-number" class="input-field inactive" type="text" name="sessionNumber" value="6">
+                <div id="saved-medicines">
+                    <div id="medicine-item-1" class="input-fields-row">
+                        <div class="field left">
+                            <label for="medicine-name-item-1">1° Medicinale</label>
+                            <input required id="medicine-name-item-1" class="input-field inactive" type="text" name="medicineName1" value="5-fluorouracile">
+                        </div>
+                        <div class="field right">
+                            <label for="medicine-dose-item-1">Dose</label>
+                            <input required id="medicine-dose-item-1" class="input-field inactive" type="text" name="medicineDose1" value="100 ml">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
