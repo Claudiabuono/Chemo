@@ -26,13 +26,6 @@ body {
     background: var(--main-color);
 }
 
-.logo {
-    margin: 10px;
-    padding: 10px;
-    width: 100px;
-    height: auto;
-}
-
 #page-content {
     margin: 0;
     padding: 0;
@@ -42,6 +35,8 @@ body {
     background-color: var(--main-color);
 }
 
+
+
 h1 {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -49,6 +44,34 @@ h1 {
 
 h2, h3, h4, h5, h6 {
 
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-color);
+}
+a:hover {
+    color: var(--main-color);
+}
+a:visited {
+    color: var(--accent-color-light);
+}
+
+.logo {
+    margin: 10px;
+    padding: 10px;
+    width: 100px;
+    height: auto;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
 }
 
 /*** UI elements used in different pages ***/
@@ -62,9 +85,27 @@ h2, h3, h4, h5, h6 {
     background: var(--neutral-color);
     box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
 }
+
 .title {
     margin-top: 0px;
 }
+
+#box-name-row #user-details-link {
+    margin-left: auto;
+    margin-right: 10px;
+}
+.icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.icon i {
+    margin: auto;
+}
+
+
 
 .button-primary-m {
     margin: 0;

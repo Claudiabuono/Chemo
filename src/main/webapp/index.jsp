@@ -13,7 +13,7 @@
 <div id="page-content">
     <div id="welcome-picture">
         <div id="picture-container">
-            <img src="./static/images/ruggi-welcome.jpg">
+            <img src="./static/images/ruggi-welcome.jpg" alt="Foto ospedale Ruggi">
             <div class="text secondary">
                 <h3 class="pic-title">San Giovanni di Dio Ruggi d'Aragona</h3>
             </div>

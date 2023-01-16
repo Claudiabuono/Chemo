@@ -1,4 +1,4 @@
-package medicinemanagement.storage;
+package patientmanagement.storage;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -6,24 +6,24 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
-import medicinemanagement.application.Box;
-import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import patientmanagement.application.PatientBean;
+import patientmanagement.application.Therapy;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class MedicineQueryBean {
+public class PatientQueryBean {
 
     //Inserimento singolo documento nella Collection
-    public void insertDocument(MedicineBean medicine) {
+    public void insertDocument(PatientBean patient) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea il documento da inserire nella Collection
-        Document document = createDocument(medicine);
+        Document document = createDocument(patient);
 
         //Inserisci il documento nella collection
         collection.insertOne(document);
@@ -32,14 +32,14 @@ public class MedicineQueryBean {
     }
 
     //Inserimento collezione di documenti nella Collection
-    public void insertDocuments(ArrayList<MedicineBean> medicines) {
+    public void insertDocuments(ArrayList<PatientBean> patients) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea un documento per ogni medicinale in medicines
         ArrayList<Document> docs = new ArrayList<>();
-        for(MedicineBean medicine : medicines) {
-            Document doc = createDocument(medicine);
+        for (PatientBean patient : patients) {
+            Document doc = createDocument(patient);
             docs.add(doc);
         }
 
@@ -78,8 +78,7 @@ public class MedicineQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-
-    public ArrayList<MedicineBean> findDocument(String key, String value) {
+    public ArrayList<PatientBean> findDocument(String key, String value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -90,15 +89,18 @@ public class MedicineQueryBean {
         FindIterable<Document> iterDoc = collection.find(filter);
 
         Iterator<Document> it = iterDoc.iterator();
-        ArrayList<MedicineBean> medicines = new ArrayList<>();
+        ArrayList<PatientBean> patients = new ArrayList<>();
 
-        while (it.hasNext()) {
-            Document document = it.next();
-            ArrayList<Box> boxes = convertToArray(document.getList("box", Box.class));
-            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxes);
-            medicines.add(medicine);
+        while(it.hasNext()) {
+            Document document = (Document) it.next();
+            ArrayList<Therapy> therapies = convertToArray(document.getList("therapy", Therapy.class));
+            PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapies);
+
+            patients.add(patient);
         }
-        return medicines;
+
+        return patients;
     }
 
 
@@ -106,29 +108,27 @@ public class MedicineQueryBean {
     private MongoCollection<Document> getCollection() {
         MongoDatabase mongoDatabase = DatabaseConnector.getDatabase();
 
-        MongoCollection<Document> collection = mongoDatabase.getCollection("medicinale");
-        System.out.println("Collection 'medicinale' recuperata con successo");
+        MongoCollection<Document> collection = mongoDatabase.getCollection("paziente");
+        System.out.println("Collection 'paziente' recuperata con successo");
         return collection;
     }
 
-    private Document createDocument(MedicineBean medicine) {
-        return new Document("id", medicine.getId())
-                .append("name", medicine.getName())
-                .append("ingredients", medicine.getIngredients())
-                .append("amount", medicine.getAmount())
-                .append("box", medicine.getBox());
+    private Document createDocument(PatientBean patient) {
+        return new Document("taxCode", patient.getTaxCode())
+                .append("name", patient.getName())
+                .append("surname", patient.getSurname())
+                .append("birthDate", patient.getBirthDate())
+                .append("city", patient.getCity())
+                .append("phoneNumber", patient.getPhoneNumber())
+                .append("status", patient.getStatus())
+                .append("condition", patient.getCondition())
+                .append("notes", patient.getNotes())
+                .append("therapy", patient.getTherapy());
     }
 
-    private ArrayList<Box> convertToArray(List<Box> boxes) {
-        return new ArrayList<>(boxes);
-    }
+    private ArrayList<Therapy> convertToArray(List<Therapy> list) {
 
-    private ArrayList<Stock> convertToArray(List<Stock> list){
-        ArrayList<Stock> stocks = new ArrayList<>();
-        for(Stock st : list){
-            stocks.add(st);
-        }
+        return new ArrayList<>(list);
 
-        return stocks;
     }
 }
