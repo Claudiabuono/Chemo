@@ -6,6 +6,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
+import medicinemanagement.application.Box;
+import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -76,16 +78,24 @@ public class MedicineQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-    public ArrayList<MedicineBean> findDocument(String chiave, String valore){
+
+    public ArrayList<MedicineBean> findDocument(String key, String value) {
+        //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
-        FindIterable<Document> iterDoc = collection.find(Filters.eq(chiave, valore));
+
+        //Crea il filtro
+        Bson filter = Filters.eq(key, value);
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find(filter);
+
         Iterator<Document> it = iterDoc.iterator();
         ArrayList<MedicineBean> medicines = new ArrayList<>();
 
-        while(it.hasNext()){
-            Document document = (Document) it.next();
-            ArrayList<Stock> stocks = convertToArray(document.getList("stocks", Stock.class));
-            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("nome"), document.getString("ingredienti"),document.getInteger("quantita"), stocks);
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<Box> boxes = convertToArray(document.getList("box", Box.class));
+            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxes);
             medicines.add(medicine);
         }
         return medicines;
@@ -103,10 +113,14 @@ public class MedicineQueryBean {
 
     private Document createDocument(MedicineBean medicine) {
         return new Document("id", medicine.getId())
-                .append("nome", medicine.getNome())
-                .append("ingredienti", medicine.getIngredienti())
-                .append("quantita", medicine.getQuantita())
-                .append("lotto", medicine.getLotti());
+                .append("name", medicine.getName())
+                .append("ingredients", medicine.getIngredients())
+                .append("amount", medicine.getAmount())
+                .append("box", medicine.getBox());
+    }
+
+    private ArrayList<Box> convertToArray(List<Box> boxes) {
+        return new ArrayList<>(boxes);
     }
 
     private ArrayList<Stock> convertToArray(List<Stock> list){
