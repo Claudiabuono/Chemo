@@ -1,8 +1,8 @@
-package medicinemanagement.storage;
+package medicinemanagement.application;
 
 import java.util.Date;
 
-class Stock {
+class Box {
 
     //Parametri
     private boolean stato;
@@ -11,10 +11,10 @@ class Stock {
     private String idLotto;
 
     //Costruttori
-    Stock() {
+    Box() {
     }
 
-    Stock(boolean stato, Date scadenza, int capacita, String idLotto) {
+    Box(boolean stato, Date scadenza, int capacita, String idLotto) {
         this.stato = stato;
         this.scadenza = scadenza;
         this.capacita = capacita;

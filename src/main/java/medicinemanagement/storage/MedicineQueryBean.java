@@ -6,13 +6,12 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
+import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Filter;
 
 public class MedicineQueryBean {
 
@@ -102,9 +101,9 @@ public class MedicineQueryBean {
 
     private Document createDocument(MedicineBean medicine) {
         return new Document("id", medicine.getId())
-                .append("nome", medicine.getNome())
-                .append("ingredienti", medicine.getIngredienti())
-                .append("quantita", medicine.getQuantita())
-                .append("lotto", medicine.getLotti());
+                .append("nome", medicine.getName())
+                .append("ingredienti", medicine.getIngredients())
+                .append("quantita", medicine.getAmount())
+                .append("lotto", medicine.getBox());
     }
 }
