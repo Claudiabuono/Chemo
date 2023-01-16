@@ -12,8 +12,12 @@
 
 .form .input-field {
     margin: 5px 0px 15px 0px;
-    padding: 0px;
+    padding: 10px 0px;
     width: 100%;
+    font-size: 1em;
+    font-family: "Titillium Web", sans-serif;
+    color: var(--medium-text);
+    background: var(--neutral-color);
     border-radius: 0px;
     border: 0;
     border-bottom: 2px solid var(--medium-text);
@@ -30,4 +34,47 @@
     width: 100%;
     border-radius: 10px;
     font-size: large;
+}
+
+.form .title-section {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.form .inactive {
+    pointer-events: none;
+    border-bottom: 2px solid var(--transparent);
+}
+
+/* Style of a row of multiple input fields */
+.form .input-fields-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.form .input-fields-row .field {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+.form .input-fields-row .left {
+    margin-right: auto;
+}
+.form .input-fields-row .middle {
+    margin-right: auto;
+    margin-left: auto;
+}
+.form .input-fields-row .right {
+    margin-left: auto;
+}
+
+.edit-button {
+    margin-left: auto;
+    margin-right: 0;
+    padding: 5px 15px;
+    height: 40px;
+    width: auto;
+    border-radius: 25px;
 }

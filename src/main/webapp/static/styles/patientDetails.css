@@ -1,0 +1,31 @@
+#status-icon {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#patient-data-form #status {
+    margin: auto 0px;
+    width: 200px;
+}
+
+#patient-data-buttons {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#patient-data-buttons #save-patient-button {
+    margin-right: 0px;
+    margin-left: 10px;
+}
+#patient-status-button {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#therapy-buttons {
+    margin-right: 0px;
+    margin-left: auto;
+}
+#delete-therapy-button {
+    margin-right: 10px;
+}
+
