@@ -2,7 +2,7 @@ package medicinemanagement.application;
 
 import java.util.Date;
 
-class Box {
+public class Box {
 
     //Parametri
     private boolean stato;
@@ -11,10 +11,10 @@ class Box {
     private String idLotto;
 
     //Costruttori
-    Box() {
+    public Box() {
     }
 
-    Box(boolean stato, Date scadenza, int capacita, String idLotto) {
+    public Box(boolean stato, Date scadenza, int capacita, String idLotto) {
         this.stato = stato;
         this.scadenza = scadenza;
         this.capacita = capacita;
@@ -23,37 +23,37 @@ class Box {
 
     //Getters
 
-    boolean getStato() {
+    public boolean getStato() {
         return stato;
     }
 
-    Date getScadenza() {
+    public Date getScadenza() {
         return scadenza;
     }
 
-    int getCapacita() {
+    public int getCapacita() {
         return capacita;
     }
 
-    String getIdLotto() {
+    public String getIdLotto() {
         return idLotto;
     }
 
 
     //Setters
-    void setStato(boolean stato) {
+    public void setStato(boolean stato) {
         this.stato = stato;
     }
 
-    void setScadenza(Date scadenza) {
+    public void setScadenza(Date scadenza) {
         this.scadenza = scadenza;
     }
 
-    void setCapacita(int capacita) {
+    public void setCapacita(int capacita) {
         this.capacita = capacita;
     }
 
-    void setIdLotto(String idLotto) {
+    public void setIdLotto(String idLotto) {
         this.idLotto = idLotto;
     }
 
