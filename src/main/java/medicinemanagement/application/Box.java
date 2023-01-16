@@ -5,8 +5,8 @@ import java.util.Date;
 public class Box {
 
     //Parametri
-    private boolean stato;
-    private Date scadenza;
+    private boolean status;
+    private Date expiryDate;
     private int capacita;
     private String idLotto;
 
@@ -14,21 +14,21 @@ public class Box {
     public Box() {
     }
 
-    public Box(boolean stato, Date scadenza, int capacita, String idLotto) {
-        this.stato = stato;
-        this.scadenza = scadenza;
+    public Box(boolean status, Date expiryDate, int capacita, String idLotto) {
+        this.status = status;
+        this.expiryDate = expiryDate;
         this.capacita = capacita;
         this.idLotto = idLotto;
     }
 
     //Getters
 
-    public boolean getStato() {
-        return stato;
+    public boolean getStatus() {
+        return status;
     }
 
-    public Date getScadenza() {
-        return scadenza;
+    public Date getExpiryDate() {
+        return expiryDate;
     }
 
     public int getCapacita() {
@@ -41,12 +41,12 @@ public class Box {
 
 
     //Setters
-    public void setStato(boolean stato) {
-        this.stato = stato;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
-    public void setScadenza(Date scadenza) {
-        this.scadenza = scadenza;
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     public void setCapacita(int capacita) {
@@ -62,8 +62,8 @@ public class Box {
     @Override
     public String toString() {
         return "StockBean{" +
-                "stato=" + stato +
-                ", scadenza=" + scadenza +
+                "status=" + status +
+                ", expiryDate=" + expiryDate +
                 ", capacita=" + capacita +
                 ", idLotto='" + idLotto + '\'' +
                 '}';

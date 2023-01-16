@@ -113,10 +113,10 @@ public class MedicineQueryBean {
 
     private Document createDocument(MedicineBean medicine) {
         return new Document("id", medicine.getId())
-                .append("nome", medicine.getName())
-                .append("ingredienti", medicine.getIngredients())
-                .append("quantita", medicine.getAmount())
-                .append("lotto", medicine.getBox());
+                .append("name", medicine.getName())
+                .append("ingredients", medicine.getIngredients())
+                .append("amount", medicine.getAmount())
+                .append("box", medicine.getBox());
     }
 
     private ArrayList<Box> convertToArray(List<Box> boxes) {
