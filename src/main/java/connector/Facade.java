@@ -1,8 +1,8 @@
 package connector;
 
-import medicinemanagement.storage.MedicineBean;
+import medicinemanagement.application.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
-import medicinemanagement.storage.Stock;
+import medicinemanagement.application.Box;
 import patientmanagement.application.PatientBean;
 import patientmanagement.storage.PatientQueryBean;
 import patientmanagement.application.Therapy;
