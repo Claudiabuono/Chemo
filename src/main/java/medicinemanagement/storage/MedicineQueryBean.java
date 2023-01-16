@@ -6,12 +6,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
+import medicinemanagement.application.Box;
 import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class MedicineQueryBean {
 
@@ -76,7 +78,7 @@ public class MedicineQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-    public Iterator<Document> findDocument(String key, String value) {
+    public ArrayList<MedicineBean> findDocument(String key, String value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -86,7 +88,17 @@ public class MedicineQueryBean {
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find(filter);
 
-        return iterDoc.iterator();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<Box> boxes = convertToArray(document.getList("box", Box.class));
+            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxes);
+            medicines.add(medicine);
+        }
+
+        return medicines;
     }
 
 
@@ -105,5 +117,9 @@ public class MedicineQueryBean {
                 .append("ingredienti", medicine.getIngredients())
                 .append("quantita", medicine.getAmount())
                 .append("lotto", medicine.getBox());
+    }
+
+    private ArrayList<Box> convertToArray(List<Box> boxes) {
+        return new ArrayList<>(boxes);
     }
 }
