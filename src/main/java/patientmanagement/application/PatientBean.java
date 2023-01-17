@@ -14,7 +14,7 @@ public class PatientBean {
     private boolean status;
     private String condition;
     private String notes;
-    private ArrayList<Therapy> therapy;
+    private ArrayList<TherapyBean> therapy;
 
     //Costruttori
 
@@ -22,7 +22,7 @@ public class PatientBean {
         this.therapy = null;
     }
 
-    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, ArrayList<Therapy> therapy) {
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, ArrayList<TherapyBean> therapy) {
         this.taxCode = taxCode;
         this.name = name;
         this.surname = surname;
@@ -69,7 +69,7 @@ public class PatientBean {
         return condition;
     }
 
-    public ArrayList<Therapy> getTherapy() {
+    public ArrayList<TherapyBean> getTherapy() {
         return therapy;
     }
 
@@ -110,7 +110,7 @@ public class PatientBean {
         this.condition = condition;
     }
 
-    public void setTherapy(ArrayList<Therapy> therapy) {
+    public void setTherapy(ArrayList<TherapyBean> therapy) {
         this.therapy = therapy;
     }
 
