@@ -1,4 +1,4 @@
-package plannerManagement.storage;
+package plannerManagement.application;
 
 import java.util.Date;
 

@@ -1,8 +1,8 @@
 package connector;
 
-import medicinemanagement.storage.MedicineBean;
+import medicinemanagement.application.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
-import medicinemanagement.storage.Stock;
+import medicinemanagement.application.Box;
 import patientmanagement.application.PatientBean;
 import patientmanagement.storage.PatientQueryBean;
 import patientmanagement.application.Therapy;
@@ -107,7 +107,7 @@ public class Facade {
     public void insertMedicine( String id, String name, String ingredients, int amount, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
-                MedicineBean medicineBean = new MedicineBean(id,name, ingredients, amount, new ArrayList<Stock>());
+                MedicineBean medicineBean = new MedicineBean(id,name, ingredients, amount, new ArrayList<Box>());
                 medicineQueryBean.insertDocument(medicineBean);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");

@@ -123,12 +123,4 @@ public class MedicineQueryBean {
         return new ArrayList<>(boxes);
     }
 
-    private ArrayList<Stock> convertToArray(List<Stock> list){
-        ArrayList<Stock> stocks = new ArrayList<>();
-        for(Stock st : list){
-            stocks.add(st);
-        }
-
-        return stocks;
-    }
 }
