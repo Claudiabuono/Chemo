@@ -42,6 +42,9 @@
     flex-direction: row;
     align-items: center;
 }
+.form .title-section .title {
+    margin-top: 0;
+}
 
 .form .inactive {
     pointer-events: none;
