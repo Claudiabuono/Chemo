@@ -6,7 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
-import medicinemanagement.application.Box;
+import medicinemanagement.application.BoxBean;
 import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -94,8 +94,8 @@ public class MedicineQueryBean {
 
         while (it.hasNext()) {
             Document document = it.next();
-            ArrayList<Box> boxes = convertToArray(document.getList("box", Box.class));
-            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxes);
+            ArrayList<BoxBean> boxBeans = convertToArray(document.getList("box", BoxBean.class));
+            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxBeans);
             medicines.add(medicine);
         }
         return medicines;
@@ -119,8 +119,8 @@ public class MedicineQueryBean {
                 .append("box", medicine.getBox());
     }
 
-    private ArrayList<Box> convertToArray(List<Box> boxes) {
-        return new ArrayList<>(boxes);
+    private ArrayList<BoxBean> convertToArray(List<BoxBean> boxBeans) {
+        return new ArrayList<>(boxBeans);
     }
 
 }

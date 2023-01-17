@@ -1,21 +1,19 @@
 package patientmanagement.application;
 
-import patientmanagement.application.Medicines;
-
 import java.util.ArrayList;
 
-public class Therapy {
+public class TherapyBean {
 
     //Parametri
     private int sessions;
-    private ArrayList<Medicines> medicines;
+    private ArrayList<MedicinesBean> medicines;
 
     //Costruttori
 
-    public Therapy() {
+    public TherapyBean() {
     }
 
-    public Therapy(int sessions, ArrayList<Medicines> medicines) {
+    public TherapyBean(int sessions, ArrayList<MedicinesBean> medicines) {
         this.sessions = sessions;
         this.medicines = medicines;
     }
@@ -26,7 +24,7 @@ public class Therapy {
         return sessions;
     }
 
-    public ArrayList<Medicines> getMedicines() {
+    public ArrayList<MedicinesBean> getMedicines() {
         return medicines;
     }
 
@@ -36,7 +34,7 @@ public class Therapy {
         this.sessions = sessions;
     }
 
-    public void setMedicines(ArrayList<Medicines> medicines) {
+    public void setMedicines(ArrayList<MedicinesBean> medicines) {
         this.medicines = medicines;
     }
 

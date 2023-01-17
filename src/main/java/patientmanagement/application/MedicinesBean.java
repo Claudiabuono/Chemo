@@ -1,25 +1,25 @@
 package patientmanagement.application;
 
-class Medicines {
+class MedicinesBean {
 
     //Parametri
-    private String idMedicinale;
+    private String medicineId;
     private int dose;
 
     //Costruttori
 
-    public Medicines() {
+    public MedicinesBean() {
     }
 
-    public Medicines(String idMedicinale, int dose) {
-        this.idMedicinale = idMedicinale;
+    public MedicinesBean(String medicineId, int dose) {
+        this.medicineId = medicineId;
         this.dose = dose;
     }
 
     //Getters
 
-    public String getIdMedicinale() {
-        return idMedicinale;
+    public String getMedicineId() {
+        return medicineId;
     }
 
     public int getDose() {
@@ -28,8 +28,8 @@ class Medicines {
 
     //Setters
 
-    public void setIdMedicinale(String idMedicinale) {
-        this.idMedicinale = idMedicinale;
+    public void setMedicineId(String medicineId) {
+        this.medicineId = medicineId;
     }
 
     public void setDose(int dose) {
@@ -41,7 +41,7 @@ class Medicines {
     @Override
     public String toString() {
         return "Medicines{" +
-                "idMedicinale='" + idMedicinale + '\'' +
+                "medicineId='" + medicineId + '\'' +
                 ", dose=" + dose +
                 '}';
     }

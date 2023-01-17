@@ -9,7 +9,7 @@ import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import patientmanagement.application.PatientBean;
-import patientmanagement.application.Therapy;
+import patientmanagement.application.TherapyBean;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -93,7 +93,7 @@ public class PatientQueryBean {
 
         while(it.hasNext()) {
             Document document = (Document) it.next();
-            ArrayList<Therapy> therapies = convertToArray(document.getList("therapy", Therapy.class));
+            ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
                     document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapies);
 
@@ -126,7 +126,7 @@ public class PatientQueryBean {
                 .append("therapy", patient.getTherapy());
     }
 
-    private ArrayList<Therapy> convertToArray(List<Therapy> list) {
+    private ArrayList<TherapyBean> convertToArray(List<TherapyBean> list) {
 
         return new ArrayList<>(list);
 
