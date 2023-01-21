@@ -30,8 +30,8 @@
                 <option value="id-medicinale-2">Nome medicinale 2</option>
             </select>
             <div id="search-buttons">
-                <input type="button" id="search-filters-button" class="button-tertiary-s edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
-                <input type="button" id="search-request-button" class="button-primary-m edit-button" value="Cerca">
+                <input type="button" id="search-filters-button" class="button-tertiary-s rounded edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
+                <input type="button" id="search-request-button" class="button-primary-m rounded edit-button" value="Cerca">
             </div>
             <div id="search-filters" class="hidden">
                 <div class="input-fields-row">
@@ -58,8 +58,8 @@
                             <h2 class="result-name">Ciclofosfamide</h2>
                         </div>
                         <div class="column icon status-avaliable right">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
-                                <path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule-pill" viewBox="0 0 16 16">
+                                <path d="M11.02 5.364a3 3 0 0 0-4.242-4.243L1.121 6.778a3 3 0 1 0 4.243 4.243l5.657-5.657Zm-6.413-.657 2.878-2.879a2 2 0 1 1 2.829 2.829L7.435 7.536 4.607 4.707ZM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm-.5 1.042a3 3 0 0 0 0 5.917V9.042Zm1 5.917a3 3 0 0 0 0-5.917v5.917Z"/>
                             </svg>
                         </div>
                     </div>

@@ -28,7 +28,7 @@
     border-bottom: 2px solid var(--main-color);
 }
 
-.form .submit-button {
+.submit-button {
     margin-top: 10px;
     margin-bottom: 0px;
     width: 100%;
@@ -73,11 +73,19 @@
     margin-left: auto;
 }
 
+
+.form-section-buttons {
+    margin-left: auto;
+    margin-right: 0px;
+
+}
+
+.save-button {
+    margin-right: 0px;
+    margin-left: 10px;
+}
+
 .edit-button {
     margin-left: auto;
     margin-right: 0;
-    padding: 5px 15px;
-    height: 40px;
-    width: auto;
-    border-radius: 25px;
 }

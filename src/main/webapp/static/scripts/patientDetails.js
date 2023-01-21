@@ -40,32 +40,7 @@ function addMedicineField(id, number) {
     document.getElementById("add-medicine-" + id).setAttribute("onclick", "addMedicineField('" + id + "'," + number + ")");
 }
 
-function editToSaveButton(newid, parentid, oldbuttonid, funcname) {
-    const newbutton = document.createElement("input");
-    newbutton.setAttribute("type", "button");
-    newbutton.setAttribute("id", newid);
-    newbutton.setAttribute("class", "button-primary-m edit-button");
-    newbutton.setAttribute("value", "Salva");
-    newbutton.setAttribute("onclick", funcname);
-    const parent = document.getElementById(parentid);
-    const oldbutton = document.getElementById(oldbuttonid);
-    parent.replaceChild(newbutton, oldbutton);
-}
-
-function addDeleteButton(text, newid,parentid, nextbuttonid, funcname) {
-    const newbutton = document.createElement("input");
-    newbutton.setAttribute("type", "button");
-    newbutton.setAttribute("id", newid);
-    newbutton.setAttribute("class", "button-tertiary-m edit-button");
-    newbutton.setAttribute("value", text);
-    newbutton.setAttribute("onclick", funcname);
-    const parent = document.getElementById(parentid);
-    const nextbutton = document.getElementById(nextbuttonid);
-    parent.insertBefore(newbutton, nextbutton);
-}
-
 function editStatusButton(id) {
-    console.log("Cambio stato 1");
     editToSaveButton("save-patient-status-button", "patient-status-button", "edit-patient-status-button", "submitUpdatedStatus('" + id + " ')");
     document.getElementById("status").className = "input-field";
 }
@@ -87,7 +62,7 @@ function editTherapyButtons(id, medicines) {
     const addmedicine = document.createElement("input");
     addmedicine.setAttribute("type", "button");
     addmedicine.setAttribute("id", "add-medicine-saved");
-    addmedicine.setAttribute("class", "button-secondary-s edit-button");
+    addmedicine.setAttribute("class", "button-secondary-s rounded edit-button");
     addmedicine.setAttribute("value", "Aggiungi medicinale");
     addmedicine.setAttribute("onclick", "addMedicineField('saved'," + nextmedicine + ")");
     document.getElementById("therapy-section").appendChild(addmedicine);

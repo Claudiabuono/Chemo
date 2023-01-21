@@ -26,8 +26,8 @@
             </div>
             <input type="text" id="search-patient-name" class="search-field input-field" placeholder="Nome paziente">
             <div id="search-buttons">
-                <input type="button" id="search-filters-button" class="button-tertiary-s edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
-                <input type="button" id="search-request-button" class="button-primary-m edit-button" value="Cerca">
+                <input type="button" id="search-filters-button" class="button-tertiary-s rounded edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
+                <input type="button" id="search-request-button" class="button-primary-m rounded edit-button" value="Cerca">
             </div>
             <div id="search-filters" class="hidden">
                 <div class="input-fields-row">
