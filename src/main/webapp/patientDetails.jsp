@@ -26,10 +26,10 @@
             <div class="title-section">
                 <h2 class="title">Anagrafica</h2>
                 <div id="patient-data-buttons">
-                    <input type="button" id="delete-patient-button" class="button-tertiary-m edit-button" value="Elimina paziente">
+                    <input type="button" id="delete-patient-button" class="button-tertiary-m rounded edit-button" value="Elimina paziente">
                     <%--
-                    <input type="button" id="save-patient-button" class="button-primary-m edit-button" value="Salva">
-                    <input type="button" id="edit-patient-data-button" class="button-secondary-s edit-button" value="Modifica">
+                    <input type="button" id="save-patient-button" class="button-primary-m rounded edit-button" value="Salva">
+                    <input type="button" id="edit-patient-data-button" class="button-secondary-s rounded edit-button" value="Modifica">
                     --%>
                 </div>
             </div>
@@ -76,7 +76,7 @@
             <div class="title-section">
                 <h2 class="title">Stato</h2>
                 <div id="patient-status-button">
-                    <input type="button" id="edit-patient-status-button" class="button-secondary-s edit-button" value="Modifica" onclick="editStatusButton('id')">
+                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('id')">
                 </div>
             </div>
             <div class="input-fields-row">
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="button" id="add-medicine-new" class="button-secondary-s edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+                <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
                 <input type="button" class="button-primary-m submit-button" value="Salva terapia">
             </div>
             <%-- Aggiungere controllo in java per nascondere questa sezione --%>
@@ -126,7 +126,7 @@
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
-                        <input type="button" id="edit-therapy-button" class="button-secondary-s edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
                     </div>
                 </div>
                 <label for="condition">Patologia</label>
