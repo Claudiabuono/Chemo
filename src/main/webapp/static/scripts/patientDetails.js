@@ -1,6 +1,6 @@
 function addTherapyForm() {
     document.getElementById("new-therapy-button").className = "hidden";
-    document.getElementById("new-therapy-form").className = "box";
+    document.getElementById("new-therapy-form").className = "box form";
 }
 
 function addMedicineField(id, number) {
@@ -50,6 +50,8 @@ function editTherapyButtons(id, medicines) {
     addDeleteButton("Elimina","delete-therapy-button","therapy-buttons", "save-therapy-button", "deleteTherapy('" + id + "')");
     document.getElementById("condition").className = "input-field";
     document.getElementById("sessions-number").className = "input-field";
+    document.getElementById("sessions-frequency").className = "input-field";
+    document.getElementById("sessions-duration").className = "input-field";
     var i = 0;
     console.log(medicines);
     for (let i = 1; i <= medicines; i++) {
