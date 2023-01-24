@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
 /*** Base Colours, Style and Typography used in the website ***/
 /*Colours used in the website*/
 :root {
@@ -78,6 +80,7 @@ a:visited:hover {
 .row {
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .column {
@@ -107,10 +110,20 @@ a:visited:hover {
     background: var(--neutral-color);
     box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
 }
+.box-in {
+    margin: 10px auto auto auto;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    color: var(--dark-text);
+    background: var(--neutral-color);
+    box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
 
 
 #page-content > .box {
-    width: 550px;
+    width: 590px;
 }
 
 #box-name-row {
@@ -147,6 +160,7 @@ a:visited:hover {
     flex-direction: column;
     align-items: center;
     text-decoration: none;
+    fill: currentColor;
 }
 
 

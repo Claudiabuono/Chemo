@@ -1,13 +1,13 @@
 .grid-container {
     display: grid;
     grid-template-columns: auto auto auto;
-    gap: 50px;
+    gap: 40px;
 }
 .grid-item {
     margin: 0;
     padding: 9.2px;
-    height: 130px;
-    width: 130px;
+    height: 150px;
+    width: 150px;
     border-radius: 10px;
     border: 1px solid var(--neutral-color);
     display: flex;
@@ -31,6 +31,7 @@
     box-shadow: 0 4px 4px 0 var(--accent-shadow-color), 0 4px 20px 0 var(--accent-shadow-color);
 }
 .grid-item svg {
+    margin-top: 15px;
     width: 96px;
     height: 96px;
     fill: currentColor;
@@ -38,6 +39,7 @@
 .grid-item label {
     margin-top: auto;
     font-weight: bold;
+    text-align: center;
 }
 #dashboard-links-medic .item5 {
     grid-column-start: 2;
