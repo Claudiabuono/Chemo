@@ -88,6 +88,16 @@ a:visited:hover {
     flex-direction: column;
 }
 
+.right {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.left {
+    margin-right: auto;
+    margin-left: 0;
+}
+
 .status-avaliable {
     color: var(--avaliable);
 }
@@ -127,6 +137,9 @@ a:visited:hover {
 
 #page-content > .box {
     width: 590px;
+}
+#page-content > #login-box {
+    width: 490px;
 }
 
 #box-name-row {
