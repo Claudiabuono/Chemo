@@ -91,38 +91,54 @@
                     <option value="nonDisponibile">Non disponibile</option>
                 </select>
             </div>
-            <%-- Aggiungere controllo in java per nascondere questa sezione --%>
-            <%-- Se il paziente non ha una terapia far vedere questa parte --%>
-            <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
-            <div id="new-therapy-form" class="box hidden">
-                <div class="title-section">
-                    <h2 class="title">Aggiunta terapia</h2>
+        </div>
+        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+        <%-- Se il paziente non ha una terapia far vedere questa parte --%>
+        <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
+        <div id="new-therapy-form" class="box hidden">
+            <div class="title-section">
+                <h2 class="title">Aggiunta terapia</h2>
+            </div>
+            <label for="new-condition">Patologia</label>
+            <input required id="new-condition" class="input-field" type="text" name="condition">
+            <div class="input-fields-row">
+                <div class="field left">
+                    <label for="new-sessions-number">Numero di sedute</label>
+                    <input required id="new-sessions-number" class="input-field" type="number" name="sessionNumber" value="6">
                 </div>
-                <label for="new-condition">Patologia</label>
-                <input required id="new-condition" class="input-field" type="text" name="condition">
-                <label for="new-sessions-number">Numero di sedute</label>
-                <input required id="new-sessions-number" class="input-field" type="text" name="sessionNumber">
-                <div id="new-medicines">
-                    <div id="new-medicine-item-1" class="input-fields-row">
-                        <div class="field left">
-                            <label for="new-medicine-name-item-1">1° Medicinale</label>
-                            <select id="new-medicine-name-item-1" class="input-field" name="medicineName1">
-                                <option value="id-medicinale-1" selected>Nome medicinale 1</option>
-                                <option value="id-medicinale-1">Nome medicinale 2</option>
-                            </select>
-                        </div>
-                        <div class="field right">
-                            <label for="new-medicine-dose-item-1">Dose (in ml)</label>
-                            <input required id="new-medicine-dose-item-1" class="input-field" type="text" name="medicineDose1">
-                        </div>
+                <div class="field right">
+                    <label for="new-sessions-frequency">Numero sedute a settimana</label>
+                    <input required id="new-sessions-frequency" class="input-field" type="number" name="sessionFrequency" value="1">
+                </div>
+            </div>
+            <div class="input-fields-row">
+                <div class="field left">
+                    <label for="new-sessions-duration">Durata seduta (in minuti)</label>
+                    <input required id="new-sessions-duration" class="input-field" type="number" name="sessionDuration" value="60">
+                </div>
+            </div>
+            <div id="new-medicines">
+                <div id="new-medicine-item-1" class="input-fields-row">
+                    <div class="field left">
+                        <label for="new-medicine-name-item-1">1° Medicinale</label>
+                        <select id="new-medicine-name-item-1" class="input-field" name="medicineName1">
+                            <option value="id-medicinale-1" selected>Nome medicinale 1</option>
+                            <option value="id-medicinale-1">Nome medicinale 2</option>
+                        </select>
+                    </div>
+                    <div class="field right">
+                        <label for="new-medicine-dose-item-1">Dose (in ml)</label>
+                        <input required id="new-medicine-dose-item-1" class="input-field" type="text" name="medicineDose1">
                     </div>
                 </div>
-                <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
-                <input type="button" class="button-primary-m submit-button" value="Salva terapia">
             </div>
-            <%-- Aggiungere controllo in java per nascondere questa sezione --%>
-            <%-- Se il paziente ha una terapia far vedere questa parte --%>
-            <div id="therapy-section" class="hidden">
+            <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+            <input type="button" class="button-primary-m submit-button" value="Salva terapia">
+        </div>
+        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+        <%-- Se il paziente ha una terapia far vedere questa parte --%>
+        <div class="hidden">
+            <div id="therapy-section" class="form">
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
@@ -131,8 +147,22 @@
                 </div>
                 <label for="condition">Patologia</label>
                 <input required id="condition" class="input-field inactive" type="text" name="condition" value="Tumore al pancreas">
-                <label for="sessions-number">Numero di sedute</label>
-                <input required id="sessions-number" class="input-field inactive" type="text" name="sessionNumber" value="6">
+                <div class="input-fields-row">
+                    <div class="field left">
+                        <label for="sessions-number">Numero di sedute</label>
+                        <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="6">
+                    </div>
+                    <div class="field right">
+                        <label for="sessions-frequency">Numero sedute a settimana</label>
+                        <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="1">
+                    </div>
+                </div>
+                <div class="input-fields-row">
+                    <div class="field left">
+                        <label for="sessions-duration">Durata seduta (in minuti)</label>
+                        <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="60">
+                    </div>
+                </div>
                 <div id="saved-medicines">
                     <div id="medicine-item-1" class="input-fields-row">
                         <div class="field left">
