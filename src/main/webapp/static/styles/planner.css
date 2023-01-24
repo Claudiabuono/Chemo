@@ -1,0 +1,124 @@
+#planner-top-bar {
+    margin: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#today-button {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+#week-selector {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.chevron {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    color: var(--accent-color);
+}
+#actual-week {
+    margin: 0 auto;
+}
+
+#add-new-appointments {
+    margin-left: auto;
+    margin-right: 0;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid var(--transparent);
+}
+#add-new-appointments:hover {
+    border: 2px solid var(--accent-color);
+}
+
+
+
+#planner-appointments-section {
+    padding: 10px;
+}
+
+.planner-row {
+    margin: 0 10px;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.planner-column {
+    margin: 10px auto;
+    width: 82px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.planner-time {
+    margin: 0;
+    width: 50px;
+    align-items: end;
+}
+
+#planner-days-row {
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+}
+#planner-days-row .planner-column {
+    margin: 0 auto;
+}
+.planner-day-name {
+    margin: 0 auto 0 auto;
+    height: 24px;
+}
+.planner-day-number {
+    margin: 0 auto 0 auto;
+    height: 20px;
+}
+
+.appointments-row .planner-appointment {
+    margin: 4px auto;
+    padding: 5px;
+    border-radius: 10px;
+    color: var(--light-text);
+    background: var(--main-color);
+}
+.appointments-row .empty {
+    padding: 5px;
+    border-radius: 10px;
+}
+
+
+
+#planner-appointments-rows {
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+#planner-appointments-rows hr {
+    margin: 0 20px 0 10px;
+    border: 1px solid var(--light-text);
+}
+
+.appointment-patients-number {
+    margin: auto;
+    text-align: center;
+}
+
+.planner-time .time {
+    margin-top: 0;
+    margin-right: 0;
+}
+
+.planner-scroll {
+    width: 30px;
+}

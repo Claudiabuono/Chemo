@@ -110,6 +110,16 @@ a:visited:hover {
     background: var(--neutral-color);
     box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
 }
+.box-in {
+    margin: 10px auto auto auto;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    border-radius: 10px;
+    color: var(--dark-text);
+    background: var(--neutral-color);
+    box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
 
 
 #page-content > .box {
