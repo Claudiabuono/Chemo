@@ -115,6 +115,19 @@ public class Facade {
         }
     }
 
+    public void insertMedicineBox(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
+        try{
+            if(isUserAuthorized(user.getUsername(), 2)){
+                BoxBean box = new BoxBean(status, expiryDate, capacity, boxId);
+                medicineQueryBean.insertDocument(box, medicineId);
+            }else
+                throw new Exception("Utente non autorizzato all'inserimento di medicinali");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
     public void insertMedicines(ArrayList<MedicineBean> medicines){medicineQueryBean.insertDocuments(medicines);}
 
     public void deleteMedicine(String key, String value, UserBean user){
