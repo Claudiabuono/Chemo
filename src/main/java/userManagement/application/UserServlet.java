@@ -17,7 +17,7 @@ public class UserServlet extends HttpServlet {
     static Facade facade = new Facade();
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String action = request.getParameter("submit");
 
         try{
             if(action != null){
@@ -25,21 +25,24 @@ public class UserServlet extends HttpServlet {
                     //Recupero dal form username e password
                     String username = request.getParameter("username");
                     String password = request.getParameter("password");
-
+                    System.out.println(username);
                     //Effettuo il check se l'utente è presente nel db o meno
                     if(isUserValid(username, password)){
+                        System.out.println("if ok");
                         ArrayList<UserBean> users = facade.findUsers("username", username);
                         UserBean user = users.get(0);
                         if (user != null) {
                             HttpSession session = request.getSession(true);
                             session.setAttribute("currentSessionUser",user);
                             if(user.getType() == 1){
-                                response.sendRedirect(""); //jsp accesso personale medico
+                                response.sendRedirect("dashboard.jsp"); //jsp accesso personale medico
                             }else if(user.getType() == 2)
-                                response.sendRedirect(""); //jsp accesso gestore medicinali
+                                response.sendRedirect("dashboard.jsp"); //jsp accesso gestore medicinali
                         }
-                    }else
-                        response.sendRedirect(""); //jsp di errore?
+                    }else {
+                        System.out.println("else ok");
+                        response.sendRedirect("index.jsp"); //jsp di errore?
+                    }
                 }else if(action.equalsIgnoreCase("logout")){
                     request.getSession().removeAttribute("currentSessionUser");
                     request.getSession().invalidate();
@@ -67,7 +70,9 @@ public class UserServlet extends HttpServlet {
      */
     private boolean isUserValid(String username, String password) throws Exception{
         Facade facade = new Facade();
+        System.out.println("Chiamata db");
         ArrayList<UserBean> users = facade.findUsers("username", username);
+        System.out.println("Controllo utente effettuato");
         boolean valid = false;
         for(UserBean us : users){
             if(us.getUsername().equals(username) && us.getPassword().equals(password))

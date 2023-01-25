@@ -71,7 +71,7 @@ public class UserQueryBean {
         DatabaseConnector conn = new DatabaseConnector();
         MongoDatabase db = conn.getDatabase();
 
-        MongoCollection<Document> coll = db.getCollection("utente");
+        MongoCollection<Document> coll = db.getCollection("user");
         System.out.println("Collection \'utente\' recuperata con successo");
         return coll;
     }

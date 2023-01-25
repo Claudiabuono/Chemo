@@ -18,13 +18,14 @@
                 </svg>
             </a>
         </div>
-        <div id="login-form" class="form">
+        <form id="login-form" class="form" action="UserServlet" method="post">
             <label for="username">Nome utente</label>
             <input required id="username" class="input-field" type="text" name="username">
             <label for="password">Password</label>
             <input required id="password" class="input-field" type="password" name="password">
-            <input type="button" class="button-primary-m submit-button" value="Accedi">
-        </div>
+            <input type="button" class="button-primary-m submit-button" value="Accedi" onclick="logInRequest()">
+            <button type="submit" name="submit" value="login">Accedi</button>
+        </form>
     </div>
 </div>
 <footer>
