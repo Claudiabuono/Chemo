@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 @WebServlet("/PatientServlet")
 public class PatientServlet extends HttpServlet {
@@ -27,8 +29,8 @@ public class PatientServlet extends HttpServlet {
             switch (action) {
                 case "createPatientProfile" -> {  //Creazione profilo paziente
                     //Creo il profilo del paziente
-                    facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), request.getParameter("birthDate"), /* todo: string to date wrapper */
-                            request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), user);
+                    facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
+                            request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), request.getParameter("notes"),user);
 
                     //Reindirizzo alla pagina del paziente appena creato
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
@@ -44,8 +46,8 @@ public class PatientServlet extends HttpServlet {
                 }
 
                 case "editPatientProfile" -> {  //Modifica profilo paziente
-                    facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
-                    facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
+                    //facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
+                    //facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
 
 
                     //Reindirizzo alla pagina del paziente appena creato
@@ -108,6 +110,17 @@ public class PatientServlet extends HttpServlet {
         }
         catch (Throwable e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    //Metodi di supporto
+    private Date dateParser(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            return format.parse(date);
+        }
+        catch (Exception e) {
+            return null;
         }
     }
 }
