@@ -2,23 +2,23 @@ package medicinemanagement.application;
 
 import java.util.Date;
 
-public class Box {
+public class BoxBean {
 
     //Parametri
     private boolean status;
     private Date expiryDate;
-    private int capacita;
-    private String idLotto;
+    private int capacity;
+    private String boxId;
 
     //Costruttori
-    public Box() {
+    public BoxBean() {
     }
 
-    public Box(boolean status, Date expiryDate, int capacita, String idLotto) {
+    public BoxBean(boolean status, Date expiryDate, int capacity, String boxId) {
         this.status = status;
         this.expiryDate = expiryDate;
-        this.capacita = capacita;
-        this.idLotto = idLotto;
+        this.capacity = capacity;
+        this.boxId = boxId;
     }
 
     //Getters
@@ -31,12 +31,12 @@ public class Box {
         return expiryDate;
     }
 
-    public int getCapacita() {
-        return capacita;
+    public int getCapacity() {
+        return capacity;
     }
 
-    public String getIdLotto() {
-        return idLotto;
+    public String getBoxId() {
+        return boxId;
     }
 
 
@@ -49,12 +49,12 @@ public class Box {
         this.expiryDate = expiryDate;
     }
 
-    public void setCapacita(int capacita) {
-        this.capacita = capacita;
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
-    public void setIdLotto(String idLotto) {
-        this.idLotto = idLotto;
+    public void setBoxId(String boxId) {
+        this.boxId = boxId;
     }
 
     //Metodi ereditati da Object
@@ -64,8 +64,8 @@ public class Box {
         return "StockBean{" +
                 "status=" + status +
                 ", expiryDate=" + expiryDate +
-                ", capacita=" + capacita +
-                ", idLotto='" + idLotto + '\'' +
+                ", capacity=" + capacity +
+                ", boxId='" + boxId + '\'' +
                 '}';
     }
 }

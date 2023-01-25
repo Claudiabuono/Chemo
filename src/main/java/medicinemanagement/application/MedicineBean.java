@@ -9,20 +9,20 @@ public class MedicineBean {
     private String name;
     private String ingredients;
     private int amount;
-    private ArrayList<Box> box;
+    private ArrayList<BoxBean> boxes;
 
 
     //Costruttori
     public MedicineBean() {
-        box = new ArrayList<>();
+        boxes = new ArrayList<>();
     }
 
-    public MedicineBean(String id, String name, String ingredients, int amount, ArrayList<Box> box) {
+    public MedicineBean(String id, String name, String ingredients, int amount, ArrayList<BoxBean> boxes) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.amount = amount;
-        this.box = box;
+        this.boxes = boxes;
     }
 
     //Getters
@@ -42,8 +42,8 @@ public class MedicineBean {
         return amount;
     }
 
-    public ArrayList<Box> getBox() {
-        return box;
+    public ArrayList<BoxBean> getBox() {
+        return boxes;
     }
 
     //Setters
@@ -63,8 +63,8 @@ public class MedicineBean {
         this.amount = amount;
     }
 
-    public void setBox(ArrayList<Box> box) {
-        this.box = box;
+    public void setBox(ArrayList<BoxBean> boxes) {
+        this.boxes = boxes;
     }
 
     //Metodi ereditati da Object
@@ -75,12 +75,12 @@ public class MedicineBean {
                 ", name='" + name + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", amount=" + amount +
-                ", box=" + box +
+                ", boxes=" + boxes +
                 '}';
     }
 
     //Altri metodi
-    public void addLotto(Box box) {
-        this.box.add(box);
+    public void addBox(BoxBean box) {
+        this.boxes.add(box);
     }
 }

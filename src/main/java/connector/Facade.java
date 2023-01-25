@@ -1,14 +1,13 @@
 package connector;
 
+import medicinemanagement.application.BoxBean;
 import medicinemanagement.application.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
-import medicinemanagement.application.Box;
 import patientmanagement.application.PatientBean;
+import patientmanagement.application.TherapyBean;
 import patientmanagement.storage.PatientQueryBean;
-import patientmanagement.application.Therapy;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
-import org.bson.Document;
 import plannerManagement.storage.PlannerQueryBean;
 import userManagement.application.UserBean;
 import userManagement.storage.UserQueryBean;
@@ -107,7 +106,7 @@ public class Facade {
     public void insertMedicine( String id, String name, String ingredients, int amount, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
-                MedicineBean medicineBean = new MedicineBean(id,name, ingredients, amount, new ArrayList<Stock>());
+                MedicineBean medicineBean = new MedicineBean(id,name, ingredients, amount, new ArrayList<BoxBean>());
                 medicineQueryBean.insertDocument(medicineBean);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");
@@ -159,7 +158,7 @@ public class Facade {
 
     public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
         try{
-            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<Therapy>());
+            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<TherapyBean>());
             if(isUserAuthorized(user.getUsername(), 1))
                 patientQueryBean.insertDocument(patient);
             else

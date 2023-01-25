@@ -28,7 +28,17 @@
             <h2>Perché nasce Chemo</h2>
             <p>
                 Chemo nasce per l’esigenza dell’ospedale di ridurre gli sprechi ed
-                ottimizzare la qualità offerta al paziente.
+                ottimizzare la qualità offerta al paziente. La gestione manuale
+                degli appuntamenti per le chiemioterapie è inefficiente e porta ad
+                un maggior consumo di medicinali, quindi a un maggiore inquinamento.
+            </p>
+        </div>
+        <div class="info-row right">
+            <h2>I vantaggi di Chemo</h2>
+            <p>
+                Chemo permette, attraverso la gestione digitale dei dati e la
+                pianificazione automatizzata delle sedute di chemioterapia, numerosi
+                vantaggi tra cui migliore organizzazione e minore impatto ambientale.
             </p>
         </div>
     </div>
