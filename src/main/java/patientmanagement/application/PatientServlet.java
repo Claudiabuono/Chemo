@@ -46,8 +46,9 @@ public class PatientServlet extends HttpServlet {
                 }
 
                 case "editPatientProfile" -> {  //Modifica profilo paziente
-                    //facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
-                    //facade.updatePatient(""); //todo: parametri qua non so cosa metterci ho mal di testa
+                    facade.updatePatient("id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
+                    facade.updatePatient("id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
+                    facade.updatePatient("id", request.getParameter("id"), "notes", request.getParameter("notes"), user);
 
 
                     //Reindirizzo alla pagina del paziente appena creato
