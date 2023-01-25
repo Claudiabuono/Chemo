@@ -26,10 +26,10 @@
             <div class="title-section">
                 <h2 class="title">Anagrafica</h2>
                 <div id="patient-data-buttons">
-                    <input type="button" id="delete-patient-button" class="button-tertiary-m edit-button" value="Elimina paziente">
+                    <input type="button" id="delete-patient-button" class="button-tertiary-m rounded edit-button" value="Elimina paziente">
                     <%--
-                    <input type="button" id="save-patient-button" class="button-primary-m edit-button" value="Salva">
-                    <input type="button" id="edit-patient-data-button" class="button-secondary-s edit-button" value="Modifica">
+                    <input type="button" id="save-patient-button" class="button-primary-m rounded edit-button" value="Salva">
+                    <input type="button" id="edit-patient-data-button" class="button-secondary-s rounded edit-button" value="Modifica">
                     --%>
                 </div>
             </div>
@@ -76,12 +76,15 @@
             <div class="title-section">
                 <h2 class="title">Stato</h2>
                 <div id="patient-status-button">
-                    <input type="button" id="edit-patient-status-button" class="button-secondary-s edit-button" value="Modifica" onclick="editStatusButton('id')">
+                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('id')">
                 </div>
             </div>
             <div class="input-fields-row">
-                <div id="status-icon" class="status-avaliable">
-                    <i class="fa-solid fa-circle-user fa-3x"></i>
+                <div id="status-icon" class="icon status-avaliable">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                    </svg>
                 </div>
                 <select id="status" class="input-field inactive" name="status">
                     <option value="disponibile" selected>Disponibile</option>
@@ -114,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                <input type="button" id="add-medicine-new" class="button-secondary-s edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+                <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
                 <input type="button" class="button-primary-m submit-button" value="Salva terapia">
             </div>
             <%-- Aggiungere controllo in java per nascondere questa sezione --%>
@@ -123,7 +126,7 @@
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
-                        <input type="button" id="edit-therapy-button" class="button-secondary-s edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
                     </div>
                 </div>
                 <label for="condition">Patologia</label>

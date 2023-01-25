@@ -1,13 +1,13 @@
 <%--
   Created by IntelliJ IDEA.
   User: anton
-  Date: 16/01/2023
-  Time: 13:23
+  Date: 17/01/2023
+  Time: 17:50
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Chemo | Storico pazienti</title>
+    <title>Chemo | Medicinali</title>
     <script src="./static/scripts/search.js"></script>
 </head>
 <body>
@@ -15,16 +15,20 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
-    <div id="patient-list-box" class="box">
+    <div id="medicines-list-box" class="box">
         <div id="box-name-row" class="row">
-            <h1 class="title">Storico pazienti</h1>
+            <h1 class="title">Medicinali</h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
         <div id="search-form" class="form box">
             <div class="title-section">
                 <h2 class="title">Ricerca</h2>
             </div>
-            <input type="text" id="search-patient-name" class="search-field input-field" placeholder="Nome paziente">
+            <select id="search-medicine-name" class="search-field input-field" name="medicineName">
+                <option value="na" selected>Nome medicinale</option>
+                <option value="id-medicinale-1">Nome medicinale 1</option>
+                <option value="id-medicinale-2">Nome medicinale 2</option>
+            </select>
             <div id="search-buttons">
                 <input type="button" id="search-filters-button" class="button-tertiary-s rounded edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
                 <input type="button" id="search-request-button" class="button-primary-m rounded edit-button" value="Cerca">
@@ -32,42 +36,39 @@
             <div id="search-filters" class="hidden">
                 <div class="input-fields-row">
                     <div class="field left">
-                        <label for="search-patient-medicine">Medicinale</label>
-                        <select id="search-patient-medicine" class="input-field" name="patientMedicine">
-                            <option value="na" selected>Seleziona medicinale</option>
-                            <option value="id-medicinale-1">Nome medicinale 1</option>
-                            <option value="id-medicinale-2">Nome medicinale 2</option>
-                        </select>
+                        <label for="search-medicine-expiry-date">Scadenza</label>
+                        <input type="date" id="search-medicine-expiry-date" class="input-field">
                     </div>
                     <div class="field right">
-                        <label for="search-patient-status">Stato</label>
-                        <select id="search-patient-status" class="input-field" name="patientStatus">
+                        <label for="search-medicine-status">Stato</label>
+                        <select id="search-medicine-status" class="input-field" name="medicineStatus">
                             <option value="na" selected>Seleziona stato</option>
                             <option value="true">Disponibile</option>
-                            <option value="false">Non disponibile</option>
+                            <option value="false">Esaurito</option>
                         </select>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="patient-list">
+        <div id="medicines-list">
             <form class="result-box-container">
-                <button id="patient-box-id" class="box">
+                <button id="medicine-box-id" class="box">
                     <div class="first-row">
                         <div class="column left">
-                            <h2 class="result-name">Mario Rossi</h2>
-                            <p>RSSMRA68E01H703R</p>
+                            <h2 class="result-name">Ciclofosfamide</h2>
                         </div>
                         <div class="column icon status-avaliable right">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule-pill" viewBox="0 0 16 16">
+                                <path d="M11.02 5.364a3 3 0 0 0-4.242-4.243L1.121 6.778a3 3 0 1 0 4.243 4.243l5.657-5.657Zm-6.413-.657 2.878-2.879a2 2 0 1 1 2.829 2.829L7.435 7.536 4.607 4.707ZM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm-.5 1.042a3 3 0 0 0 0 5.917V9.042Zm1 5.917a3 3 0 0 0 0-5.917v5.917Z"/>
                             </svg>
                         </div>
                     </div>
+                    <div class="column">
+                        <h3 class="result-title left">Ingredienti</h3>
+                        <p class="left">ciclososfamide, monoidrata</p>
+                    </div>
                     <div class="row">
-                        <h3 class="left">Tumore al pancreas</h3>
-                        <p class="right">Numero sedute: 6</p>
+                        <p class="left">Quantità: 1</p>
                     </div>
                 </button>
             </form>

@@ -30,8 +30,10 @@
     border: 1px solid var(--accent-color-light);
     box-shadow: 0 4px 4px 0 var(--accent-shadow-color), 0 4px 20px 0 var(--accent-shadow-color);
 }
-.grid-item i {
-
+.grid-item svg {
+    width: 96px;
+    height: 96px;
+    fill: currentColor;
 }
 .grid-item label {
     margin-top: auto;
