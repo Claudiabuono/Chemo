@@ -35,7 +35,7 @@ public class MedicineServlet extends HttpServlet {
 
                 case "insertMedicineBox" -> { //Inserimento confezione medicinale
                     //Inserisco il box
-                    //todo: METODO PER INSERIRE I BOX NEL FACADE
+                    facade.insertMedicineBox(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
 
                     //Reindirizzo alla pagina lista dei medicinali
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
