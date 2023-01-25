@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MedicineServlet extends HttpServlet {
     private static final Facade facade = new Facade();
@@ -96,5 +98,16 @@ public class MedicineServlet extends HttpServlet {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    //Metodi di supporto
+    private Date dateParser(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            return format.parse(date);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 }
