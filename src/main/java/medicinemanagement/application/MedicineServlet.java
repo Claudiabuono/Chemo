@@ -41,6 +41,14 @@ public class MedicineServlet extends HttpServlet {
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
                 }
 
+                case "deleteMedicineBox" -> {
+                    //Rimuovo il box
+                    facade.removeMedicineBox(request.getParameter("boxId"), user);
+
+                    //Reindirizzo alla pagina lista dei medicinali
+                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                }
+
                 case "searchMedicine" -> { //Ricerca medicinale
                     //Recupero i medicinali
                     ArrayList<MedicineBean> medicines = facade.findMedicines("name", request.getParameter("name"));
