@@ -4,6 +4,7 @@ import connector.Facade;
 import userManagement.application.UserBean;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+@WebServlet("/MedicineServlet")
 public class MedicineServlet extends HttpServlet {
     private static final Facade facade = new Facade();
 
