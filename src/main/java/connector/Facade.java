@@ -128,6 +128,17 @@ public class Facade {
     }
 
 
+    public void removeMedicineBox(String boxId, UserBean user) {
+        try{
+            if(isUserAuthorized(user.getUsername(), 2)){
+                medicineQueryBean.deleteDocument("boxId", boxId);
+            }else
+                throw new Exception("Utente non autorizzato all'inserimento di medicinali");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void insertMedicines(ArrayList<MedicineBean> medicines){medicineQueryBean.insertDocuments(medicines);}
 
     public void deleteMedicine(String key, String value, UserBean user){
