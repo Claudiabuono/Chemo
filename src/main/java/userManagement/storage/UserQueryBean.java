@@ -60,7 +60,7 @@ public class UserQueryBean {
 
         while(it.hasNext()){
             Document document = (Document) it.next();
-            UserBean user = new UserBean(document.getString("id"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"), document.getString("birthplace"), document.getString("username"), document.getString("password"), document.getString("specialization"), document.getInteger("type"));
+            UserBean user = new UserBean(document.getString("id"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"), document.getString("city"), document.getString("username"), document.getString("password"), document.getString("specialization"), document.getInteger("type"));
             users.add(user);
         }
         return users;
@@ -78,14 +78,14 @@ public class UserQueryBean {
 
     private Document createDocument(UserBean userBean){
         Document doc = new Document("id", userBean.getId())
-                .append("nome", userBean.getName())
-                .append("cognome", userBean.getSurname())
-                .append("cittaNascita", userBean.getBirthplace())
-                .append("dataNascita", userBean.getBirthDate())
+                .append("name", userBean.getName())
+                .append("surname", userBean.getSurname())
+                .append("city", userBean.getBirthplace())
+                .append("birthDate", userBean.getBirthDate())
                 .append("username", userBean.getUsername())
                 .append("password", userBean.getPassword())
-                .append("specializzazione", userBean.getSpecialization())
-                .append("tipo", userBean.getType());
+                .append("specialization", userBean.getSpecialization())
+                .append("type", userBean.getType());
 
         return doc;
     }

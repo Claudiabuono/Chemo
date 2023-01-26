@@ -4,7 +4,8 @@
   Date: 24/01/2023
   Time: 17:38
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="userManagement.application.UserBean" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -13,6 +14,20 @@
     <script src="./static/scripts/user.js"></script>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null) {
+            System.out.println("Errore: sessione senza utente");
+            //è presente una sessione senza utente
+            session.invalidate();
+            response.sendRedirect("./error401.jsp");
+        } else {
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -29,27 +44,21 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="name">Nome</label>
-                    <input required id="name" class="input-field inactive" type="text" name="name" value="Lucia">
+                    <input required id="name" class="input-field inactive" type="text" name="name" value="<%=user.getName()%>">
                 </div>
                 <div class="field right">
                     <label for="surname">Cognome</label>
-                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="Esposito">
+                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="<%=user.getSurname()%>">
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="birthdate">Data di nascita</label>
-                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="1987-03-29">
+                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="<%=user.getParsedBirthDate()%>">
                 </div>
                 <div class="field right">
                     <label for="city">Città di nascita</label>
-                    <input required id="city" class="input-field inactive" type="text" name="city" value="Napoli">
-                </div>
-            </div>
-            <div class="input-fields-row">
-                <div class="field left">
-                    <label for="tax-code">Codice fiscale</label>
-                    <input required id="tax-code" class="input-field inactive" type="text" name="taxCode" value="SPSLCU87C69F839Z">
+                    <input required id="city" class="input-field inactive" type="text" name="city" value="<%=user.getBirthplace()%>">
                 </div>
             </div>
         </div>
@@ -66,15 +75,19 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="name">Username</label>
-                    <input required id="username" class="input-field inactive" type="text" name="username" value="LuciaE">
+                    <input required id="username" class="input-field inactive" type="text" name="username" value="<%=user.getUsername()%>">
                 </div>
                 <div class="field left">
                     <label for="name">Password</label>
-                    <input required id="password" class="input-field inactive" type="password" name="password" value="PasswordLucia">
+                    <input required id="password" class="input-field inactive" type="password" name="password" value="<%=user.getPassword()%>">
                 </div>
             </div>
         </div>
     </div>
 </div>
+<%
+        }
+    }
+%>
 </body>
 </html>
