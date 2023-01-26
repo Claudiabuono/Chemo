@@ -1,0 +1,23 @@
+#page-content > #error-box {
+    margin-top: 50px;
+    width: 490px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-self: center;
+}
+
+#error-code {
+    margin: 0 auto 20px auto;
+}
+#error-name {
+    margin: 0 auto 0 auto;
+}
+#error-message {
+    margin: 0 auto 20px auto;
+}
+
+#error-box a {
+    width: 100%;
+}

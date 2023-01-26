@@ -28,26 +28,25 @@ public class UserServlet extends HttpServlet {
                     System.out.println(username);
                     //Effettuo il check se l'utente è presente nel db o meno
                     if(isUserValid(username, password)){
-                        System.out.println("if ok");
+                        System.out.println("Utente registrato");
                         ArrayList<UserBean> users = facade.findUsers("username", username);
                         UserBean user = users.get(0);
                         if (user != null) {
                             HttpSession session = request.getSession(true);
                             session.setAttribute("currentSessionUser",user);
-                            if(user.getType() == 1){
-                                response.sendRedirect("dashboard.jsp"); //jsp accesso personale medico
-                            }else if(user.getType() == 2)
-                                response.sendRedirect("dashboard.jsp"); //jsp accesso gestore medicinali
+                            if(user.getType() == 1 || user.getType() == 2){
+                                response.sendRedirect("dashboard.jsp"); //jsp area riservata personale medico e magazzino
+                            }
                         }
                     }else {
-                        System.out.println("else ok");
+                        System.out.println("Utente non registrato");
                         response.sendRedirect("index.jsp"); //jsp di errore?
                     }
                 }else if(action.equalsIgnoreCase("logout")){
                     request.getSession().removeAttribute("currentSessionUser");
                     request.getSession().invalidate();
 
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    response.sendRedirect("index.jsp");
                 }else if(action.equalsIgnoreCase("viewProfile")){
                     /*Questa parte sella servlet indirizza semplicemente l'utente alla jsp di visualizzazione profilo
                     dove sarà recuperato il currentSessionUser e, quindi, tutti i suoi dati
