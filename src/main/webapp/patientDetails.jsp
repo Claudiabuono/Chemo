@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+            <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
             <input type="button" class="button-primary-m submit-button" value="Salva terapia">
         </div>
         <%-- Aggiungere controllo in java per nascondere questa sezione --%>
