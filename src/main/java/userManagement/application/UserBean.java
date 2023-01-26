@@ -1,5 +1,8 @@
 package userManagement.application;
 
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UserBean {
@@ -41,6 +44,10 @@ public class UserBean {
 
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public String getParsedBirthDate() {
+        return dateParser(birthDate);
     }
 
     public String getBirthplace() {
@@ -112,5 +119,10 @@ public class UserBean {
                 ", specializzazione='" + specialization + '\'' +
                 ", tipo=" + type +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

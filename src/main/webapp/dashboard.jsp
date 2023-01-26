@@ -19,14 +19,6 @@
         //redirect alla pagina di error 401 Unauthorized
         response.sendRedirect("./error401.jsp");
     } else {
-
-%>
-<header>
-    <jsp:include page="static/templates/userHeaderLogged.html"/>
-</header>
-<div id="page-content">
-    <div id="user-box" class="box">
-<%
         UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
         if (user == null) {
             System.out.println("Errore: sessione senza utente");
@@ -34,8 +26,12 @@
             session.invalidate();
             response.sendRedirect("./logIn.jsp");
         } else {
-
 %>
+<header>
+    <jsp:include page="static/templates/userHeaderLogged.html"/>
+</header>
+<div id="page-content">
+    <div id="user-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Benvenuta, <%=user.getName()%></h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
