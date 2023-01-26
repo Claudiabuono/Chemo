@@ -46,7 +46,7 @@ public class UserServlet extends HttpServlet {
                     request.getSession().removeAttribute("currentSessionUser");
                     request.getSession().invalidate();
 
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    response.sendRedirect("index.jsp");
                 }else if(action.equalsIgnoreCase("viewProfile")){
                     /*Questa parte sella servlet indirizza semplicemente l'utente alla jsp di visualizzazione profilo
                     dove sarà recuperato il currentSessionUser e, quindi, tutti i suoi dati

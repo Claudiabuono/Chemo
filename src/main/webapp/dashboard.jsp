@@ -1,10 +1,11 @@
-<%@ page import="userManagement.application.UserBean" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 08/01/2023
   Time: 23:04
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="userManagement.application.UserBean" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -16,7 +17,7 @@
     HttpSession sessione=request.getSession(false);
     if (sessione == null) {
         //redirect alla pagina di error 401 Unauthorized
-        response.sendRedirect("./errors/error404.jsp");
+        response.sendRedirect("./error401.jsp");
     } else {
 
 %>
@@ -40,6 +41,9 @@
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
         <%
+            if (user.getType() < 1 || user.getType() > 2) {
+                response.sendRedirect("./error401.jsp");
+            }
             if (user.getType() == 1) {
                 System.out.println("Dashboard personale medico");
 
@@ -82,7 +86,7 @@
         </div>
 <%
 
-            } else {
+            } else if (user.getType() == 2){
                 System.out.println("Dashboard personale magazzino");
 
 
