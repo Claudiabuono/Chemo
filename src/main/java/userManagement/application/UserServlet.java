@@ -39,23 +39,23 @@ public class UserServlet extends HttpServlet {
                             }
                         }
                     }else {
-                        System.out.println("Utente non registrato");
+                        System.out.println("Errore: Utente non registrato");
+                        System.out.println("Reindirizzamento alla homepage");
                         response.sendRedirect("index.jsp"); //jsp di errore?
                     }
                 }else if(action.equalsIgnoreCase("logout")){
+                    System.out.println("Logout");
                     request.getSession().removeAttribute("currentSessionUser");
                     request.getSession().invalidate();
-
+                    System.out.println("Reindirizzamento alla homepage");
                     response.sendRedirect("index.jsp");
                 }else if(action.equalsIgnoreCase("viewProfile")){
                     /*Questa parte sella servlet indirizza semplicemente l'utente alla jsp di visualizzazione profilo
                     dove sarà recuperato il currentSessionUser e, quindi, tutti i suoi dati
                     */
                     HttpSession session = request.getSession(true);
-                    UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
-                    session.setAttribute("currentSessionUser", user);
-
-                    response.sendRedirect(""); //jsp visualizzazione informazioni utente
+                    UserBean user = (UserBean) session.getAttribute("currentSessionUser");
+                    response.sendRedirect("userDetails.jsp"); //jsp visualizzazione informazioni utente
                 }
             }
         }catch(Throwable e){
