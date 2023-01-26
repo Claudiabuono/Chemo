@@ -31,6 +31,23 @@ public class MedicineQueryBean {
         System.out.println("Documento inserito con successo nella Collection");
     }
 
+    //Inserimento singolo documento in un medicinale
+    public void insertDocument(BoxBean box, String medicineId) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il documento da inserire nella Collection
+        Document document = createDocument(box);
+
+        //Crea il filtro
+        Bson filter = Filters.eq("id", medicineId);
+
+        //Inserisci il documento nella collection
+        collection.findOneAndUpdate(filter, document);
+
+        System.out.println("Documento inserito con successo nella Collection");
+    }
+
     //Inserimento collezione di documenti nella Collection
     public void insertDocuments(ArrayList<MedicineBean> medicines) {
         //Recupera la Collection
@@ -117,6 +134,13 @@ public class MedicineQueryBean {
                 .append("ingredients", medicine.getIngredients())
                 .append("amount", medicine.getAmount())
                 .append("box", medicine.getBox());
+    }
+
+    private Document createDocument(BoxBean box) {
+        return new Document("id", box.getBoxId())
+                .append("status", box.getStatus())
+                .append("capacity", box.getCapacity())
+                .append("expiryDate", box.getExpiryDate());
     }
 
     private ArrayList<BoxBean> convertToArray(List<BoxBean> boxBeans) {
