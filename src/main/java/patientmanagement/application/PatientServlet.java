@@ -33,7 +33,8 @@ public class PatientServlet extends HttpServlet {
                             request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), request.getParameter("notes"),user);
 
                     //Reindirizzo alla pagina del paziente appena creato
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    //response.sendRedirect("patientDetails.jsp"); //todo: aggiungere jsp una volta creata
+                    response.addHeader("OPERATION_RESULT","true");
                 }
 
                 case "completePatientProfile" -> {  //Completamento profilo paziente

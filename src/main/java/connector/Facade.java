@@ -181,6 +181,7 @@ public class Facade {
     };
 
     public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
+        System.out.println("Nome "+ name + " con taxcode " + taxCode + "city " + city);
         try{
             PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<TherapyBean>());
             if(isUserAuthorized(user.getUsername(), 1))
