@@ -1,49 +1,89 @@
+import random
 import json
-import random as ran
-p1 = {
-    "name" : "Roberto",
-    "surname" : "Rossi",
-    "age": 22
-}
 
-p2 = {
-    "name" : "Camilla",
-    "surname" : "Leo",
-    "age": 12
-}
+# Il modulo prende in input i pazienti sottomessi dal medico: per far comunicare Java e Python
+# utilizziamo un file condiviso tra i due linguaggi: Java scrive l'input, preso da Python, e Python
+# scrive l'output preso da Java per visualizzare lo schedule
+file = open('patients.json', 'r')
+patients = json.loads(file.read())
 
-p3 = {
-    "name" : "Rodolfo",
-    "surname" : "Ponticelli",
-    "age": 44
-}
+file2 = open('medicines.json', 'r')
+meds = json.loads(file2.read())
 
-p4 = {
-    "name" : "Lucia",
-    "surname" : "Caiazza",
-    "age": 99
-}
+prova = [1, 2, 3, 4, 5]
 
-lista = [p1, p2, p3, p4]
-def encodeIndividual(patientList):
+
+def encodeIndividual(patientList, numSeats, numHours, numDays):
     column = len(patientList)
-    row = 50 #num poltrone * num orari * 7 gg
+    row = numSeats * numHours * numDays
     matrix = []
-    #Occorre inserire un controllo: se il numero di pazienti è inferiore al numero degli appuntamenti cosa facciamo?
 
     if column < row or column == row:
         for i in range(column):
             for j in range(row):
-                lista = ran.sample([0, 1], counts=[column - 1, 1], k=column)
+                lista = random.sample([0, 1], counts=[column - 1, 1], k=column)
 
-            #la matrice risultante è di taglia column * column
             matrix.append(lista)
-
-        for k in zip(*matrix):
-            print(k)
-    elif column > row: #o si impone un limite al form o si eliminano pazienti a random
+        return matrix
+    elif column > row:  # o si impone un limite al form o si eliminano pazienti a random
         print("Selezionare un numero di pazienti ridotto: inferiore alle X unita")
 
 
-encodeIndividual(lista)
+def countZeros(lista):
+    count = 0
+    for elem in lista:
+        if elem == 0:
+            count += 1
+    return count
 
+
+def countOne(lista):
+    count = 0
+    for elem in lista:
+        if elem == 1:
+            count += 1
+    return count
+
+
+def generation(patients, numSeats, numHours, numDays):
+    population_size = random.randrange(len(patients) + 1, 50)
+    print("Size population: " + str(population_size))
+    population = []
+    newIndividual = []
+    for i in range(population_size):
+        newIndividual = encodeIndividual(patients, numSeats, numHours, numDays)
+        population.append(newIndividual)
+        newIndividual = []
+    return population
+
+
+def fitness(generation, patients):
+    values = []
+    conflict = 0
+    for indi in generation:
+        fit_of_indi = 0
+        lista_indici_pazienti = []
+        for elem in indi:
+            index = elem.index(1)
+            lista_indici_pazienti.append(index)
+
+        for i in range(len(lista_indici_pazienti)):
+            for j in range(1):
+                fit = 0
+                if j == i:
+                    continue
+                elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId']:
+                    fit += 0.7
+                else:
+                    fit += 0.1
+            fit_of_indi += fit
+
+        #valutazione fatta in base a quanto consumo si fa di un faramco:
+
+        values.append(fit_of_indi)
+    return values
+
+
+generation_list = generation(patients, 10, 6, 5)
+fit = fitness(generation_list, patients)
+print(fit)
