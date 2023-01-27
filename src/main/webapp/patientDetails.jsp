@@ -4,7 +4,11 @@
   Date: 12/01/2023
   Time: 16:43
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="patientmanagement.application.PatientServlet"
+         import="patientmanagement.application.PatientBean"
+         import="userManagement.application.UserBean"%>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -13,6 +17,24 @@
     <script src="./static/scripts/patientDetails.js"></script>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null) {
+            System.out.println("Errore: sessione senza utente");
+            //è presente una sessione senza utente
+            session.invalidate();
+            response.sendRedirect("./error401.jsp");
+        } else {
+            PatientBean patient = (PatientBean) request.getAttribute("patient");
+            if (patient == null) {
+                response.sendRedirect("./error403.jsp");
+            } else {
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -36,27 +58,27 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="name">Nome</label>
-                    <input required id="name" class="input-field inactive" type="text" name="name" value="Mario">
+                    <input required id="name" class="input-field inactive" type="text" name="name" value="<%=patient.getName()%>">
                 </div>
                 <div class="field right">
                     <label for="surname">Cognome</label>
-                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="Rossi">
+                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="<%=patient.getSurname()%>">
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="birthdate">Data di nascita</label>
-                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="1968-05-01">
+                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="<%=patient.getParsedBirthDate()%>">
                 </div>
                 <div class="field right">
                     <label for="city">Città di nascita</label>
-                    <input required id="city" class="input-field inactive" type="text" name="city" value="Salerno">
+                    <input required id="city" class="input-field inactive" type="text" name="city" value="<%=patient.getCity()%>">
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="tax-code">Codice fiscale</label>
-                    <input required id="tax-code" class="input-field inactive" type="text" name="taxCode" value="RSSMRA68E01H703R">
+                    <input required id="tax-code" class="input-field inactive" type="text" name="taxCode" value="<%=patient.getTaxCode()%>">
                 </div>
             </div>
             <div class="title-section">
@@ -65,14 +87,14 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="phone-number">Numero di telefono</label>
-                    <input required id="phone-number" class="input-field inactive" type="tel" name="phoneNumber" value="0818412110">
+                    <input required id="phone-number" class="input-field inactive" type="tel" name="phoneNumber" value="<%=patient.getPhoneNumber()%>">
                 </div>
             </div>
             <div class="title-section">
                 <h2 class="title">Note</h2>
             </div>
             <label for="notes">Allergie ed intolleranze</label>
-            <input required id="notes" class="input-field inactive" type="text" name="notes" value="Intolleranza al lattosio">
+            <input required id="notes" class="input-field inactive" type="text" name="notes" value="<%=patient.getNotes()%>">
             <div class="title-section">
                 <h2 class="title">Stato</h2>
                 <div id="patient-status-button">
@@ -92,7 +114,9 @@
                 </select>
             </div>
         </div>
-        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+        <%
+            if (patient.getTherapy() == null) {
+        %>
         <%-- Se il paziente non ha una terapia far vedere questa parte --%>
         <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
         <div id="new-therapy-form" class="box hidden">
@@ -135,9 +159,12 @@
             <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
             <input type="button" class="button-primary-m submit-button" value="Salva terapia">
         </div>
-        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+
+        <%
+            } else {
+        %>
         <%-- Se il paziente ha una terapia far vedere questa parte --%>
-        <div class="hidden">
+        <div class="">
             <div id="therapy-section" class="form">
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
@@ -177,7 +204,16 @@
                 </div>
             </div>
         </div>
+        <%
+                }
+        %>
     </div>
 </div>
+<%
+            }
+    }
+    }
+%>
+
 </body>
 </html>

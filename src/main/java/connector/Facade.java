@@ -3,6 +3,7 @@ package connector;
 import medicinemanagement.application.BoxBean;
 import medicinemanagement.application.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
+import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
 import patientmanagement.storage.PatientQueryBean;
@@ -180,17 +181,20 @@ public class Facade {
         }
     };
 
-    public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
+    public PatientBean insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
         System.out.println("Nome "+ name + " con taxcode " + taxCode + "city " + city);
         try{
             PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<TherapyBean>());
-            if(isUserAuthorized(user.getUsername(), 1))
+            if(isUserAuthorized(user.getUsername(), 1)) {
                 patientQueryBean.insertDocument(patient);
+                return  patient;
+            }
             else
                 throw new Exception("Utente non autorizzato all'inserimento dei pazienti");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        return null;
     };
 
     public void insertPatients(ArrayList<PatientBean> patients, UserBean user){
@@ -230,10 +234,13 @@ public class Facade {
     public ArrayList<PatientBean> findPatients(String key, String value, UserBean user){
         ArrayList<PatientBean> patients = new ArrayList<>();
         try{
-            if(isUserAuthorized(user.getUsername(), 1))
-
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                if (key.equals("_id")) {
+                    patients.add(patientQueryBean.findDocumentsById(value));
+                    return patients;
+                }
                 return patients = patientQueryBean.findDocument(key, value);
-
+            }
             else
                 throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
         }catch(Exception e){

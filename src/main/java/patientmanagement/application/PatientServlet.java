@@ -16,7 +16,21 @@ import java.util.Date;
 @WebServlet("/PatientServlet")
 public class PatientServlet extends HttpServlet {
     static Facade facade = new Facade();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Recupero l'action dalla request
+        String action = request.getParameter("action");
 
+        if (action.equals("testRedirect")) {
+            UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
+            //cerca il paziente richiesto
+            ArrayList<PatientBean> patients = facade.findPatients("_id", request.getParameter("id"), user);
+            //imposta i dati del paziente come attributo
+            request.setAttribute("patient", patients.get(0));
+            //reindirizza alla pagina del paziente
+            getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/patientDetails.jsp"))).forward(request, response);
+        }
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Recupero l'action dalla request
@@ -29,12 +43,11 @@ public class PatientServlet extends HttpServlet {
             switch (action) {
                 case "createPatientProfile" -> {  //Creazione profilo paziente
                     //Creo il profilo del paziente
-                    facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
+                    PatientBean patient = facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
                             request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), request.getParameter("notes"),user);
 
-                    //Reindirizzo alla pagina del paziente appena creato
-                    //response.sendRedirect("patientDetails.jsp"); //todo: aggiungere jsp una volta creata
                     response.addHeader("OPERATION_RESULT","true");
+                    response.addHeader("PATIENT_ID", patient.getPatientId());
                 }
 
                 case "completePatientProfile" -> {  //Completamento profilo paziente
