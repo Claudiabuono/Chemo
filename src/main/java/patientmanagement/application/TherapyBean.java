@@ -6,7 +6,7 @@ public class TherapyBean {
 
     //Parametri
     private int sessions;
-    private ArrayList<MedicinesBean> medicines;
+    private ArrayList<TherapyMedicineBean> medicines;
 
     private int duration;
     private int frequency;
@@ -16,7 +16,7 @@ public class TherapyBean {
     public TherapyBean() {
     }
 
-    public TherapyBean(int sessions, ArrayList<MedicinesBean> medicines, int duration, int frequency) {
+    public TherapyBean(int sessions, ArrayList<TherapyMedicineBean> medicines, int duration, int frequency) {
         this.sessions = sessions;
         this.medicines = medicines;
         this.duration = duration;
@@ -29,7 +29,7 @@ public class TherapyBean {
         return sessions;
     }
 
-    public ArrayList<MedicinesBean> getMedicines() {
+    public ArrayList<TherapyMedicineBean> getMedicines() {
         return medicines;
     }
 
@@ -47,7 +47,7 @@ public class TherapyBean {
         this.sessions = sessions;
     }
 
-    public void setMedicines(ArrayList<MedicinesBean> medicines) {
+    public void setMedicines(ArrayList<TherapyMedicineBean> medicines) {
         this.medicines = medicines;
     }
 
