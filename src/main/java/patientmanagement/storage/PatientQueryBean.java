@@ -1,5 +1,6 @@
 package patientmanagement.storage;
 
+import com.mongodb.Mongo;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -8,6 +9,7 @@ import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
 
@@ -103,6 +105,24 @@ public class PatientQueryBean {
         return patients;
     }
 
+    public PatientBean findDocumentsById(String value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(value));
+
+        //Cerca il documento
+        Document document = (Document) collection.find(filter).first();
+
+        ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
+        PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
+                document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapies);
+        patient.setPatientId(value);
+
+        return patient;
+    }
+
 
     //Metodi ausiliari
     private MongoCollection<Document> getCollection() {
@@ -114,7 +134,8 @@ public class PatientQueryBean {
     }
 
     private Document createDocument(PatientBean patient) {
-        return new Document("taxCode", patient.getTaxCode())
+        return new Document("_id", new ObjectId(patient.getPatientId()))
+                .append("taxCode", patient.getTaxCode())
                 .append("name", patient.getName())
                 .append("surname", patient.getSurname())
                 .append("birthDate", patient.getBirthDate())

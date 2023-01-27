@@ -28,9 +28,10 @@ function addPatient() {
                 //redirectToPage("patientDetails.jsp");
                 //alert(request.responseText);
                 if (request.getResponseHeader('OPERATION_RESULT')){
-                    window.location = "patientDetails.jsp";
+                    //window.location = "patientDetails.jsp";
+                    const patientID = request.getResponseHeader('PATIENT_ID');
                     //recupero id dalla risposta
-                    redirectToPatientDetails(id);
+                    redirectToPatientDetails(patientID);
                 } else {
                     //errore creazione paziente
                 }
@@ -41,4 +42,5 @@ function addPatient() {
 
 function redirectToPatientDetails(id) {
     //crea una richiesta alla servlet paziente per reindirizzare
+    window.location.replace("PatientServlet?action=testRedirect&id=" + id);
 }

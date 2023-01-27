@@ -9,6 +9,18 @@
     <jsp:include page="./static/templates/userHeader.html"/>
 </header>
 <div id="page-content">
+    <%
+        String error = (String) request.getAttribute("loginError");
+        if(error != null)
+        {
+    %>
+    <div id="login-error" class="box">
+        <h3>Si &egrave; verificato un errore!</h3>
+        <p><%=error%></p>
+    </div>
+    <%
+        }
+    %>
     <div id="login-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Entra nell'area riservata</h1>

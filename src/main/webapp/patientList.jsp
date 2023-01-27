@@ -51,8 +51,9 @@
             </div>
         </div>
         <div id="patient-list">
+            <!-- Si itera fino a quando ci sono risultati-->
             <form class="result-box-container">
-                <button id="patient-box-id" class="box">
+                <div id="patient-box-id" class="box" onclick="redirectToPatientDetails('id')">
                     <div class="first-row">
                         <div class="column left">
                             <h2 class="result-name">Mario Rossi</h2>
@@ -69,7 +70,7 @@
                         <h3 class="left">Tumore al pancreas</h3>
                         <p class="right">Numero sedute: 6</p>
                     </div>
-                </button>
+                </div>
             </form>
         </div>
     </div>

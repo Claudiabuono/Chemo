@@ -141,6 +141,9 @@ a:visited:hover {
 #page-content > #login-box {
     width: 490px;
 }
+#page-content > #login-error {
+    width: 490px;
+}
 
 #box-name-row {
     margin-bottom: 10px;
