@@ -1,6 +1,6 @@
 package patientmanagement.application;
 
-class TherapyMedicineBean {
+public class TherapyMedicineBean {
 
     //Parametri
     private String medicineId;

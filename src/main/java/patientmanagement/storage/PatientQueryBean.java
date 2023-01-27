@@ -12,6 +12,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
+import patientmanagement.application.TherapyMedicineBean;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -95,7 +96,7 @@ public class PatientQueryBean {
 
         while(it.hasNext()) {
             Document document = (Document) it.next();
-            ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
+            //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
                     document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,document.get("therapy", TherapyBean.class));
 
@@ -105,7 +106,8 @@ public class PatientQueryBean {
         return patients;
     }
 
-    public PatientBean findDocumentsById(String value) {
+    //Ricerca di un documento nella Collection in base al suo ObjectId
+    public PatientBean findDocumentById(String value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -115,9 +117,9 @@ public class PatientQueryBean {
         //Cerca il documento
         Document document = (Document) collection.find(filter).first();
 
-        ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
+        //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
         PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
-                document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes"), document.get("therapy", TherapyBean.class));
+                document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes"), therapyParser((Document) document.get("therapy")));
         patient.setPatientId(value);
 
         return patient;
@@ -143,11 +145,17 @@ public class PatientQueryBean {
                 .append("phoneNumber", patient.getPhoneNumber())
                 .append("status", patient.getStatus())
                 .append("condition", patient.getCondition())
-                .append("notes", patient.getNotes())
-                .append("therapy", patient.getTherapy());
+                .append("notes", patient.getNotes());
     }
 
-    private ArrayList<TherapyBean> convertToArray(List<TherapyBean> list) {
+    private TherapyBean therapyParser(Document document) {
+        if(document == null) {
+            return null;
+        }
+        return new TherapyBean(document.getInteger("sessions"), convertToArray(document.getList("medicines", TherapyMedicineBean.class)), document.getInteger("duration"), document.getInteger("frequency"));
+    }
+
+    private ArrayList<TherapyMedicineBean> convertToArray(List<TherapyMedicineBean> list) {
 
         return new ArrayList<>(list);
 

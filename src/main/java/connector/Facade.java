@@ -236,7 +236,7 @@ public class Facade {
         try{
             if(isUserAuthorized(user.getUsername(), 1)) {
                 if (key.equals("_id")) {
-                    patients.add(patientQueryBean.findDocumentsById(value));
+                    patients.add(patientQueryBean.findDocumentById(value));
                     return patients;
                 }
                 return patients = patientQueryBean.findDocument(key, value);
