@@ -3,6 +3,7 @@ package userManagement.application;
 import connector.Facade;
 
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +28,7 @@ public class UserServlet extends HttpServlet {
                     String password = request.getParameter("password");
                     System.out.println(username);
                     //Effettuo il check se l'utente è presente nel db o meno
-                    if(isUserValid(username, password)){
+                    if(usernameCheck(username) && passwordCheck(username, password)){
                         System.out.println("Utente registrato");
                         ArrayList<UserBean> users = facade.findUsers("username", username);
                         UserBean user = users.get(0);
@@ -39,9 +40,19 @@ public class UserServlet extends HttpServlet {
                             }
                         }
                     }else {
-                        System.out.println("Errore: Utente non registrato");
+                        System.out.println("Errore login");
+                        if (!usernameCheck(username)) {
+                            request.setAttribute("loginError","Utente non registrato");
+                        } else if (!passwordCheck(username, password)) {
+                            request.setAttribute("loginError","Password errata");
+                        } else {
+                            request.setAttribute("loginError","Controlla le credenziali");
+                        }
+
                         System.out.println("Reindirizzamento alla homepage");
-                        response.sendRedirect("index.jsp"); //jsp di errore?
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("logIn.jsp");
+                        requestDispatcher.forward(request, response);
+                        //response.sendRedirect("index.jsp"); //jsp di errore?
                     }
                 }else if(action.equalsIgnoreCase("logout")){
                     System.out.println("Logout");
@@ -67,17 +78,29 @@ public class UserServlet extends HttpServlet {
     Il metodo recupera dal db le istanze di 'utente' in cui appare 'username': se username e password sono
     entrambi corretti, allora il metodo restituisce true, perchÃ¨ l'utente ha accesso al sito
      */
-    private boolean isUserValid(String username, String password) throws Exception{
+    private boolean usernameCheck(String username) throws Exception{
         Facade facade = new Facade();
         System.out.println("Chiamata db");
         ArrayList<UserBean> users = facade.findUsers("username", username);
         System.out.println("Controllo utente effettuato");
         boolean valid = false;
         for(UserBean us : users){
-            if(us.getUsername().equals(username) && us.getPassword().equals(password))
+            if(us.getUsername().equals(username))
                 valid = true;
         }
-
         return valid;
+    }
+
+    private boolean passwordCheck(String username, String password) throws Exception{
+        Facade facade = new Facade();
+        System.out.println("Chiamata db");
+        ArrayList<UserBean> users = facade.findUsers("username", username);
+        System.out.println("Controllo utente effettuato");
+        boolean result = false;
+        for(UserBean us : users){
+            if(us.getPassword().equals(password))
+                result = true;
+        }
+        return result;
     }
 }
