@@ -27,6 +27,19 @@ public class PatientBean {
         this.therapy = null;
     }
 
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes) {
+        this.patientId = new ObjectId().toString();
+        this.taxCode = taxCode;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = dataNascita;
+        this.city = city;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
+        this.condition = condition;
+        this.notes = notes;
+    }
+
     public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, TherapyBean therapy) {
         this.patientId = new ObjectId().toString();
         this.taxCode = taxCode;
