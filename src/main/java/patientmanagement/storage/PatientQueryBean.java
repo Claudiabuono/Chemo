@@ -108,8 +108,8 @@ public class PatientQueryBean {
     private MongoCollection<Document> getCollection() {
         MongoDatabase mongoDatabase = DatabaseConnector.getDatabase();
 
-        MongoCollection<Document> collection = mongoDatabase.getCollection("paziente");
-        System.out.println("Collection 'paziente' recuperata con successo");
+        MongoCollection<Document> collection = mongoDatabase.getCollection("patient");
+        System.out.println("Collection 'patient' recuperata con successo");
         return collection;
     }
 
