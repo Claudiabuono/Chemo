@@ -27,7 +27,7 @@ public class PatientBean {
         this.therapy = null;
     }
 
-    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes) {
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String notes) {
         this.patientId = new ObjectId().toString();
         this.taxCode = taxCode;
         this.name = name;
@@ -36,7 +36,6 @@ public class PatientBean {
         this.city = city;
         this.phoneNumber = phoneNumber;
         this.status = status;
-        this.condition = condition;
         this.notes = notes;
     }
 

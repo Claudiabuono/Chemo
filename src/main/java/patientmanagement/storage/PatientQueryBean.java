@@ -166,7 +166,6 @@ public class PatientQueryBean {
                 .append("city", patient.getCity())
                 .append("phoneNumber", patient.getPhoneNumber())
                 .append("status", patient.getStatus())
-                .append("condition", patient.getCondition())
                 .append("notes", patient.getNotes());
     }
 
