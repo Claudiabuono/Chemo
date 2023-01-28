@@ -6,6 +6,7 @@ import medicinemanagement.storage.MedicineQueryBean;
 import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
+import patientmanagement.application.TherapyMedicineBean;
 import patientmanagement.storage.PatientQueryBean;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
@@ -196,6 +197,19 @@ public class Facade {
         }
         return null;
     };
+
+    public void insertTherapy(int sessions, ArrayList<TherapyMedicineBean> medicines, int duration, int frequency, String patientId, UserBean user) {
+        try{
+            TherapyBean therapy = new TherapyBean(sessions, medicines, duration, frequency);
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                patientQueryBean.insertDocument(therapy, patientId);
+            }
+            else
+                throw new Exception("Utente non autorizzato all'inserimento dei pazienti");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void insertPatients(ArrayList<PatientBean> patients, UserBean user){
         try{

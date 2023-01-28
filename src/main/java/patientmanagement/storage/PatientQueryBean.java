@@ -7,6 +7,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
+import medicinemanagement.application.BoxBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -30,6 +31,22 @@ public class PatientQueryBean {
 
         //Inserisci il documento nella collection
         collection.insertOne(document);
+
+        System.out.println("Documento inserito con successo nella Collection");
+    }
+
+    public void insertDocument(TherapyBean therapy, String patientId) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il documento da inserire nella Collection
+        Document document = createDocument(therapy);
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(patientId));
+
+        //Inserisci il documento nella collection
+        collection.findOneAndUpdate(filter, document);
 
         System.out.println("Documento inserito con successo nella Collection");
     }
@@ -167,6 +184,14 @@ public class PatientQueryBean {
                 .append("phoneNumber", patient.getPhoneNumber())
                 .append("status", patient.getStatus())
                 .append("notes", patient.getNotes());
+    }
+
+    private Document createDocument(TherapyBean therapyBean) {
+        return new Document("_id", new ObjectId())
+                .append("sessions", therapyBean.getSessions())
+                .append("duration", therapyBean.getDuration())
+                .append("frequency", therapyBean.getFrequency())
+                .append("medicines", therapyBean.getMedicines());
     }
 
     private TherapyBean therapyParser(Document document) {
