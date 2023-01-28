@@ -22,12 +22,16 @@ public class PatientServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action.equals("testRedirect")) {
+            //Recupero l'utente dalla sessione
             UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
-            //cerca il paziente richiesto
+
+            //Cerco il paziente richiesto
             ArrayList<PatientBean> patients = facade.findPatients("_id", request.getParameter("id"), user);
-            //imposta i dati del paziente come attributo
+
+            //Imposto i dati del paziente come attributo
             request.setAttribute("patient", patients.get(0));
-            //reindirizza alla pagina del paziente
+
+            //Reindirizzo alla pagina del paziente
             getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/patientDetails.jsp"))).forward(request, response);
         }
     }
@@ -46,40 +50,43 @@ public class PatientServlet extends HttpServlet {
                     PatientBean patient = facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
                             request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), request.getParameter("notes"),user);
 
+                    //Salvo l'id del paziente nell'header della response, così da poterlo reindirizzare alla sua pagina
                     response.addHeader("OPERATION_RESULT","true");
                     response.addHeader("PATIENT_ID", patient.getPatientId());
                 }
 
                 case "completePatientProfile" -> {  //Completamento profilo paziente
                     //Completo il profilo paziente inserendo patologia e terapia
-                    facade.updatePatient("id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
-                    facade.updatePatient("id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
 
                     //Reindirizzo alla pagina del paziente appena creato
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    response.addHeader("OPERATION_RESULT","true");
+                    response.addHeader("PATIENT_ID", request.getParameter("id"));
                 }
 
                 case "editPatientProfile" -> {  //Modifica profilo paziente
-                    facade.updatePatient("id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
-                    facade.updatePatient("id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
-                    facade.updatePatient("id", request.getParameter("id"), "notes", request.getParameter("notes"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "notes", request.getParameter("notes"), user);
 
 
                     //Reindirizzo alla pagina del paziente appena creato
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    response.addHeader("OPERATION_RESULT","true");
+                    response.addHeader("PATIENT_ID", request.getParameter("id"));
                 }
 
                 case "searchPatient" -> {
                     //Recupero i pazienti
-                    ArrayList<PatientBean> patients = new ArrayList<>();
-                    patients = facade.findPatients("id", request.getParameter("id"), user);
+                    ArrayList<PatientBean> patients = facade.findPatients("_id", request.getParameter("id"), user);
 
                     if(patients.size() == 1) {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients.get(0));
 
-                        //Reindirizzo alla pagina del paziente appena trovato
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        //Salvo l'id del paziente nell'header della response, così da poterlo reindirizzare alla sua pagina
+                        response.addHeader("OPERATION_RESULT","true");
+                        response.addHeader("PATIENT_ID", patients.get(0).getPatientId());
                     }
                     else {
                         //Aggiungo il parametro alla request
@@ -92,8 +99,12 @@ public class PatientServlet extends HttpServlet {
 
                 case "viewPatientList" -> {
                     //Recupero i pazienti
-                    ArrayList<PatientBean> patients = new ArrayList<>();
-                    patients = facade.findPatients("", "", user);
+                    ArrayList<PatientBean> patients = facade.findAllPatients(user);
+
+                    //####################################################################################################################################################
+                    //## Va testato se mettendo dei filtri vuoti nel metodo findPatient si comporta come una findAll, se così allora si può rimuovere il metodo findAll ##
+                    //## Da testare: ArrayList<PatientBean> patients = facade.findPatients("", "", user);                                                               ##
+                    //####################################################################################################################################################
 
                     //Aggiungo il parametro alla request
                     request.setAttribute("patientsResult", patients);
@@ -104,8 +115,7 @@ public class PatientServlet extends HttpServlet {
 
                 case "viewAvailablePatients" -> {
                     //Recupero i pazienti
-                    ArrayList<PatientBean> patients = new ArrayList<>();
-                    patients = facade.findPatients("status", request.getParameter("status"), user);
+                    ArrayList<PatientBean> patients = facade.findPatients("status", "true", user);
 
                     //Aggiungo il parametro alla request
                     request.setAttribute("patientsResult", patients);
@@ -116,10 +126,11 @@ public class PatientServlet extends HttpServlet {
 
                 case "editPatientStatus" -> {
                     //Aggiorno lo stato del paziente
-                    facade.updatePatient("id", request.getParameter("id"), "status", request.getParameter("status"), user);
+                    facade.updatePatient("_id", request.getParameter("id"), "status", request.getParameter("status"), user);
 
-                    //Reindirizzo alla pagina del paziente appena aggiornato
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    //Reindirizzo alla pagina del paziente appena creato
+                    response.addHeader("OPERATION_RESULT","true");
+                    response.addHeader("PATIENT_ID", request.getParameter("id"));
                 }
             }
         }

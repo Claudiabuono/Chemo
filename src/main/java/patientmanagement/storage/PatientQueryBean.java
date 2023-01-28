@@ -72,7 +72,7 @@ public class PatientQueryBean {
         MongoCollection<Document> collection = getCollection();
 
         //Crea il filtro
-        Bson filter = Filters.eq(id, valId);
+        Bson filter = Filters.eq(id, new ObjectId(valId));
 
         //Aggiorna il documento
         collection.updateOne(filter, Updates.set(key, valKey));
@@ -95,8 +95,30 @@ public class PatientQueryBean {
         ArrayList<PatientBean> patients = new ArrayList<>();
 
         while(it.hasNext()) {
-            Document document = (Document) it.next();
+            Document document = it.next();
             //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
+            PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,document.get("therapy", TherapyBean.class));
+
+            patients.add(patient);
+        }
+
+        return patients;
+    }
+
+    public ArrayList<PatientBean> findAll() {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find();
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PatientBean> patients = new ArrayList<>();
+
+        while(it.hasNext()) {
+            Document document = it.next();
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
                     document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,document.get("therapy", TherapyBean.class));
 
@@ -115,7 +137,7 @@ public class PatientQueryBean {
         Bson filter = Filters.eq("_id", new ObjectId(value));
 
         //Cerca il documento
-        Document document = (Document) collection.find(filter).first();
+        Document document = collection.find(filter).first();
 
         //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
         PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),

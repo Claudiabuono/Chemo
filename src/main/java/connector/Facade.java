@@ -250,4 +250,16 @@ public class Facade {
         return patients;
     };
 
+    public ArrayList<PatientBean> findAllPatients(UserBean user){
+        try{
+            if(isUserAuthorized(user.getUsername(), 1))
+                return patientQueryBean.findAll();
+            else
+                throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    };
+
 }
