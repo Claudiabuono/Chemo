@@ -56,9 +56,30 @@ public class PatientServlet extends HttpServlet {
                 }
 
                 case "completePatientProfile" -> {  //Completamento profilo paziente
-                    //Completo il profilo paziente inserendo patologia e terapia
-                    facade.updatePatient("_id", request.getParameter("id"), "condition", request.getParameter("condition"), user);
-                    facade.updatePatient("_id", request.getParameter("id"), "therapy", request.getParameter("therapy"), user);
+                    //Recupero l'id del paziente
+                    String patientId = request.getParameter("id");
+
+                    //Aggiorno il profilo paziente con la malattia
+                    facade.updatePatient("_id", patientId, "condition", request.getParameter("condition"), user);
+
+                    //Recupero i dati della terapia dalla request
+                    int duration = Integer.parseInt(request.getParameter("duration"));
+                    int frequency = Integer.parseInt(request.getParameter("frequency"));
+                    int sessions = Integer.parseInt(request.getParameter("sessions"));
+                    ArrayList<TherapyMedicineBean> medicines = new ArrayList<>();
+
+                    //Recupero i medicinali dalla request e li aggiungo a medicines
+                    int medicinesNumber = Integer.parseInt(request.getParameter("medicinesNumber"));
+                    String currentMedicineId, currentMedicineDose;
+                    for(int i = 0; i < medicinesNumber; i++) {
+                        currentMedicineId = "medicineId" + i;
+                        currentMedicineDose = "medicineDose" + i;
+                        TherapyMedicineBean medicine = new TherapyMedicineBean(request.getParameter(currentMedicineId), Integer.parseInt(request.getParameter(currentMedicineDose)));
+                        medicines.add(medicine);
+                    }
+
+                    //Inserisco la terapia
+                    facade.insertTherapy(sessions, medicines, duration, frequency, patientId, user);
 
                     //Reindirizzo alla pagina del paziente appena creato
                     response.addHeader("OPERATION_RESULT","true");
@@ -78,7 +99,7 @@ public class PatientServlet extends HttpServlet {
 
                 case "searchPatient" -> {
                     //Recupero i pazienti
-                    ArrayList<PatientBean> patients = facade.findPatients("_id", request.getParameter("id"), user);
+                    ArrayList<PatientBean> patients = facade.findPatients("name", request.getParameter("name"), user);
 
                     if(patients.size() == 1) {
                         //Aggiungo il parametro alla request
