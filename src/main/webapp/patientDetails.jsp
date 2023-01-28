@@ -14,7 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Pagina paziente</title>
-    <script src="./static/scripts/patientDetails.js"></script>
+    <script src="./static/scripts/patient.js"></script>
 </head>
 <body>
 <%
@@ -141,6 +141,7 @@
                     <input required id="new-sessions-duration" class="input-field" type="number" name="sessionDuration" value="60">
                 </div>
             </div>
+            <p id="new-medicines-number" class="hidden">1</p>
             <div id="new-medicines">
                 <div id="new-medicine-item-1" class="input-fields-row">
                     <div class="field left">
@@ -157,7 +158,7 @@
                 </div>
             </div>
             <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
-            <input type="button" class="button-primary-m submit-button" value="Salva terapia">
+            <input type="button" class="button-primary-m submit-button" value="Salva terapia" onclick="addTherapy('<%=patient.getPatientId()%>')">
         </div>
 
         <%
@@ -190,6 +191,7 @@
                         <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="60">
                     </div>
                 </div>
+                <p id="saved-medicines-number" class="hidden">1</p>
                 <div id="saved-medicines">
                     <div id="medicine-item-1" class="input-fields-row">
                         <div class="field left">
