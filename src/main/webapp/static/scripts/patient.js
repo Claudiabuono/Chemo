@@ -130,6 +130,7 @@ function addTherapy(id) {
     const condition = document.getElementById("new-condition").value;
     const frequency = document.getElementById("new-sessions-frequency").value;
     const duration = document.getElementById("new-sessions-duration").value;
+    const sessions = document.getElementById("new-sessions-number").value;
     const medicinesNumber = document.getElementById("new-medicines-number").innerHTML;
     let medicines = [];
     let therapyMedicine = [];
@@ -150,7 +151,8 @@ function addTherapy(id) {
         request.setRequestHeader('Authorization', 'Basic ');
         request.setRequestHeader('Accept', 'application/json');
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
-            frequency + "&duration=" + duration + "&medicinesNumber=" + medicinesNumber;
+            frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
+
         for (let i = 0; i < medicinesNumber; i++) {
             body += "&medicineId" + i + "=" + medicines[i][0];
             body += "&medicineDose" + i + "=" + medicines[i][1];

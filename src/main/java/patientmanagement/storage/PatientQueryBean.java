@@ -35,18 +35,22 @@ public class PatientQueryBean {
         System.out.println("Documento inserito con successo nella Collection");
     }
 
+    //Inserimento terapia in un paziente
     public void insertDocument(TherapyBean therapy, String patientId) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea il documento da inserire nella Collection
-        Document document = createDocument(therapy);
+        Document therapyDocument = createDocument(therapy);
 
         //Crea il filtro
         Bson filter = Filters.eq("_id", new ObjectId(patientId));
 
-        //Inserisci il documento nella collection
-        collection.findOneAndUpdate(filter, document);
+        //Recupera il documento del paziente
+        Document patientDoc = collection.find(filter).first();
+
+        //Inserisci il documento della terapia nel documento del paziente
+        collection.updateOne(patientDoc, new Document("$set", therapyDocument));
 
         System.out.println("Documento inserito con successo nella Collection");
     }
@@ -127,7 +131,6 @@ public class PatientQueryBean {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
-
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find();
 
@@ -186,19 +189,38 @@ public class PatientQueryBean {
                 .append("notes", patient.getNotes());
     }
 
-    private Document createDocument(TherapyBean therapyBean) {
-        return new Document("_id", new ObjectId())
+   private Document createDocument(TherapyBean therapyBean) {
+        //Creo il documento con le informazioni della terapia
+        Document therapyDocument = new Document()
                 .append("sessions", therapyBean.getSessions())
                 .append("duration", therapyBean.getDuration())
                 .append("frequency", therapyBean.getFrequency())
                 .append("medicines", therapyBean.getMedicines());
+
+       //Restituisco il documento della terapia
+        return new Document("therapy", therapyDocument);
     }
 
     private TherapyBean therapyParser(Document document) {
+        //Se non c'è una terapia restituisco null
         if(document == null) {
             return null;
         }
-        return new TherapyBean(document.getInteger("sessions"), convertToArray(document.getList("medicines", TherapyMedicineBean.class)), document.getInteger("duration"), document.getInteger("frequency"));
+
+        //Se c'è una terapia
+
+        //Recupero i medicinali e li inserisco in un ArrayList
+        List<Document> medicinesDocument = document.getList("medicines", Document.class);
+        ArrayList<TherapyMedicineBean> medicines = new ArrayList<>();
+
+        for (Document d : medicinesDocument) {
+            medicines.add(new TherapyMedicineBean(d.getString("medicineId"), d.getInteger("dose")));
+        }
+
+
+        //Restituisco il documento della terapia
+        return new TherapyBean(document.getInteger("sessions"), medicines,
+                document.getInteger("duration"), document.getInteger("frequency"));
     }
 
     private ArrayList<TherapyMedicineBean> convertToArray(List<TherapyMedicineBean> list) {

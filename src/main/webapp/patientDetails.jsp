@@ -174,21 +174,21 @@
                     </div>
                 </div>
                 <label for="condition">Patologia</label>
-                <input required id="condition" class="input-field inactive" type="text" name="condition" value="Tumore al pancreas">
+                <input required id="condition" class="input-field inactive" type="text" name="condition" value="<%=patient.getCondition()%>">
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-number">Numero di sedute</label>
-                        <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="6">
+                        <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="<%=patient.getTherapy().getSessions()%>">
                     </div>
                     <div class="field right">
                         <label for="sessions-frequency">Numero sedute a settimana</label>
-                        <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="1">
+                        <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="<%=patient.getTherapy().getFrequency()%>">
                     </div>
                 </div>
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-duration">Durata seduta (in minuti)</label>
-                        <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="60">
+                        <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="<%=patient.getTherapy().getDuration()%>">
                     </div>
                 </div>
                 <p id="saved-medicines-number" class="hidden">1</p>
