@@ -193,16 +193,18 @@
                 </div>
                 <p id="saved-medicines-number" class="hidden">1</p>
                 <div id="saved-medicines">
-                    <div id="medicine-item-1" class="input-fields-row">
+                    <% for(int i = 0; i < patient.getTherapy().getMedicines().size(); i++) { %>
+                    <div id="medicine-item-<%=i%>" class="input-fields-row">
                         <div class="field left">
-                            <label for="medicine-name-item-1">1° Medicinale</label>
-                            <input required id="medicine-name-item-1" class="input-field inactive" type="text" name="medicineName1" value="5-fluorouracile">
+                            <label for="medicine-name-item-<%=i%>"><%=i+1%>° Medicinale</label>
+                            <input required id="medicine-name-item-<%=i%>" class="input-field inactive" type="text" name="medicineName<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getMedicineId()%>">
                         </div>
                         <div class="field right">
-                            <label for="medicine-dose-item-1">Dose</label>
-                            <input required id="medicine-dose-item-1" class="input-field inactive" type="text" name="medicineDose1" value="100 ml">
+                            <label for="medicine-dose-item-<%=i%>">Dose</label>
+                            <input required id="medicine-dose-item-<%=i%>" class="input-field inactive" type="text" name="medicineDose<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getDose()%> ml">
                         </div>
                     </div>
+                    <% } %>
                 </div>
             </div>
         </div>
