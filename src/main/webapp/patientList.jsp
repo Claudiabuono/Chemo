@@ -13,6 +13,7 @@
 <head>
     <title>Chemo | Storico pazienti</title>
     <script src="./static/scripts/search.js"></script>
+    <script src="./static/scripts/patient.js"></script>
 </head>
 <body>
 <%
@@ -80,24 +81,20 @@
                 if (request.getAttribute("patientsResult") == null) {
                     //nessuna richiesta di ricerca
                     //si visualizzano tutti i pazienti
-                    System.out.println("Lista pazienti: tutti");
                     Facade facade = new Facade();
                     patients = facade.findAllPatients(user);
                 } else {
-                    System.out.println("Lista pazienti: filtrati");
                     patients = (ArrayList<PatientBean>) request.getAttribute("patientsResult");
                 }
 
                 if (patients.size() == 0) {
                     //visualizzazione messaggio nessun paziente trovato
-                    System.out.println("Lista pazienti: nessun risultato");
             %>
             <div class="result-box-container">
                 <h2>Nessun paziente trovato</h2>
             </div>
             <%
                     } else {
-                        System.out.println("Stampa lista pazienti");
                         String patientStatus = "status-unavaliable";
                         for (PatientBean patient:patients) {
                             System.out.println("Stampa paziente");
@@ -106,10 +103,9 @@
                                 patientStatus = "status-avaliable";
                             else
                                 patientStatus = "status-unavaliable";
-                            System.out.println("Stato paziente: " + patientStatus);
             %>
             <div class="result-box-container">
-                <div id="patient-box-id" class="box" onclick="redirectToPatientDetails('<%=patient.getPatientId()%>')">
+                <button type="submit" id="patient-box-id" class="box" onclick="redirectToPatientDetails('<%=patient.getPatientId()%>')">
                     <div class="first-row">
                         <div class="column left">
                             <h2 class="result-name"><%=patient.getName()%></h2>
@@ -132,7 +128,7 @@
                     <%
                         }
                     %>
-                </div>
+                </button>
             </div>
             <%
                         System.out.println("Fine paziente");
