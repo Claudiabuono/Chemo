@@ -110,6 +110,11 @@ public class MedicineServlet extends HttpServlet {
 
     }
 
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
+    }
+
     //Metodi di supporto
     private Date dateParser(String date) {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
