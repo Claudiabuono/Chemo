@@ -4,13 +4,29 @@
   Date: 16/01/2023
   Time: 13:23
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="connector.Facade"
+         import="java.util.ArrayList"
+         import="userManagement.application.UserBean"
+         import="patientmanagement.application.PatientBean"%>
 <html>
 <head>
     <title>Chemo | Storico pazienti</title>
     <script src="./static/scripts/search.js"></script>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null || user.getType() != 1) {
+            //è presente una sessione senza utente o con utente non autorizzato
+            response.sendRedirect("./error401.jsp");
+        } else {
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -20,14 +36,21 @@
             <h1 class="title">Storico pazienti</h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
-        <div id="search-form" class="form box">
+        <form id="search-form" class="form box" action="PatientServlet" method="post">
             <div class="title-section">
                 <h2 class="title">Ricerca</h2>
             </div>
-            <input type="text" id="search-patient-name" class="search-field input-field" placeholder="Nome paziente">
+            <div class="input-fields-row">
+                <div class="field left">
+                    <input type="text" id="search-patient-name" class="search-field input-field" name="name" placeholder="Nome paziente">
+                </div>
+                <div class="field right">
+                    <input type="text" id="search-patient-surname" class="search-field input-field" name="surname" placeholder="Cognome paziente">
+                </div>
+            </div>
             <div id="search-buttons">
                 <input type="button" id="search-filters-button" class="button-tertiary-s rounded edit-button" value="Espandi filtri" onclick="expandSearchFilters()">
-                <input type="button" id="search-request-button" class="button-primary-m rounded edit-button" value="Cerca">
+                <button type="submit" id="search-request-button" class="button-primary-m rounded edit-button" name="action" value="searchPatient">Cerca</button>
             </div>
             <div id="search-filters" class="hidden">
                 <div class="input-fields-row">
@@ -49,31 +72,79 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         <div id="patient-list">
             <!-- Si itera fino a quando ci sono risultati-->
-            <form class="result-box-container">
-                <div id="patient-box-id" class="box" onclick="redirectToPatientDetails('id')">
+            <%
+                ArrayList<PatientBean> patients = new ArrayList<PatientBean>();
+                if (request.getAttribute("patientsResult") == null) {
+                    //nessuna richiesta di ricerca
+                    //si visualizzano tutti i pazienti
+                    System.out.println("Lista pazienti: tutti");
+                    Facade facade = new Facade();
+                    patients = facade.findAllPatients(user);
+                } else {
+                    System.out.println("Lista pazienti: filtrati");
+                    patients = (ArrayList<PatientBean>) request.getAttribute("patientsResult");
+                }
+
+                if (patients.size() == 0) {
+                    //visualizzazione messaggio nessun paziente trovato
+                    System.out.println("Lista pazienti: nessun risultato");
+            %>
+            <div class="result-box-container">
+                <h2>Nessun paziente trovato</h2>
+            </div>
+            <%
+                    } else {
+                        System.out.println("Stampa lista pazienti");
+                        String patientStatus = "status-unavaliable";
+                        for (PatientBean patient:patients) {
+                            System.out.println("Stampa paziente");
+                            //visualizzazione box singolo paziente
+                            if (patient.getStatus())
+                                patientStatus = "status-avaliable";
+                            else
+                                patientStatus = "status-unavaliable";
+                            System.out.println("Stato paziente: " + patientStatus);
+            %>
+            <div class="result-box-container">
+                <div id="patient-box-id" class="box" onclick="redirectToPatientDetails('<%=patient.getPatientId()%>')">
                     <div class="first-row">
                         <div class="column left">
-                            <h2 class="result-name">Mario Rossi</h2>
-                            <p>RSSMRA68E01H703R</p>
+                            <h2 class="result-name"><%=patient.getName()%></h2>
+                            <p><%=patient.getTaxCode()%></p>
                         </div>
-                        <div class="column icon status-avaliable right">
+                        <div class="column icon <%=patientStatus%> right">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                             </svg>
                         </div>
                     </div>
+                    <%
+                        if (patient.getCondition() != null){
+                    %>
                     <div class="row">
-                        <h3 class="left">Tumore al pancreas</h3>
-                        <p class="right">Numero sedute: 6</p>
+                        <h3 class="left"><%=patient.getCondition()%></h3>
+                        <p class="right">Appuntamenti necessari: <%=patient.getTherapy().getSessions()%></p>
                     </div>
+                    <%
+                        }
+                    %>
                 </div>
-            </form>
+            </div>
+            <%
+                        System.out.println("Fine paziente");
+                    }
+                }
+            %>
         </div>
     </div>
 </div>
+<%
+        }
+    }
+%>
 </body>
 </html>

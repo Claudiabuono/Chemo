@@ -3,6 +3,7 @@ package patientmanagement.application;
 import connector.Facade;
 import userManagement.application.UserBean;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -105,16 +106,15 @@ public class PatientServlet extends HttpServlet {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients.get(0));
 
-                        //Salvo l'id del paziente nell'header della response, così da poterlo reindirizzare alla sua pagina
-                        response.addHeader("OPERATION_RESULT","true");
-                        response.addHeader("PATIENT_ID", patients.get(0).getPatientId());
+                        response.sendRedirect("PatientServlet?action=testRedirect&id=" + patients.get(0).getPatientId());
                     }
                     else {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients);
 
                         //Reindirizzo alla pagina del paziente appena trovato
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("patientList.jsp");
+                        requestDispatcher.forward(request, response);
                     }
                 }
 
