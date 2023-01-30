@@ -24,10 +24,8 @@
         response.sendRedirect("./error401.jsp");
     } else {
         UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
-        if (user == null) {
-            System.out.println("Errore: sessione senza utente");
-            //è presente una sessione senza utente
-            session.invalidate();
+        if (user == null || user.getType() != 1) {
+            //è presente una sessione senza utente o con utente
             response.sendRedirect("./error401.jsp");
         } else {
             PatientBean patient = (PatientBean) request.getAttribute("patient");
