@@ -29,6 +29,6 @@
     margin-right: 10px;
 }
 
-#new-medicines {
+#new-medicines, #saved-medicines {
     width: 100%;
 }
