@@ -182,16 +182,20 @@ public class Facade {
         }
     };
 
-    public void insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
+    public boolean insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
         try{
             PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, condition, notes, new ArrayList<TherapyBean>());
-            if(isUserAuthorized(user.getUsername(), 1))
+            if(isUserAuthorized(user.getUsername(), 1)) {
                 patientQueryBean.insertDocument(patient);
+                return true;
+            }
+
             else
                 throw new Exception("Utente non autorizzato all'inserimento dei pazienti");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        return false;
     };
 
     public void insertPatients(ArrayList<PatientBean> patients, UserBean user){

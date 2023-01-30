@@ -133,7 +133,7 @@ public class MedicineQueryBean {
                 .append("name", medicine.getName())
                 .append("ingredients", medicine.getIngredients())
                 .append("amount", medicine.getAmount())
-                .append("box", medicine.getBox());
+                .append("package", medicine.getBox());
     }
 
     private Document createDocument(BoxBean box) {

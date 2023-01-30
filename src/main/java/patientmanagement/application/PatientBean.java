@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class PatientBean {
     //Parametri
+    String patientId;
     private String taxCode;
     private String name;
     private String surname;
@@ -76,6 +77,11 @@ public class PatientBean {
     public String getNotes() {
         return notes;
     }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
     //Setters
 
     public void setTaxCode(String taxCode) {
@@ -114,6 +120,9 @@ public class PatientBean {
         this.therapy = therapy;
     }
 
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     //Metodi ereditati da Object
 

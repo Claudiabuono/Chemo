@@ -1,5 +1,6 @@
 package patientmanagement.storage;
 
+import com.mongodb.MongoServerException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -8,6 +9,7 @@ import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
 
@@ -18,7 +20,7 @@ import java.util.List;
 public class PatientQueryBean {
 
     //Inserimento singolo documento nella Collection
-    public void insertDocument(PatientBean patient) {
+    public boolean insertDocument(PatientBean patient) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -26,9 +28,15 @@ public class PatientQueryBean {
         Document document = createDocument(patient);
 
         //Inserisci il documento nella collection
-        collection.insertOne(document);
+        try {
+            collection.insertOne(document);
+        } catch (MongoServerException e) {
+            return false;
+        }
 
         System.out.println("Documento inserito con successo nella Collection");
+
+        return true;
     }
 
     //Inserimento collezione di documenti nella Collection
@@ -114,16 +122,15 @@ public class PatientQueryBean {
     }
 
     private Document createDocument(PatientBean patient) {
-        return new Document("taxCode", patient.getTaxCode())
+        return new Document("_id", new ObjectId(patient.getPatientId()))
+                .append("taxCode", patient.getTaxCode())
                 .append("name", patient.getName())
                 .append("surname", patient.getSurname())
                 .append("birthDate", patient.getBirthDate())
                 .append("city", patient.getCity())
                 .append("phoneNumber", patient.getPhoneNumber())
                 .append("status", patient.getStatus())
-                .append("condition", patient.getCondition())
-                .append("notes", patient.getNotes())
-                .append("therapy", patient.getTherapy());
+                .append("notes", patient.getNotes());
     }
 
     private ArrayList<TherapyBean> convertToArray(List<TherapyBean> list) {
