@@ -56,6 +56,51 @@
 },{
   "name": "Alberico",
   "surname": "Antonio",
+  "medicineId": 7,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 7,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 12,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
   "medicineId": 18,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 18,
+  "dose": 100
+},{
+  "name": "Marco",
+  "surname": "Verdi",
+  "medicineId": 1,
+  "dose": 100
+},{
+  "name": "Luca",
+  "surname": "Ranieri",
+  "medicineId": 6,
+  "dose": 150
+},{
+  "name": "Marco",
+  "surname": "Verdi",
+  "medicineId": 1,
+  "dose": 100
+},{
+  "name": "Luca",
+  "surname": "Ranieri",
+  "medicineId": 6,
+  "dose": 150
+},{
+  "name": "Giovanni",
+  "surname": "Vecchione",
+  "medicineId": 15,
   "dose": 100
 }]

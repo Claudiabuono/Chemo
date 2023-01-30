@@ -1,0 +1,29 @@
+[{
+  "medicineId": 1,
+  "quantity": 500
+},{
+  "medicineId": 6,
+  "quantity": 500
+},{
+  "medicineId": 15,
+  "quantity": 500
+},{
+  "medicineId": 5,
+  "quantity": 400
+},{
+  "medicineId": 17,
+  "quantity": 500
+},{
+  "medicineId": 7,
+  "quantity": 700
+},{
+  "medicineId": 3,
+  "quantity": 500
+},{
+  "medicineId": 12,
+  "quantity": 400
+},{
+
+  "medicineId": 18,
+  "quantity": 500
+}]
