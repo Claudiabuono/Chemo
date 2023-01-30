@@ -20,14 +20,14 @@ public class PatientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Recupero l'action dalla request
-        String action = request.getParameter("action");
+        String id = request.getParameter("id");
 
-        if (action.equals("testRedirect")) {
+        if (id != null) {
             //Recupero l'utente dalla sessione
             UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
 
             //Cerco il paziente richiesto
-            ArrayList<PatientBean> patients = facade.findPatients("_id", request.getParameter("id"), user);
+            ArrayList<PatientBean> patients = facade.findPatients("_id", id, user);
 
             //Imposto i dati del paziente come attributo
             request.setAttribute("patient", patients.get(0));
@@ -106,7 +106,7 @@ public class PatientServlet extends HttpServlet {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients.get(0));
 
-                        response.sendRedirect("PatientServlet?action=testRedirect&id=" + patients.get(0).getPatientId());
+                        response.sendRedirect("PatientServlet?id=" + patients.get(0).getPatientId());
                     }
                     else {
                         //Aggiungo il parametro alla request

@@ -122,7 +122,7 @@ function addPatient() {
 
 function redirectToPatientDetails(id) {
     //crea una richiesta alla servlet paziente per reindirizzare
-    window.location.replace("PatientServlet?action=testRedirect&id=" + id);
+    window.location.replace("PatientServlet?id=" + id);
 }
 
 function addTherapy(id) {
