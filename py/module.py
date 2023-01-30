@@ -4,13 +4,13 @@ import json
 # Il modulo prende in input i pazienti sottomessi dal medico: per far comunicare Java e Python
 # utilizziamo un file condiviso tra i due linguaggi: Java scrive l'input, preso da Python, e Python
 # scrive l'output preso da Java per visualizzare lo schedule
+
 file = open('patients.json', 'r')
 patients = json.loads(file.read())
+print("Patients number: " + str(len(patients)))
 
-file2 = open('medicines.json', 'r')
-meds = json.loads(file2.read())
-
-prova = [1, 2, 3, 4, 5]
+file = open('medicines.json', 'r')
+medicines = json.loads(file.read())
 
 
 def encodeIndividual(patientList, numSeats, numHours, numDays):
@@ -29,25 +29,9 @@ def encodeIndividual(patientList, numSeats, numHours, numDays):
         print("Selezionare un numero di pazienti ridotto: inferiore alle X unita")
 
 
-def countZeros(lista):
-    count = 0
-    for elem in lista:
-        if elem == 0:
-            count += 1
-    return count
-
-
-def countOne(lista):
-    count = 0
-    for elem in lista:
-        if elem == 1:
-            count += 1
-    return count
-
-
 def generation(patients, numSeats, numHours, numDays):
-    population_size = random.randrange(len(patients) + 1, 50)
-    print("Size population: " + str(population_size))
+    population_size = random.randrange(len(patients) + 1, 30)
+    print("Population size: " + str(population_size))
     population = []
     newIndividual = []
     for i in range(population_size):
@@ -62,28 +46,95 @@ def fitness(generation, patients):
     conflict = 0
     for indi in generation:
         fit_of_indi = 0
-        lista_indici_pazienti = []
-        for elem in indi:
-            index = elem.index(1)
-            lista_indici_pazienti.append(index)
+        lista_indici_pazienti = indexPatients(indi)
 
-        for i in range(len(lista_indici_pazienti)):
-            for j in range(1):
-                fit = 0
-                if j == i:
-                    continue
-                elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId']:
-                    fit += 0.7
-                else:
-                    fit += 0.1
-            fit_of_indi += fit
-
-        #valutazione fatta in base a quanto consumo si fa di un faramco:
+        for i in range(len(patients)):
+            for j in range(len(patients) - 1):
+                for k in range(len(patients) - 2):
+                    fit = 0
+                    if j == i+1 and k == j+1:
+                        if patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId'] and patients[lista_indici_pazienti[j]]['medicineId'] == patients[lista_indici_pazienti[k]]['medicineId']:
+                            fit += 0.5
+                        elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId']:
+                            fit += 0.2
+                    fit_of_indi += fit
 
         values.append(fit_of_indi)
+
+    for i in range(len(medicines)):
+        quantity = medConsume(medicines[i], patients, medicines[i]['quantity'])
+        if quantity < 0:
+            values[i] += 0.7
+        elif quantity < (medicines[i]['quantity'] * 0.5):
+            values[i] += 0.3
+
     return values
 
 
-generation_list = generation(patients, 10, 6, 5)
-fit = fitness(generation_list, patients)
+def medConsume(medicine, patients, totQuant):
+    for pat in patients:
+        if pat['medicineId'] == medicine['medicineId']:
+            totQuant -= pat['dose']
+    return totQuant
+
+
+#La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
+def countConflict(schedule):
+    lista_indici_pazienti = indexPatients(schedule)
+    res = []
+    conflict = False
+    for elem in lista_indici_pazienti:
+        if elem not in res:
+            res.append(elem)
+        else:
+            conflict = True
+
+    print(len(res), res)
+    return conflict
+
+
+def indexPatients(schedule):
+    lista = []
+    for elem in schedule:
+        index = elem.index(1)
+        lista.append(index)
+    return lista
+
+
+def crossover(ind1, ind2, numPatients):
+    newIndi = []
+    values = []
+
+    for elem in range(int(len(ind1)/2)):
+        if ind1[elem].index(1) not in values:
+            values.append(ind1[elem].index(1))
+            newIndi.append(ind1[elem])
+
+    for elem in ind2:
+        if len(newIndi) < numPatients:
+            if elem.index(1) not in values:
+                values.append(elem.index(1))
+                newIndi.append(elem)
+
+
+    if len(newIndi) < numPatients:
+        for i in range(numPatients):
+            default_indi = [0] * numPatients
+            if i not in values:
+                default_indi[i] = 1
+                newIndi.append(default_indi)
+
+    return newIndi
+
+
+gen = generation(patients, 6, 6, 5)
+newIndi = crossover(gen[0], gen[1], len(patients))
+print("num pazienti primo schedule: ")
+countConflict(gen[0])
+print("num pazienti secondo schedule: ")
+countConflict(gen[1])
+print("num pazienti figlio: ")
+countConflict(newIndi)
+fit = fitness(gen, patients)
 print(fit)
+
