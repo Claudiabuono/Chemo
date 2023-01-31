@@ -182,10 +182,10 @@ public class Facade {
         }
     };
 
-    public PatientBean insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String condition, String notes, UserBean user){
+    public PatientBean insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String notes, UserBean user){
         System.out.println("Nome "+ name + " con taxcode " + taxCode + "city " + city);
         try{
-            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, true, notes);
+            PatientBean patient = new PatientBean(taxCode, name, surname, birthDate, city, phoneNumber, false, notes);
             if(isUserAuthorized(user.getUsername(), 1)) {
                 patientQueryBean.insertDocument(patient);
                 return  patient;

@@ -49,7 +49,7 @@ public class PatientServlet extends HttpServlet {
                 case "createPatientProfile" -> {  //Creazione profilo paziente
                     //Creo il profilo del paziente
                     PatientBean patient = facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
-                            request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("condition"), request.getParameter("notes"),user);
+                            request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("notes"),user);
 
                     //Salvo l'id del paziente nell'header della response, così da poterlo reindirizzare alla sua pagina
                     response.addHeader("OPERATION_RESULT","true");
