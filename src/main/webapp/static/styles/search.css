@@ -65,3 +65,8 @@
 .result-title {
     margin-bottom: 0;
 }
+
+.result-box-container .no-result {
+    margin: 50px auto 30px auto;
+    text-align: center;
+}

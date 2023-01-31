@@ -91,7 +91,7 @@
                     //visualizzazione messaggio nessun paziente trovato
             %>
             <div class="result-box-container">
-                <h2>Nessun paziente trovato</h2>
+                <h2 class="no-result">Nessun paziente trovato</h2>
             </div>
             <%
                     } else {
