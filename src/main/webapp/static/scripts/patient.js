@@ -59,7 +59,7 @@ function editTherapyButtons(id, medicines) {
     document.getElementById("sessions-duration").className = "input-field";
     var i = 0;
     console.log(medicines);
-    for (let i = 1; i <= medicines; i++) {
+    for (let i = 0; i < medicines; i++) {
         console.log(i);
         document.getElementById("medicine-name-item-" + i ).className = "input-field";
         document.getElementById("medicine-dose-item-" + i ).className = "input-field";

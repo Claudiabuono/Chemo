@@ -160,17 +160,6 @@ public class PatientServlet extends HttpServlet {
                     //Reindirizzo alla pagina del paziente appena trovato
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
                 }
-
-                case "viewAvailablePatients" -> {
-                    //Recupero i pazienti
-                    ArrayList<PatientBean> patients = facade.findPatients("status", "true", user);
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("patientsResult", patients);
-
-                    //Reindirizzo alla pagina del paziente appena trovato
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
             }
         }
         catch (Throwable e) {

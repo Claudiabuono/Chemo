@@ -193,7 +193,7 @@
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
-                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('<%=patient.getPatientId()%>', 1)">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('<%=patient.getPatientId()%>', <%=patient.getTherapy().getMedicines().size()%>)">
                     </div>
                 </div>
                 <label for="condition">Patologia</label>
