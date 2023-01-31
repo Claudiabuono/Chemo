@@ -107,7 +107,7 @@
                 <button type="submit" id="patient-box-id" class="box" onclick="redirectToPatientDetails('<%=patient.getPatientId()%>')">
                     <div class="first-row">
                         <div class="column left">
-                            <h2 class="result-name"><%=patient.getName()%></h2>
+                            <h2 class="result-name"><%=patient.getName()%> <%=patient.getSurname()%></h2>
                             <p><%=patient.getTaxCode()%></p>
                         </div>
                         <div class="column icon <%=patientStatus%> right">
