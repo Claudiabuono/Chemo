@@ -233,7 +233,7 @@ public class Facade {
         }
     };
 
-    public void updatePatient(String id, String valId, String key, String valKey, UserBean user){
+    public void updatePatient(String id, String valId, String key, Object valKey, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 1))
                 patientQueryBean.updateDocument(id, valId, key, valKey);

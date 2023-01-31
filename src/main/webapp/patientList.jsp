@@ -97,7 +97,6 @@
                     } else {
                         String patientStatus = "status-unavaliable";
                         for (PatientBean patient:patients) {
-                            System.out.println("Stampa paziente");
                             //visualizzazione box singolo paziente
                             if (patient.getStatus())
                                 patientStatus = "status-avaliable";
@@ -131,7 +130,6 @@
                 </button>
             </div>
             <%
-                        System.out.println("Fine paziente");
                     }
                 }
             %>

@@ -32,6 +32,11 @@
             if (patient == null) {
                 response.sendRedirect("./error403.jsp");
             } else {
+                String patientStatus = "status-unavaliable";
+                if (patient.getStatus())
+                    patientStatus = "status-avaliable";
+                else
+                    patientStatus = "status-unavaliable";
 %>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
@@ -95,20 +100,38 @@
             <input required id="notes" class="input-field inactive" type="text" name="notes" value="<%=patient.getNotes()%>">
             <div class="title-section">
                 <h2 class="title">Stato</h2>
+                <%
+                if (patient.getTherapy() != null) {
+                %>
                 <div id="patient-status-button">
-                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('id')">
+                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('<%=patient.getPatientId()%>')">
                 </div>
+                <%
+                }
+                %>
             </div>
             <div class="input-fields-row">
-                <div id="status-icon" class="icon status-avaliable">
+                <div id="status-icon" class="icon <%=patientStatus%>">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                     </svg>
                 </div>
                 <select id="status" class="input-field inactive" name="status">
-                    <option value="disponibile" selected>Disponibile</option>
-                    <option value="nonDisponibile">Non disponibile</option>
+                    <%
+                        if (patient.getStatus()){
+                    %>
+                    <option value="true" selected>Disponibile</option>
+                    <option value="false">Non disponibile</option>
+                    <%
+                        } else {
+                    %>
+                    <option value="true">Disponibile</option>
+                    <option value="false" selected>Non disponibile</option>
+                    <%
+                        }
+                    %>
+
                 </select>
             </div>
         </div>
@@ -116,6 +139,7 @@
             if (patient.getTherapy() == null) {
         %>
         <%-- Se il paziente non ha una terapia far vedere questa parte --%>
+        <p id="therapy" class="hidden">false</p>
         <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
         <div id="new-therapy-form" class="box hidden">
             <div class="title-section">
@@ -162,13 +186,14 @@
         <%
             } else {
         %>
+        <p id="therapy" class="hidden">true</p>
         <%-- Se il paziente ha una terapia far vedere questa parte --%>
         <div class="">
             <div id="therapy-section" class="form">
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
-                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('<%=patient.getPatientId()%>', 1)">
                     </div>
                 </div>
                 <label for="condition">Patologia</label>

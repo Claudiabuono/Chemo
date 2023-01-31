@@ -98,6 +98,33 @@ public class PatientServlet extends HttpServlet {
                     response.addHeader("PATIENT_ID", request.getParameter("id"));
                 }
 
+                case "editPatientStatus" -> {
+                    String operationResult = "false";
+                    String patientId = request.getParameter("id");
+                    boolean patientStatus = Boolean.parseBoolean(request.getParameter("status"));
+
+                    System.out.println("Edit status: id=" + patientId);
+
+                    ArrayList<PatientBean> patients = facade.findPatients("_id", patientId, user);
+                    //controlla se esiste una condition e una terapia per quel paziente
+                    if (patients.get(0).getTherapy() == null) {
+                        //se non esiste c'è un errore e l'operazione fallisce
+                        operationResult = "false";
+                    } else {
+                        //se esiste viene effettuata la modifica
+                        operationResult = "true";
+                        if (patients.get(0).getStatus() != patientStatus) {
+                            //Aggiorno lo stato del paziente
+                            facade.updatePatient("_id", patientId, "status", patientStatus, user);
+                        }
+                    }
+
+                    System.out.println("Edit status: id=" + patientId + " result=" + operationResult);
+
+                    //Reindirizzo alla pagina del paziente appena creato
+                    response.addHeader("OPERATION_RESULT",operationResult);
+                }
+
                 case "searchPatient" -> {
                     //Recupero i pazienti
                     ArrayList<PatientBean> patients = facade.findPatients("name", request.getParameter("name"), user);
@@ -143,15 +170,6 @@ public class PatientServlet extends HttpServlet {
 
                     //Reindirizzo alla pagina del paziente appena trovato
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
-                case "editPatientStatus" -> {
-                    //Aggiorno lo stato del paziente
-                    facade.updatePatient("_id", request.getParameter("id"), "status", request.getParameter("status"), user);
-
-                    //Reindirizzo alla pagina del paziente appena creato
-                    response.addHeader("OPERATION_RESULT","true");
-                    response.addHeader("PATIENT_ID", request.getParameter("id"));
                 }
             }
         }

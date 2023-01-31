@@ -88,7 +88,7 @@ public class PatientQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String key, String valKey) {
+    public void updateDocument(String id, String valId, String key, Object valKey) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 

@@ -46,7 +46,7 @@ function addMedicineField(id, number) {
 }
 
 function editStatusButton(id) {
-    editToSaveButton("save-patient-status-button", "patient-status-button", "edit-patient-status-button", "submitUpdatedStatus('" + id + " ')");
+    editToSaveButton("save-patient-status-button", "patient-status-button", "edit-patient-status-button", "submitUpdatedStatus('" + id + "')");
     document.getElementById("status").className = "input-field";
 }
 
@@ -77,6 +77,11 @@ function editTherapyButtons(id, medicines) {
 
 
 /* Funzioni per le chiamata alle servlet per il paziente*/
+
+function redirectToPatientDetails(id) {
+    //crea una richiesta alla servlet paziente per reindirizzare
+    window.location.replace("PatientServlet?id=" + id);
+}
 
 function addPatient() {
     //recupero dei parametri dalla pagina
@@ -118,11 +123,6 @@ function addPatient() {
             }
         };
     }
-}
-
-function redirectToPatientDetails(id) {
-    //crea una richiesta alla servlet paziente per reindirizzare
-    window.location.replace("PatientServlet?id=" + id);
 }
 
 function addTherapy(id) {
@@ -169,6 +169,48 @@ function addTherapy(id) {
                     redirectToPatientDetails(patientID);
                 } else {
                     //errore aggiunta terapia
+                }
+            }
+        };
+    }
+}
+
+
+function submitUpdatedStatus(id){
+    //recupero dei parametri dalla pagina
+    const status = document.getElementById("status").value;
+    console.log(status);
+    const therapy = document.getElementById("therapy").innerHTML;
+    console.log(therapy);
+    console.log(id);
+
+    var validity = true;
+    //validazione del formato
+    if (!therapy) {
+        validity = false;
+    }
+    if (validity) {
+        //i campi hanno tutti il formato corretto
+        var request = new XMLHttpRequest();
+        request.open('POST', "PatientServlet", true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.setRequestHeader('Authorization', 'Basic ');
+        request.setRequestHeader('Accept', 'application/json');
+        const body = "action=editPatientStatus&id=" + id +"&status=" + status;
+        request.send(body);
+
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status == 200) {
+                //redirectToPage("patientDetails.jsp");
+                //alert(request.responseText);
+                if (request.getResponseHeader('OPERATION_RESULT')){
+                    //recupero id dalla risposta
+                    redirectToPatientDetails(id);
+                } else {
+                    //errore aggiunta terapia
+                    console.log("Errore modifica stato");
+                    //recupero id dalla risposta
+                    redirectToPatientDetails(id);
                 }
             }
         };
