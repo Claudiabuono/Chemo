@@ -51,7 +51,7 @@ function editStatusButton(id) {
 }
 
 function editTherapyButtons(id, medicines) {
-    editToSaveButton("save-therapy-button", "therapy-buttons", "edit-therapy-button", "submitUpdatedTherapy('" + id + " ')");
+    editToSaveButton("save-therapy-button", "therapy-buttons", "edit-therapy-button", "submitUpdatedTherapy('" + id + "')");
     addDeleteButton("Elimina","delete-therapy-button","therapy-buttons", "save-therapy-button", "deleteTherapy('" + id + "')");
     document.getElementById("condition").className = "input-field";
     document.getElementById("sessions-number").className = "input-field";
@@ -145,33 +145,64 @@ function addTherapy(id) {
 
     if (validity) {
         //i campi hanno tutti il formato corretto
-        var request = new XMLHttpRequest();
-        request.open('POST', "PatientServlet", true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        request.setRequestHeader('Authorization', 'Basic ');
-        request.setRequestHeader('Accept', 'application/json');
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
-
         for (let i = 0; i < medicinesNumber; i++) {
             body += "&medicineId" + i + "=" + medicines[i][0];
             body += "&medicineDose" + i + "=" + medicines[i][1];
         }
-        request.send(body);
+        sendTherapyData(body)
+    }
+}
+function sendTherapyData(body){
+    var request = new XMLHttpRequest();
+    request.open('POST', "PatientServlet", true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    request.setRequestHeader('Authorization', 'Basic ');
+    request.setRequestHeader('Accept', 'application/json');
+    request.send(body);
 
-        request.onreadystatechange = function () {
-            if (request.readyState === 4 && request.status == 200) {
-                //redirectToPage("patientDetails.jsp");
-                //alert(request.responseText);
-                if (request.getResponseHeader('OPERATION_RESULT')){
-                    const patientID = request.getResponseHeader('PATIENT_ID');
-                    //recupero id dalla risposta
-                    redirectToPatientDetails(patientID);
-                } else {
-                    //errore aggiunta terapia
-                }
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status == 200) {
+            //redirectToPage("patientDetails.jsp");
+            //alert(request.responseText);
+            if (request.getResponseHeader('OPERATION_RESULT')){
+                const patientID = request.getResponseHeader('PATIENT_ID');
+                //recupero id dalla risposta
+                redirectToPatientDetails(patientID);
+            } else {
+                //errore aggiunta terapia
             }
-        };
+        }
+    };
+}
+function submitUpdatedTherapy(id) {
+    //recupero dei parametri dalla pagina
+    const condition = document.getElementById("condition").value;
+    const frequency = document.getElementById("sessions-frequency").value;
+    const duration = document.getElementById("sessions-duration").value;
+    const sessions = document.getElementById("sessions-number").value;
+    const medicinesNumber = document.getElementById("saved-medicines-number").innerHTML;
+    let medicines = [];
+    let therapyMedicine = [];
+    for (let i = 0; i < medicinesNumber; i++) {
+        therapyMedicine[0] = document.getElementById("medicine-name-item-" + i).value;
+        therapyMedicine[1] = document.getElementById("medicine-dose-item-" + i).value;
+        medicines[i] = therapyMedicine;
+    }
+
+    var validity = true;
+    //validazione del formato
+
+    if (validity) {
+        //i campi hanno tutti il formato corretto
+        var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
+            frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
+        for (let i = 0; i < medicinesNumber; i++) {
+            body += "&medicineId" + i + "=" + medicines[i][0];
+            body += "&medicineDose" + i + "=" + medicines[i][1];
+        }
+        sendTherapyData(body)
     }
 }
 

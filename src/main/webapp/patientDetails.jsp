@@ -223,8 +223,8 @@
                             <input required id="medicine-name-item-<%=i%>" class="input-field inactive" type="text" name="medicineName<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getMedicineId()%>">
                         </div>
                         <div class="field right">
-                            <label for="medicine-dose-item-<%=i%>">Dose</label>
-                            <input required id="medicine-dose-item-<%=i%>" class="input-field inactive" type="text" name="medicineDose<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getDose()%> ml">
+                            <label for="medicine-dose-item-<%=i%>">Dose (in ml)</label>
+                            <input required id="medicine-dose-item-<%=i%>" class="input-field inactive" type="text" name="medicineDose<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getDose()%>">
                         </div>
                     </div>
                     <% } %>
