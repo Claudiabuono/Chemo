@@ -1,6 +1,6 @@
 package patientmanagement.application;
 
-class MedicinesBean {
+public class TherapyMedicineBean {
 
     //Parametri
     private String medicineId;
@@ -8,10 +8,10 @@ class MedicinesBean {
 
     //Costruttori
 
-    public MedicinesBean() {
+    public TherapyMedicineBean() {
     }
 
-    public MedicinesBean(String medicineId, int dose) {
+    public TherapyMedicineBean(String medicineId, int dose) {
         this.medicineId = medicineId;
         this.dose = dose;
     }

@@ -1,10 +1,15 @@
 package patientmanagement.application;
 
+import org.bson.types.ObjectId;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class PatientBean {
     //Parametri
+    private String patientId;
     private String taxCode;
     private String name;
     private String surname;
@@ -14,7 +19,7 @@ public class PatientBean {
     private boolean status;
     private String condition;
     private String notes;
-    private ArrayList<TherapyBean> therapy;
+    private TherapyBean therapy;
 
     //Costruttori
 
@@ -22,7 +27,20 @@ public class PatientBean {
         this.therapy = null;
     }
 
-    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, ArrayList<TherapyBean> therapy) {
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String notes) {
+        this.patientId = new ObjectId().toString();
+        this.taxCode = taxCode;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = dataNascita;
+        this.city = city;
+        this.phoneNumber = phoneNumber;
+        this.status = status;
+        this.notes = notes;
+    }
+
+    public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String condition, String notes, TherapyBean therapy) {
+        this.patientId = new ObjectId().toString();
         this.taxCode = taxCode;
         this.name = name;
         this.surname = surname;
@@ -36,6 +54,9 @@ public class PatientBean {
     }
 
     //Getters
+    public String getPatientId() {
+        return patientId;
+    }
 
     public String getTaxCode() {
         return taxCode;
@@ -51,6 +72,10 @@ public class PatientBean {
 
     public Date getBirthDate() {
         return birthDate;
+    }
+
+    public String getParsedBirthDate() {
+        return dateParser(birthDate);
     }
 
     public String getCity() {
@@ -69,7 +94,7 @@ public class PatientBean {
         return condition;
     }
 
-    public ArrayList<TherapyBean> getTherapy() {
+    public TherapyBean getTherapy() {
         return therapy;
     }
 
@@ -77,6 +102,10 @@ public class PatientBean {
         return notes;
     }
     //Setters
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 
     public void setTaxCode(String taxCode) {
         this.taxCode = taxCode;
@@ -110,7 +139,7 @@ public class PatientBean {
         this.condition = condition;
     }
 
-    public void setTherapy(ArrayList<TherapyBean> therapy) {
+    public void setTherapy(TherapyBean therapy) {
         this.therapy = therapy;
     }
 
@@ -131,5 +160,10 @@ public class PatientBean {
                 ", notes='" + notes + '\'' +
                 ", therapy=" + therapy +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

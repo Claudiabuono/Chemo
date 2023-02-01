@@ -4,14 +4,30 @@
   Date: 09/01/2023
   Time: 20:32
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="userManagement.application.UserBean" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Aggiunta paziente</title>
+    <script src="./static/scripts/patient.js"></script>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null) {
+            System.out.println("Errore: sessione senza utente");
+            //è presente una sessione senza utente
+            session.invalidate();
+            response.sendRedirect("./error401.jsp");
+        } else {
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -65,9 +81,13 @@
             </div>
             <label for="notes">Allergie ed intolleranze</label>
             <input required id="notes" class="input-field" type="text" name="notes">
-            <input type="button" class="button-primary-m submit-button" value="Aggiungi paziente">
+            <input type="button" class="button-primary-m submit-button" value="Aggiungi paziente" onclick="addPatient()">
         </div>
     </div>
 </div>
+<%
+        }
+    }
+%>
 </body>
 </html>

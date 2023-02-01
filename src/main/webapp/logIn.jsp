@@ -9,6 +9,18 @@
     <jsp:include page="./static/templates/userHeader.html"/>
 </header>
 <div id="page-content">
+    <%
+        String error = (String) request.getAttribute("loginError");
+        if(error != null)
+        {
+    %>
+    <div id="login-error" class="box">
+        <h3>Si &egrave; verificato un errore!</h3>
+        <p><%=error%></p>
+    </div>
+    <%
+        }
+    %>
     <div id="login-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Entra nell'area riservata</h1>
@@ -18,13 +30,14 @@
                 </svg>
             </a>
         </div>
-        <div id="login-form" class="form">
+        <form id="login-form" class="form" action="UserServlet" method="post">
             <label for="username">Nome utente</label>
             <input required id="username" class="input-field" type="text" name="username">
             <label for="password">Password</label>
             <input required id="password" class="input-field" type="password" name="password">
-            <input type="button" class="button-primary-m submit-button" value="Accedi">
-        </div>
+            <!--<input type="button" class="button-primary-m submit-button" value="Accedi" onclick="logInRequest()">-->
+            <button type="submit" class="button-primary-m submit-button" name="submit" value="login">Accedi</button>
+        </form>
     </div>
 </div>
 <footer>
