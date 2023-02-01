@@ -119,6 +119,7 @@ public class MedicineQueryBean {
             MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
             medicines.add(medicine);
         }
+
         return medicines;
     }
 
@@ -136,6 +137,26 @@ public class MedicineQueryBean {
         MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", PackageBean.class)));
 
         return medicine;
+    }
+
+    public ArrayList<MedicineBean> findAll() {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find();
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", PackageBean.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
+            medicines.add(medicine);
+        }
+
+        return medicines;
     }
 
 
