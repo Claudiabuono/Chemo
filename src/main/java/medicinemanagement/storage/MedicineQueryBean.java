@@ -32,19 +32,22 @@ public class MedicineQueryBean {
         System.out.println("Documento inserito con successo nella Collection");
     }
 
-    //Inserimento singolo documento in un medicinale
-    public void insertDocument(PackageBean box, String medicineId) {
+    //Inserimento una confezione in un medicinale
+    public void insertDocument(PackageBean newPackage, String medicineId) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea il documento da inserire nella Collection
-        Document document = createDocument(box);
+        Document packageDocument = createDocument(newPackage);
 
         //Crea il filtro
-        Bson filter = Filters.eq("id", medicineId);
+        Bson filter = Filters.eq("_id", new ObjectId(medicineId));
+
+        //Recupera il documento del medicinale
+        Document medicineDocument = collection.find(filter).first();
 
         //Inserisci il documento nella collection
-        collection.findOneAndUpdate(filter, document);
+        collection.updateOne(medicineDocument, new Document("$set", packageDocument));
 
         System.out.println("Documento inserito con successo nella Collection");
     }
