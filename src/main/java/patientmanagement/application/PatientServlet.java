@@ -176,7 +176,7 @@ public class PatientServlet extends HttpServlet {
 
     //Metodi di supporto
     private Date dateParser(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return format.parse(date);
         }
