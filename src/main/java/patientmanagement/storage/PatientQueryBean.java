@@ -102,7 +102,7 @@ public class PatientQueryBean {
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
-    public ArrayList<PatientBean> findDocument(String key, String value) {
+    public ArrayList<PatientBean> findDocument(String key, Object value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -111,6 +111,37 @@ public class PatientQueryBean {
 
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find(filter);
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PatientBean> patients = new ArrayList<>();
+
+        while(it.hasNext()) {
+            Document document = it.next();
+            //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
+            PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
+                    document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapyParser((Document) document.get("therapy")));
+            patient.setPatientId(document.get("_id").toString());
+            patients.add(patient);
+        }
+
+        return patients;
+    }
+
+    public ArrayList<PatientBean> findDocument(ArrayList<String> key, ArrayList<Object> value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson finalFilter = Filters.eq(key.get(0), value.get(0));
+        Bson filter;
+        for(int i = 1; i < key.size(); i++) {
+            filter = Filters.eq(key.get(i), value.get(i));
+            finalFilter = Filters.and(finalFilter, filter);
+        }
+        System.out.println(finalFilter);
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find(finalFilter);
 
         Iterator<Document> it = iterDoc.iterator();
         ArrayList<PatientBean> patients = new ArrayList<>();

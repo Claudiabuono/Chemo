@@ -245,12 +245,12 @@ public class Facade {
     };
 
     //modificare il metodo in patientQueryBean in modo che restituisca ArrayList<PatientBean>
-    public ArrayList<PatientBean> findPatients(String key, String value, UserBean user){
+    public ArrayList<PatientBean> findPatients(String key, Object value, UserBean user){
         ArrayList<PatientBean> patients = new ArrayList<>();
         try{
             if(isUserAuthorized(user.getUsername(), 1)) {
                 if (key.equals("_id")) {
-                    patients.add(patientQueryBean.findDocumentById(value));
+                    patients.add(patientQueryBean.findDocumentById(String.valueOf(value)));
                     return patients;
                 }
                 return patients = patientQueryBean.findDocument(key, value);
@@ -263,6 +263,21 @@ public class Facade {
 
         return patients;
     };
+
+    public ArrayList<PatientBean> findPatients(ArrayList<String> key, ArrayList<Object> value, UserBean user){
+        ArrayList<PatientBean> patients = new ArrayList<>();
+        try{
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                patients = patientQueryBean.findDocument(key, value);
+            }
+            else
+                throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return patients;
+    }
 
     public ArrayList<PatientBean> findAllPatients(UserBean user){
         try{
