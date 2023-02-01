@@ -10,6 +10,7 @@ import medicinemanagement.application.PackageBean;
 import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -129,11 +130,11 @@ public class MedicineQueryBean {
     }
 
     private Document createDocument(MedicineBean medicine) {
-        return new Document("id", medicine.getId())
+        return new Document("_id", new ObjectId(medicine.getId()))
                 .append("name", medicine.getName())
                 .append("ingredients", medicine.getIngredients())
                 .append("amount", medicine.getAmount())
-                .append("box", medicine.getBox());
+                .append("package", medicine.getPackages());
     }
 
     private Document createDocument(PackageBean box) {
