@@ -47,7 +47,6 @@ public class PatientServlet extends HttpServlet {
         try {
             switch (action) {
                 case "createPatientProfile" -> {  //Creazione profilo paziente
-                    //Creo il profilo del paziente
                     PatientBean patient = facade.insertPatient(request.getParameter("taxCode"), request.getParameter("name"), request.getParameter("surname"), dateParser(request.getParameter("birthDate")),
                             request.getParameter("city"), request.getParameter("phoneNumber"), request.getParameter("notes"),user);
 
@@ -119,12 +118,14 @@ public class PatientServlet extends HttpServlet {
                     ArrayList<String> keys = new ArrayList<>();
                     ArrayList<Object> values = new ArrayList<>();
                     String parameter;
+                    boolean findAll = true; //booleano che ci serve per capire se non sono stati selezionati parametri nella ricerca, quindi per indicare che serve una findAll
 
                     //Nome
                     parameter = request.getParameter("name");
                     if(parameter != null && !(parameter.equals(""))) {
                         keys.add("name");
                         values.add(parameter);
+                        findAll = false;
                     }
 
                     //Cognome
@@ -132,6 +133,7 @@ public class PatientServlet extends HttpServlet {
                     if(parameter != null && !(parameter.equals(""))) {
                         keys.add("surname");
                         values.add(parameter);
+                        findAll = false;
                     }
 
                     //Medicinale
@@ -139,6 +141,7 @@ public class PatientServlet extends HttpServlet {
                     if(parameter != null && !(parameter.equals("na"))) {
                         keys.add("medicine");
                         values.add(parameter);
+                        findAll = false;
                     }
 
                     //Stato
@@ -146,23 +149,33 @@ public class PatientServlet extends HttpServlet {
                     if(parameter != null && !(parameter.equals("na"))) {
                         keys.add("status");
                         values.add(Boolean.parseBoolean(parameter));
+                        findAll = false;
                     }
 
 
-                    //Recupero i pazienti
-                    ArrayList<PatientBean> patients = facade.findPatients(keys, values, user);
+                    //Creo l'ArrayList da restituire
+                    ArrayList<PatientBean> patients;
 
+                    //Se non sono stati selezionati parametri, allora dobbiamo effettuare una ricerca di tutti i pazienti
+                    if(findAll)
+                        patients = facade.findAllPatients(user);
+                    //Altrimenti ci serve una ricerca in base ai parametri selezionati
+                    else
+                        patients = facade.findPatients(keys, values, user);
+
+                    //Se ho trovato un solo paziente, allora reindirizzo alla sua pagina paziente
                     if(patients.size() == 1) {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients.get(0));
 
+                        //Reindirizzo alla pagina paziente
                         response.sendRedirect("PatientServlet?id=" + patients.get(0).getPatientId());
                     }
                     else {
                         //Aggiungo il parametro alla request
                         request.setAttribute("patientsResult", patients);
 
-                        //Reindirizzo alla pagina del paziente appena trovato
+                        //Mando la richiesta con il dispatcher
                         RequestDispatcher requestDispatcher = request.getRequestDispatcher("patientList.jsp");
                         requestDispatcher.forward(request, response);
                     }

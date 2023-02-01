@@ -1,13 +1,11 @@
 package patientmanagement.storage;
 
-import com.mongodb.Mongo;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
-import medicinemanagement.application.BoxBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -18,6 +16,7 @@ import patientmanagement.application.TherapyMedicineBean;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PatientQueryBean {
 
@@ -115,6 +114,7 @@ public class PatientQueryBean {
         Iterator<Document> it = iterDoc.iterator();
         ArrayList<PatientBean> patients = new ArrayList<>();
 
+        //Itero su ogni documento restituito dalla query
         while(it.hasNext()) {
             Document document = it.next();
             //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
@@ -132,13 +132,30 @@ public class PatientQueryBean {
         MongoCollection<Document> collection = getCollection();
 
         //Crea il filtro
-        Bson finalFilter = Filters.eq(key.get(0), value.get(0));
+        Bson finalFilter;
         Bson filter;
+        Pattern regex;
+
+        //Controllo se il primo elemento della lista dei valori è una stringa, se così creo la regex per la stringa
+        if (value.get(0) instanceof String) {
+            regex = Pattern.compile(Pattern.quote((String) value.get(0)), Pattern.CASE_INSENSITIVE);
+            finalFilter = Filters.eq(key.get(0), regex);
+        }
+        else
+            finalFilter = Filters.eq(key.get(0), value.get(0));
+
+        //Ciclo su ogni elemento della lista
         for(int i = 1; i < key.size(); i++) {
-            filter = Filters.eq(key.get(i), value.get(i));
+            //Controllo se l'elemento i-esimo della lista dei valori è una stringa, se così creo la regex per la stringa
+            if (value.get(i) instanceof String) {
+                regex = Pattern.compile(Pattern.quote((String) value.get(i)), Pattern.CASE_INSENSITIVE);
+                filter = Filters.eq(key.get(i), regex);
+            }
+            else
+                filter = Filters.eq(key.get(i), value.get(i));
+
             finalFilter = Filters.and(finalFilter, filter);
         }
-        System.out.println(finalFilter);
 
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find(finalFilter);
@@ -146,9 +163,9 @@ public class PatientQueryBean {
         Iterator<Document> it = iterDoc.iterator();
         ArrayList<PatientBean> patients = new ArrayList<>();
 
+        //Itero su ogni documento restituito dalla query
         while(it.hasNext()) {
             Document document = it.next();
-            //ArrayList<TherapyBean> therapies = convertToArray(document.getList("therapy", TherapyBean.class));
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
                     document.getString("city"), document.getString("phoneNumber"), document.getBoolean("status"), document.getString("condition"), document.getString("notes") ,therapyParser((Document) document.get("therapy")));
             patient.setPatientId(document.get("_id").toString());
@@ -168,6 +185,7 @@ public class PatientQueryBean {
         Iterator<Document> it = iterDoc.iterator();
         ArrayList<PatientBean> patients = new ArrayList<>();
 
+        //Itero su ogni documento restituito dalla query
         while(it.hasNext()) {
             Document document = it.next();
             PatientBean patient = new PatientBean(document.getString("taxCode"), document.getString("name"), document.getString("surname"), document.getDate("birthDate"),
