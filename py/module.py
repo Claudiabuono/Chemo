@@ -54,19 +54,21 @@ def fitness(generation, patients):
                     fit = 0
                     if j == i+1 and k == j+1:
                         if patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId'] and patients[lista_indici_pazienti[j]]['medicineId'] == patients[lista_indici_pazienti[k]]['medicineId']:
-                            fit += 0.5
+                            fit += 0.7
                         elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId']:
-                            fit += 0.2
+                            fit += 0.3
                     fit_of_indi += fit
 
-        values.append(fit_of_indi)
+        for i in range(len(medicines)):
+            val = 0
+            quantity = medConsume(medicines[i], patients, medicines[i]['quantity'])
+            if quantity < 0:
+                val += 0.3
+            elif quantity < (medicines[i]['quantity'] * 0.5):
+                val += 0.1
+            fit_of_indi += val
 
-    for i in range(len(medicines)):
-        quantity = medConsume(medicines[i], patients, medicines[i]['quantity'])
-        if quantity < 0:
-            values[i] += 0.7
-        elif quantity < (medicines[i]['quantity'] * 0.5):
-            values[i] += 0.3
+        values.append(fit_of_indi)
 
     return values
 
@@ -128,13 +130,6 @@ def crossover(ind1, ind2, numPatients):
 
 
 gen = generation(patients, 6, 6, 5)
-newIndi = crossover(gen[0], gen[1], len(patients))
-print("num pazienti primo schedule: ")
-countConflict(gen[0])
-print("num pazienti secondo schedule: ")
-countConflict(gen[1])
-print("num pazienti figlio: ")
-countConflict(newIndi)
 fit = fitness(gen, patients)
 print(fit)
 
