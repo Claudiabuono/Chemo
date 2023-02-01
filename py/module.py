@@ -130,13 +130,6 @@ def crossover(ind1, ind2, numPatients):
 
 
 gen = generation(patients, 6, 6, 5)
-newIndi = crossover(gen[0], gen[1], len(patients))
-print("num pazienti primo schedule: ")
-countConflict(gen[0])
-print("num pazienti secondo schedule: ")
-countConflict(gen[1])
-print("num pazienti figlio: ")
-countConflict(newIndi)
 fit = fitness(gen, patients)
 print(fit)
 
