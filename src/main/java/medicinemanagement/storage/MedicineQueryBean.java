@@ -122,6 +122,22 @@ public class MedicineQueryBean {
         return medicines;
     }
 
+    public MedicineBean findDocumentById(String value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(value));
+
+        //Cerca il documento
+        Document document = collection.find(filter).first();
+
+        //Crea il medicinale da restituire
+        MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", PackageBean.class)));
+
+        return medicine;
+    }
+
 
     //Metodi ausiliari
     private MongoCollection<Document> getCollection() {
@@ -136,15 +152,16 @@ public class MedicineQueryBean {
         return new Document("_id", new ObjectId(medicine.getId()))
                 .append("name", medicine.getName())
                 .append("ingredients", medicine.getIngredients())
-                .append("amount", medicine.getAmount())
-                .append("package", medicine.getPackages());
+                .append("amount", medicine.getAmount());
     }
 
     private Document createDocument(PackageBean box) {
-        return new Document("packageId", box.getPackageId())
+        Document document = new Document("packageId", box.getPackageId())
                 .append("status", box.getStatus())
                 .append("capacity", box.getCapacity())
                 .append("expiryDate", box.getExpiryDate());
+
+        return new Document("package", document);
     }
 
     private ArrayList<PackageBean> convertToArray(List<PackageBean> packageBeans) {
