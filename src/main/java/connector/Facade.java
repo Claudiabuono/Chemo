@@ -1,9 +1,8 @@
 package connector;
 
-import medicinemanagement.application.BoxBean;
+import medicinemanagement.application.PackageBean;
 import medicinemanagement.application.MedicineBean;
 import medicinemanagement.storage.MedicineQueryBean;
-import org.bson.types.ObjectId;
 import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
 import patientmanagement.application.TherapyMedicineBean;
@@ -108,7 +107,7 @@ public class Facade {
     public void insertMedicine( String id, String name, String ingredients, int amount, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
-                MedicineBean medicineBean = new MedicineBean(id,name, ingredients, amount, new ArrayList<BoxBean>());
+                MedicineBean medicineBean = new MedicineBean(id, name, ingredients, amount, new ArrayList<PackageBean>());
                 medicineQueryBean.insertDocument(medicineBean);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");
@@ -117,11 +116,11 @@ public class Facade {
         }
     }
 
-    public void insertMedicineBox(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
+    public void insertMedicinePackage(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
-                BoxBean box = new BoxBean(status, expiryDate, capacity, boxId);
-                medicineQueryBean.insertDocument(box, medicineId);
+                PackageBean newPackage = new PackageBean(status, expiryDate, capacity, boxId);
+                medicineQueryBean.insertDocument(newPackage, medicineId);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");
         }catch(Exception e){
@@ -130,7 +129,7 @@ public class Facade {
     }
 
 
-    public void removeMedicineBox(String boxId, UserBean user) {
+    public void removeMedicinePackage(String boxId, UserBean user) {
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
                 medicineQueryBean.deleteDocument("boxId", boxId);

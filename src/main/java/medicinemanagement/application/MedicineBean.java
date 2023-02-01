@@ -9,27 +9,27 @@ public class MedicineBean {
     private String name;
     private String ingredients;
     private int amount;
-    private ArrayList<BoxBean> boxes;
+    private ArrayList<PackageBean> packages;
 
 
     //Costruttori
     public MedicineBean() {
-        boxes = new ArrayList<>();
+        packages = new ArrayList<>();
     }
 
     public MedicineBean(String name, String ingredients) {
         this.name = name;
         this.ingredients = ingredients;
         this.amount = 0;
-        this.boxes = new ArrayList<>();
+        this.packages = new ArrayList<>();
     }
 
-    public MedicineBean(String id, String name, String ingredients, int amount, ArrayList<BoxBean> boxes) {
+    public MedicineBean(String id, String name, String ingredients, int amount, ArrayList<PackageBean> packages) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.amount = amount;
-        this.boxes = boxes;
+        this.packages = packages;
     }
 
     //Getters
@@ -49,12 +49,12 @@ public class MedicineBean {
         return amount;
     }
 
-    public BoxBean getBox(int index) {
-        return boxes.get(index);
+    public PackageBean getPackage(int index) {
+        return packages.get(index);
     }
 
-    public ArrayList<BoxBean> getBoxes() {
-        return boxes;
+    public ArrayList<PackageBean> getPackages() {
+        return packages;
     }
 
     //Setters
@@ -74,8 +74,8 @@ public class MedicineBean {
         this.amount = amount;
     }
 
-    public void setBox(ArrayList<BoxBean> boxes) {
-        this.boxes = boxes;
+    public void setPackages(ArrayList<PackageBean> packages) {
+        this.packages = packages;
     }
 
     //Metodi ereditati da Object
@@ -86,12 +86,12 @@ public class MedicineBean {
                 ", name='" + name + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", amount=" + amount +
-                ", boxes=" + boxes +
+                ", packages=" + packages +
                 '}';
     }
 
     //Altri metodi
-    public void addBox(BoxBean box) {
-        this.boxes.add(box);
+    public void addPackage(PackageBean newPackage) {
+        this.packages.add(newPackage);
     }
 }

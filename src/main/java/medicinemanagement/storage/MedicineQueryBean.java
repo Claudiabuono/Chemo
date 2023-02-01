@@ -6,7 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
-import medicinemanagement.application.BoxBean;
+import medicinemanagement.application.PackageBean;
 import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -32,7 +32,7 @@ public class MedicineQueryBean {
     }
 
     //Inserimento singolo documento in un medicinale
-    public void insertDocument(BoxBean box, String medicineId) {
+    public void insertDocument(PackageBean box, String medicineId) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -111,8 +111,8 @@ public class MedicineQueryBean {
 
         while (it.hasNext()) {
             Document document = it.next();
-            ArrayList<BoxBean> boxBeans = convertToArray(document.getList("box", BoxBean.class));
-            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxBeans);
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", PackageBean.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
             medicines.add(medicine);
         }
         return medicines;
@@ -136,15 +136,15 @@ public class MedicineQueryBean {
                 .append("box", medicine.getBox());
     }
 
-    private Document createDocument(BoxBean box) {
-        return new Document("id", box.getBoxId())
+    private Document createDocument(PackageBean box) {
+        return new Document("packageId", box.getPackageId())
                 .append("status", box.getStatus())
                 .append("capacity", box.getCapacity())
                 .append("expiryDate", box.getExpiryDate());
     }
 
-    private ArrayList<BoxBean> convertToArray(List<BoxBean> boxBeans) {
-        return new ArrayList<>(boxBeans);
+    private ArrayList<PackageBean> convertToArray(List<PackageBean> packageBeans) {
+        return new ArrayList<>(packageBeans);
     }
 
 }
