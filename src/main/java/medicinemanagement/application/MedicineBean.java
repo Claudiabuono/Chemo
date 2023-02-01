@@ -49,7 +49,11 @@ public class MedicineBean {
         return amount;
     }
 
-    public ArrayList<BoxBean> getBox() {
+    public BoxBean getBox(int index) {
+        return boxes.get(index);
+    }
+
+    public ArrayList<BoxBean> getBoxes() {
         return boxes;
     }
 
