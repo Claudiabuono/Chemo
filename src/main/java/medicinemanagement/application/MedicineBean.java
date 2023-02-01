@@ -17,6 +17,13 @@ public class MedicineBean {
         boxes = new ArrayList<>();
     }
 
+    public MedicineBean(String name, String ingredients) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.amount = 0;
+        this.boxes = new ArrayList<>();
+    }
+
     public MedicineBean(String id, String name, String ingredients, int amount, ArrayList<BoxBean> boxes) {
         this.id = id;
         this.name = name;
