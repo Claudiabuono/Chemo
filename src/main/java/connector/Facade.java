@@ -104,10 +104,10 @@ public class Facade {
     /*
     OPERAZIONI CRUD PER ENTITA' MEDICINE
      */
-    public void insertMedicine( String id, String name, String ingredients, int amount, UserBean user){
+    public void insertMedicine(String name, String ingredients, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
-                MedicineBean medicineBean = new MedicineBean(id, name, ingredients, amount, new ArrayList<PackageBean>());
+                MedicineBean medicineBean = new MedicineBean(name, ingredients);
                 medicineQueryBean.insertDocument(medicineBean);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");

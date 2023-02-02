@@ -29,7 +29,7 @@ public class MedicineServlet extends HttpServlet {
             switch (action) {
                 case "insertMedicine" -> { //Inserimento medicinale
                     //Inserisco il medicinale
-                    facade.insertMedicine(request.getParameter("id"), request.getParameter("name"), request.getParameter("ingredients"), Integer.parseInt(request.getParameter("amount")), user);
+                    facade.insertMedicine(request.getParameter("name"), request.getParameter("ingredients"), user);
 
                     //Reindirizzo alla pagina lista dei medicinali
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
@@ -37,7 +37,7 @@ public class MedicineServlet extends HttpServlet {
 
                 case "insertMedicineBox" -> { //Inserimento confezione medicinale
                     //Inserisco il box
-                    facade.insertMedicineBox(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
+                    facade.insertMedicinePackage(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
 
                     //Reindirizzo alla pagina lista dei medicinali
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
@@ -45,7 +45,7 @@ public class MedicineServlet extends HttpServlet {
 
                 case "deleteMedicineBox" -> {
                     //Rimuovo il box
-                    facade.removeMedicineBox(request.getParameter("boxId"), user);
+                    facade.removeMedicinePackage(request.getParameter("boxId"), user);
 
                     //Reindirizzo alla pagina lista dei medicinali
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
@@ -112,7 +112,7 @@ public class MedicineServlet extends HttpServlet {
 
     //Metodi di supporto
     private Date dateParser(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return format.parse(date);
         }
