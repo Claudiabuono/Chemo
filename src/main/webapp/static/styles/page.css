@@ -141,6 +141,9 @@ a:visited:hover {
 #page-content > #login-box {
     width: 490px;
 }
+#page-content > #login-error {
+    width: 490px;
+}
 
 #box-name-row {
     margin-bottom: 10px;
@@ -155,18 +158,24 @@ a:visited:hover {
     margin-left: auto;
     margin-right: 10px;
 }
-#box-name-row a {
+#box-name-row button {
+    padding: 0;
+    cursor: pointer;
+}
+#box-name-row .icon {
     text-decoration: none;
     color: var(--accent-color);
+    background: transparent;
+    border: none;
 }
-#box-name-row a:hover {
+#box-name-row .icon:hover {
     color: var(--accent-color-light);
 }
-#box-name-row a:visited {
+#box-name-row .icon:visited {
     text-decoration: none;
     color: var(--accent-color);
 }
-#box-name-row a:visited:hover {
+#box-name-row .icon:visited:hover {
     color: var(--accent-color-light);
 }
 

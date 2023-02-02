@@ -8,7 +8,7 @@
 </head>
 <body>
 <header>
-    <jsp:include page="./static/templates/header.html"/>
+    <jsp:include page="static/templates/indexHeader.html"/>
 </header>
 <div id="page-content">
     <div id="welcome-picture">

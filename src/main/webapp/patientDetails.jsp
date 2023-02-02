@@ -4,15 +4,40 @@
   Date: 12/01/2023
   Time: 16:43
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="patientmanagement.application.PatientServlet"
+         import="patientmanagement.application.PatientBean"
+         import="userManagement.application.UserBean"%>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Pagina paziente</title>
-    <script src="./static/scripts/patientDetails.js"></script>
+    <script src="./static/scripts/patient.js"></script>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null || user.getType() != 1) {
+            //è presente una sessione senza utente o con utente
+            response.sendRedirect("./error401.jsp");
+        } else {
+            PatientBean patient = (PatientBean) request.getAttribute("patient");
+            if (patient == null) {
+                response.sendRedirect("./error403.jsp");
+            } else {
+                String patientStatus = "status-unavaliable";
+                if (patient.getStatus())
+                    patientStatus = "status-avaliable";
+                else
+                    patientStatus = "status-unavaliable";
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -36,27 +61,27 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="name">Nome</label>
-                    <input required id="name" class="input-field inactive" type="text" name="name" value="Mario">
+                    <input required id="name" class="input-field inactive" type="text" name="name" value="<%=patient.getName()%>">
                 </div>
                 <div class="field right">
                     <label for="surname">Cognome</label>
-                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="Rossi">
+                    <input required id="surname" class="input-field inactive" type="text" name="surname" value="<%=patient.getSurname()%>">
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="birthdate">Data di nascita</label>
-                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="1968-05-01">
+                    <input required id="birthdate" class="input-field inactive" type="date" name="birthdate" value="<%=patient.getParsedBirthDate()%>">
                 </div>
                 <div class="field right">
                     <label for="city">Città di nascita</label>
-                    <input required id="city" class="input-field inactive" type="text" name="city" value="Salerno">
+                    <input required id="city" class="input-field inactive" type="text" name="city" value="<%=patient.getCity()%>">
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="tax-code">Codice fiscale</label>
-                    <input required id="tax-code" class="input-field inactive" type="text" name="taxCode" value="RSSMRA68E01H703R">
+                    <input required id="tax-code" class="input-field inactive" type="text" name="taxCode" value="<%=patient.getTaxCode()%>">
                 </div>
             </div>
             <div class="title-section">
@@ -65,35 +90,56 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="phone-number">Numero di telefono</label>
-                    <input required id="phone-number" class="input-field inactive" type="tel" name="phoneNumber" value="0818412110">
+                    <input required id="phone-number" class="input-field inactive" type="tel" name="phoneNumber" value="<%=patient.getPhoneNumber()%>">
                 </div>
             </div>
             <div class="title-section">
                 <h2 class="title">Note</h2>
             </div>
             <label for="notes">Allergie ed intolleranze</label>
-            <input required id="notes" class="input-field inactive" type="text" name="notes" value="Intolleranza al lattosio">
+            <input required id="notes" class="input-field inactive" type="text" name="notes" value="<%=patient.getNotes()%>">
             <div class="title-section">
                 <h2 class="title">Stato</h2>
+                <%
+                if (patient.getTherapy() != null) {
+                %>
                 <div id="patient-status-button">
-                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('id')">
+                    <input type="button" id="edit-patient-status-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editStatusButton('<%=patient.getPatientId()%>')">
                 </div>
+                <%
+                }
+                %>
             </div>
             <div class="input-fields-row">
-                <div id="status-icon" class="icon status-avaliable">
+                <div id="status-icon" class="icon <%=patientStatus%>">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                     </svg>
                 </div>
                 <select id="status" class="input-field inactive" name="status">
-                    <option value="disponibile" selected>Disponibile</option>
-                    <option value="nonDisponibile">Non disponibile</option>
+                    <%
+                        if (patient.getStatus()){
+                    %>
+                    <option value="true" selected>Disponibile</option>
+                    <option value="false">Non disponibile</option>
+                    <%
+                        } else {
+                    %>
+                    <option value="true">Disponibile</option>
+                    <option value="false" selected>Non disponibile</option>
+                    <%
+                        }
+                    %>
+
                 </select>
             </div>
         </div>
-        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+        <%
+            if (patient.getTherapy() == null) {
+        %>
         <%-- Se il paziente non ha una terapia far vedere questa parte --%>
+        <p id="therapy" class="hidden">false</p>
         <input type="button" id="new-therapy-button" class="button-primary-m submit-button" value="Aggiungi terapia" onclick="addTherapyForm()">
         <div id="new-therapy-form" class="box hidden">
             <div class="title-section">
@@ -117,6 +163,7 @@
                     <input required id="new-sessions-duration" class="input-field" type="number" name="sessionDuration" value="60">
                 </div>
             </div>
+            <p id="new-medicines-number" class="hidden">1</p>
             <div id="new-medicines">
                 <div id="new-medicine-item-1" class="input-fields-row">
                     <div class="field left">
@@ -132,52 +179,68 @@
                     </div>
                 </div>
             </div>
-            <input type="button" id="add-medicine-new" class="button-secondary-s rounded edit-button" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
-            <input type="button" class="button-primary-m submit-button" value="Salva terapia">
+            <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+            <input type="button" class="button-primary-m submit-button" value="Salva terapia" onclick="addTherapy('<%=patient.getPatientId()%>')">
         </div>
-        <%-- Aggiungere controllo in java per nascondere questa sezione --%>
+
+        <%
+            } else {
+        %>
+        <p id="therapy" class="hidden">true</p>
         <%-- Se il paziente ha una terapia far vedere questa parte --%>
-        <div class="hidden">
+        <div class="">
             <div id="therapy-section" class="form">
                 <div class="title-section">
                     <h2 class="title">Terapia</h2>
                     <div id="therapy-buttons">
-                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('id', 1)">
+                        <input type="button" id="edit-therapy-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editTherapyButtons('<%=patient.getPatientId()%>', <%=patient.getTherapy().getMedicines().size()%>)">
                     </div>
                 </div>
                 <label for="condition">Patologia</label>
-                <input required id="condition" class="input-field inactive" type="text" name="condition" value="Tumore al pancreas">
+                <input required id="condition" class="input-field inactive" type="text" name="condition" value="<%=patient.getCondition()%>">
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-number">Numero di sedute</label>
-                        <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="6">
+                        <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="<%=patient.getTherapy().getSessions()%>">
                     </div>
                     <div class="field right">
                         <label for="sessions-frequency">Numero sedute a settimana</label>
-                        <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="1">
+                        <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="<%=patient.getTherapy().getFrequency()%>">
                     </div>
                 </div>
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-duration">Durata seduta (in minuti)</label>
-                        <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="60">
+                        <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="<%=patient.getTherapy().getDuration()%>">
                     </div>
                 </div>
+                <p id="saved-medicines-number" class="hidden">1</p>
                 <div id="saved-medicines">
-                    <div id="medicine-item-1" class="input-fields-row">
+                    <% for(int i = 0; i < patient.getTherapy().getMedicines().size(); i++) { %>
+                    <div id="medicine-item-<%=i%>" class="input-fields-row">
                         <div class="field left">
-                            <label for="medicine-name-item-1">1° Medicinale</label>
-                            <input required id="medicine-name-item-1" class="input-field inactive" type="text" name="medicineName1" value="5-fluorouracile">
+                            <label for="medicine-name-item-<%=i%>"><%=i+1%>° Medicinale</label>
+                            <input required id="medicine-name-item-<%=i%>" class="input-field inactive" type="text" name="medicineName<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getMedicineId()%>">
                         </div>
                         <div class="field right">
-                            <label for="medicine-dose-item-1">Dose</label>
-                            <input required id="medicine-dose-item-1" class="input-field inactive" type="text" name="medicineDose1" value="100 ml">
+                            <label for="medicine-dose-item-<%=i%>">Dose (in ml)</label>
+                            <input required id="medicine-dose-item-<%=i%>" class="input-field inactive" type="text" name="medicineDose<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getDose()%>">
                         </div>
                     </div>
+                    <% } %>
                 </div>
             </div>
         </div>
+        <%
+                }
+        %>
     </div>
 </div>
+<%
+            }
+    }
+    }
+%>
+
 </body>
 </html>

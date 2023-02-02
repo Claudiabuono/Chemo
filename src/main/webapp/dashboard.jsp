@@ -4,7 +4,8 @@
   Date: 08/01/2023
   Time: 23:04
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"
+         import="userManagement.application.UserBean" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -12,28 +13,50 @@
     <title>Chemo Area Personale</title>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null) {
+            System.out.println("Errore: sessione senza utente");
+            //è presente una sessione senza utente
+            session.invalidate();
+            response.sendRedirect("./logIn.jsp");
+        } else {
+%>
 <header>
     <jsp:include page="static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
     <div id="user-box" class="box">
         <div id="box-name-row" class="row">
-            <h1 class="title">Benvenuta, Lucia</h1>
+            <h1 class="title">Benvenuta, <%=user.getName()%></h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
+        <%
+            if (user.getType() < 1 || user.getType() > 2) {
+                response.sendRedirect("./error401.jsp");
+            }
+            if (user.getType() == 1) {
+                System.out.println("Dashboard personale medico");
+
+        %>
         <div id="dashboard-links-medic" class="grid-container">
             <a id="add-patient-link" class="grid-item item1" href="./addPatient.jsp">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill-add" viewBox="0 0 16 16">
-                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                        <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
-                    </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Zm-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                    <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                </svg>
                 <label>Aggiunta paziente</label>
             </a>
             <a id="patient-list-link" class="grid-item item2" href="./patientList.jsp">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-card-list" viewBox="0 0 16 16">
-                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
-                    </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-card-list" viewBox="0 0 16 16">
+                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                    <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                </svg>
                 <label>Storico pazienti</label>
             </a>
             <a id="medicines-list-link" class="grid-item item3" href="./medicinesList.jsp">
@@ -57,7 +80,13 @@
                 <label>Calendario sedute</label>
             </a>
         </div>
+<%
 
+            } else if (user.getType() == 2){
+                System.out.println("Dashboard personale magazzino");
+
+
+%>
         <div id="dashboard-links-storage" class="grid-container">
             <a id="add-medicine-link" class="grid-item item1" href="./addMedicines.jsp">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
@@ -79,7 +108,18 @@
                 <label>Calendario sedute</label>
             </a>
         </div>
+
+        <%
+            }
+        }
+        %>
+
     </div>
 </div>
+<%
+
+}
+
+%>
 </body>
 </html>

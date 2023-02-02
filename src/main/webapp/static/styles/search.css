@@ -49,6 +49,10 @@
     width: 100%;
 }
 
+.result-box-container .first-row .left {
+    text-align: left;
+}
+
 .result-box-container .result-name {
     margin-top: 0;
 }
@@ -64,4 +68,9 @@
 
 .result-title {
     margin-bottom: 0;
+}
+
+.result-box-container .no-result {
+    margin: 50px auto 30px auto;
+    text-align: center;
 }
