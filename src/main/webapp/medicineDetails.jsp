@@ -11,7 +11,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Scheda medicinale</title>
-    <script src="./static/scripts/medicineDetails.js"></script>
 </head>
 <body>
 <header>

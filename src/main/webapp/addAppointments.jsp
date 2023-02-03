@@ -4,7 +4,7 @@
   Date: 21/01/2023
   Time: 20:07
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,7 +19,7 @@
 <div id="page-content">
     <div id="add-appointments-box" class="box">
         <div id="box-name-row" class="row">
-            <h1 class="title">Nuove sedute</h1>
+            <h1 class="title">Chemo Nuove sedute</h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
         <form id="add-appointments-content">
