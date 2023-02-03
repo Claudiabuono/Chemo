@@ -1,8 +1,10 @@
 package medicinemanagement.application;
 
 import connector.Facade;
+import patientmanagement.application.PatientBean;
 import userManagement.application.UserBean;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +20,26 @@ public class MedicineServlet extends HttpServlet {
     private static final Facade facade = new Facade();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Recupero l'action dalla request
+        String id = request.getParameter("id");
+
+        if (id != null) {
+            //Recupero l'utente dalla sessione
+            UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
+
+            //Cerco il medicinale richiesto
+            ArrayList<MedicineBean> medicine = facade.findMedicines("_id", id, user);
+
+            //Imposto i dati del paziente come attributo
+            request.setAttribute("medicine", medicine.get(0));
+
+            //Reindirizzo alla pagina del paziente
+            getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/medicineDetails.jsp"))).forward(request, response);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Recupero l'action dalla request
         String action = request.getParameter("action");
@@ -29,13 +51,14 @@ public class MedicineServlet extends HttpServlet {
             switch (action) {
                 case "insertMedicine" -> { //Inserimento medicinale
                     //Inserisco il medicinale
-                    facade.insertMedicine(request.getParameter("name"), request.getParameter("ingredients"), user);
+                    MedicineBean medicine = facade.insertMedicine(request.getParameter("name"), request.getParameter("ingredients"), user);
 
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    //Salvo l'id del medicinale nell'header della response, così da poterlo reindirizzare alla sua pagina
+                    response.addHeader("OPERATION_RESULT","true");
+                    response.addHeader("MEDICINE_ID", medicine.getId());
                 }
 
-                case "insertMedicineBox" -> { //Inserimento confezione medicinale
+                case "insertMedicinePackage" -> { //Inserimento confezione medicinale
                     //Inserisco il box
                     facade.insertMedicinePackage(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
 
@@ -43,64 +66,24 @@ public class MedicineServlet extends HttpServlet {
                     response.sendRedirect(""); //todo: aggiungere jsp una volta creata
                 }
 
-                case "deleteMedicineBox" -> {
-                    //Rimuovo il box
-                    facade.removeMedicinePackage(request.getParameter("boxId"), user);
-
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
                 case "searchMedicine" -> { //Ricerca medicinale
                     //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("name", request.getParameter("name"));
+                    ArrayList<MedicineBean> medicines = facade.findMedicines("name", request.getParameter("name"), user);
 
                     if(medicines.size() == 1) { //Un solo medicinale trovato
                         //Aggiungo il parametro alla request
                         request.setAttribute("medicineResults", medicines.get(0));
 
-                        //Reindirizzo alla pagina del singolo medicinale
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        //Reindirizzo alla pagina paziente
+                        response.sendRedirect("MedicineServlet?id=" + medicines.get(0).getId());
                     } else { //Più medicinali trovati
                         //Aggiungo il parametro alla request
                         request.setAttribute("medicineResults", medicines);
 
-                        //Reindirizzo alla pagina della lista medicinali
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        //Mando la richiesta con il dispatcher
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("medicinesList.jsp");
+                        requestDispatcher.forward(request, response);
                     }
-                }
-
-                case "viewMedicineList" -> { //Visualizza lista medicinali
-                    //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("", request.getParameter(""));
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines);
-
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
-                case "viewAvailableMedicinesList" -> { //Visualizza lista medicinali disponibili
-                    //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("status", "true");
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines);
-
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
-                case "viewMedicinePage" -> { //Visualizza pagina medicinale
-                    //Recupero il medicinale
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("", request.getParameter(""));
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines.get(0));
-
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
                 }
             }
         }
