@@ -26,7 +26,7 @@
             <div class="title-section">
                 <h2 class="title">Selezione pazienti</h2>
             </div>
-            <div id="patient-list" class="result-box-container">
+            <fieldset id="patient-list" class="result-box-container">
                 <div id="patient-box-id" class="box form">
                     <div class="first-row">
                         <div class="column left">
@@ -35,7 +35,7 @@
                         </div>
                         <div id="patient-check-id" class="column right checkbox-container">
                             <label class="checkbox-label">
-                                <input type="checkbox" name="patient-id" value="patient-id">
+                                <input type="checkbox" name="patient-checkbox" value="idpaziente">
                                 <span class="checkbox-custom rectangular"></span>
                             </label>
                         </div >
@@ -45,8 +45,8 @@
                         <p class="right">Numero sedute: 6</p>
                     </div>
                 </div>
-            </div>
-            <input type="button" class="button-primary-m submit-button" value="Crea calendario">
+            </fieldset>
+            <input type="button" class="button-primary-m submit-button" value="Crea calendario" onclick="addAppointments()">
         </form>
     </div>
 </div>
