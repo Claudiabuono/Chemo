@@ -101,7 +101,7 @@ a:visited:hover {
 .status-avaliable {
     color: var(--avaliable);
 }
-.status-unavaliable {
+.status-unavailable {
     color: var(--unavaliable);
 }
 
