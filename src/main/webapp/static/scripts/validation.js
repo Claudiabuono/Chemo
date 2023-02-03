@@ -9,6 +9,12 @@ function nameValidity(input) {
     return input.match(name);
 }
 
+function idValidity(input) {
+    var id = /^[a-f\d]{24}$/i;
+    return input.match(id);
+}
+
+
 
 /* FUNZIONI PER IL CONTROLLO DEGLI INPUT DEI PAZIENTI */
 
@@ -46,11 +52,6 @@ function notesValidity(input) {
 function conditionValidity(input) {
     var condition = /^[A-Za-z0-9][A-Za-z0-9\'\-]+([\ A-Za-z0-9][A-Za-z0-9\'\-]+)*$/;
     return input.match(condition);
-}
-
-function idValidity(input) {
-    var id = /^$/;          //Aggiungere regex id medicinale
-    return input.match(id);
 }
 
 function doseValidity(input) {
