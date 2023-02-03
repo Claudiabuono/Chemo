@@ -86,3 +86,7 @@ function ingredientsValidity(input) {
 function quantityValidity(input) {
     return numberValidity(input);
 }
+
+function capacityValidity(input) {
+    return numberValidity(input);
+}
