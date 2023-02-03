@@ -104,16 +104,19 @@ public class Facade {
     /*
     OPERAZIONI CRUD PER ENTITA' MEDICINE
      */
-    public void insertMedicine(String name, String ingredients, UserBean user){
+    public MedicineBean insertMedicine(String name, String ingredients, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
                 MedicineBean medicineBean = new MedicineBean(name, ingredients);
                 medicineQueryBean.insertDocument(medicineBean);
+                return medicineBean;
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+
+        return null;
     }
 
     public void insertMedicinePackage(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
@@ -164,7 +167,23 @@ public class Facade {
         }
     };
 
-    public ArrayList<MedicineBean> findMedicines(String key, String value){return medicineQueryBean.findDocument(key, value);};
+    public ArrayList<MedicineBean> findMedicines(String key, Object value, UserBean user){
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+        try{
+            if(isUserAuthorized(user.getUsername(), 2)){
+                if(key.equals("_id"))  {
+                    medicines.add(medicineQueryBean.findDocumentById(String.valueOf(value)));
+                    return medicines;
+                }
+                return medicineQueryBean.findDocument(key, value);
+            }else
+                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return medicines;
+    };
 
     /*
     OPERAZIONI CRUD PER ENTITA' PATIENT
@@ -252,7 +271,7 @@ public class Facade {
                     patients.add(patientQueryBean.findDocumentById(String.valueOf(value)));
                     return patients;
                 }
-                return patients = patientQueryBean.findDocument(key, value);
+                return patientQueryBean.findDocument(key, value);
             }
             else
                 throw new Exception("Utente non autorizzato alla visualizzazione dei pazienti");
