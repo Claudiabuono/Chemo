@@ -5,7 +5,7 @@ function numberValidity(input) {
 }
 
 function nameValidity(input) {
-    var name = /^[A-Za-z][A-Za-z\'\-]+([\ A-Za-z][A-Za-z\'\-]+)*$/;
+    var name = /^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$/;
     return input.match(name);
 }
 
@@ -37,12 +37,12 @@ function taxCodeValidity(input) {
 }
 
 function phoneNumberValidity(input) {
-    var phoneNumber = /^[\+]?[(]?[0-9]{2,3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,7}$/;
+    var phoneNumber = /^[+]?[(]?[0-9]{2,3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,7}$/;
     return input.match(phoneNumber);
 }
 
 function notesValidity(input) {
-    var notes = /^[A-Za-z0-9][A-Za-z0-9\'\-\.\,\n]+([\ A-Za-z0-9][A-Za-z0-9\'\-\.\,\n]+)*$/;
+    var notes = /^[A-Za-z0-9][A-Za-z0-9'.,\n-]+([ A-Za-z0-9][A-Za-z0-9'.,\n-]+)*$/;
     return input.match(notes);
 }
 
@@ -50,7 +50,7 @@ function notesValidity(input) {
 /* FUNZIONI PER IL CONTROLLO DEGLI INPUT DELLE TERAPIE */
 
 function conditionValidity(input) {
-    var condition = /^[A-Za-z0-9][A-Za-z0-9\'\-]+([\ A-Za-z0-9][A-Za-z0-9\'\-]+)*$/;
+    var condition = /^[A-Za-z0-9][A-Za-z0-9'-]+([ A-Za-z0-9][A-Za-z0-9'-]+)*$/;
     return input.match(condition);
 }
 
@@ -74,12 +74,12 @@ function frequencyValidity(input) {
 /* FUNZIONI PER IL CONTROLLO DEGLI INPUT DEI MEDICINALI */
 
 function medicineNameValidity(input) {
-    var medicineName = /^[A-Za-z0-9][A-Za-z0-9\'\-]+([\ A-Za-z0-9][A-Za-z0-9\'\-]+)*$/;
+    var medicineName = /^[A-Za-z0-9][A-Za-z0-9'\-]+([ A-Za-z0-9][A-Za-z0-9'-]+)*$/;
     return input.match(medicineName);
 }
 
 function ingredientsValidity(input) {
-    var ingredients = /^[A-Za-z0-9][A-Za-z0-9\'\-\.\,\n]+([\ A-Za-z0-9][A-Za-z0-9\'\-\.\,\n]+)*$/;
+    var ingredients = /^[A-Za-z0-9][A-Za-z0-9'.,\n-]+([ A-Za-z0-9][A-Za-z0-9'.,\n-Z]+)*$/;
     return input.match(ingredients);
 }
 
