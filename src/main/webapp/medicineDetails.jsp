@@ -5,14 +5,27 @@
   Time: 17:29
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"
+         import="userManagement.application.UserBean"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Chemo | Scheda medicinale</title>
+    <title>Chemo Scheda medicinale</title>
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null) {
+            //è presente una sessione senza utente
+            response.sendRedirect("./error401.jsp");
+        } else {
+%>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
@@ -59,17 +72,17 @@
                 </div>
                 <div class="input-fields-row">
                     <div class="field left">
-                        <label for="new-package-capacity">Capacità (in ml)</label>
-                        <input required id="new-package-capacity" class="input-field" type="number" min="0" name="capacity">
+                        <label for="package-new-capacity">Capacità (in ml)</label>
+                        <input required id="package-new-capacity" class="input-field" type="number" min="0" name="capacity">
                         <p id="package-new-capacity-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
-                        <label for="new-package-expiry-date">Scadenza</label>
-                        <input required id="new-package-expiry-date" class="input-field" type="date" name="expiryDate">
+                        <label for="package-new-expiry-date">Scadenza</label>
+                        <input required id="package-new-expiry-date" class="input-field" type="date" name="expiryDate">
                         <p id="package-new-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
-                <input type="button" class="button-primary-m submit-button" value="Salva confezione">
+                <input type="button" class="button-primary-m submit-button" value="Salva confezione" onclick="addPackage()">
             </div>
         </div>
         <div id="medicine-available-packages">
@@ -117,5 +130,9 @@
         </div>
     </div>
 </div>
+<%
+        }
+    }
+%>
 </body>
 </html>

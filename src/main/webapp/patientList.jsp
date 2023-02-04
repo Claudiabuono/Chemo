@@ -25,7 +25,11 @@
         UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
         if (user == null || user.getType() != 1) {
             //è presente una sessione senza utente o con utente non autorizzato
-            response.sendRedirect("./error401.jsp");
+            if (user == null) {
+                response.sendRedirect("./error401.jsp");
+            } else {
+                response.sendRedirect("./error403.jsp");
+            }
         } else {
 %>
 <header>
