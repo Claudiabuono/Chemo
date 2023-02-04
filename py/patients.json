@@ -1,0 +1,106 @@
+[{
+  "name": "Marco",
+  "surname": "Verdi",
+  "medicineId": 1,
+  "dose": 100
+},{
+  "name": "Luca",
+  "surname": "Ranieri",
+  "medicineId": 6,
+  "dose": 150
+},{
+  "name": "Giovanni",
+  "surname": "Vecchione",
+  "medicineId": 15,
+  "dose": 100
+},{
+  "name": "Franchino",
+  "surname": "Pugile",
+  "medicineId": 15,
+  "dose": 100
+},{
+  "name": "Marco",
+  "surname": "Migliore",
+  "medicineId": 1,
+  "dose": 250
+},{
+  "name": "Lucia",
+  "surname": "Gialli",
+  "medicineId": 5,
+  "dose": 300
+},{
+  "name": "Emenuela",
+  "surname": "Rolla",
+  "medicineId": 5,
+  "dose": 200
+},{
+  "name": "Giulio",
+  "surname": "Gambardelli",
+  "medicineId": 17,
+  "dose": 300
+},{
+  "name": "Maria",
+  "surname": "Scoglio",
+  "medicineId": 7,
+  "dose": 200
+},{
+  "name": "Salvatore",
+  "surname": "Rana",
+  "medicineId": 7,
+  "dose": 200
+},{
+  "name": "Tommaso",
+  "surname": "Busci",
+  "medicineId": 3,
+  "dose": 150
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 7,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 7,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 12,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 18,
+  "dose": 100
+},{
+  "name": "Alberico",
+  "surname": "Antonio",
+  "medicineId": 18,
+  "dose": 100
+},{
+  "name": "Marco",
+  "surname": "Verdi",
+  "medicineId": 1,
+  "dose": 100
+},{
+  "name": "Luca",
+  "surname": "Ranieri",
+  "medicineId": 6,
+  "dose": 150
+},{
+  "name": "Marco",
+  "surname": "Verdi",
+  "medicineId": 1,
+  "dose": 100
+},{
+  "name": "Luca",
+  "surname": "Ranieri",
+  "medicineId": 6,
+  "dose": 150
+},{
+  "name": "Giovanni",
+  "surname": "Vecchione",
+  "medicineId": 15,
+  "dose": 100
+}]

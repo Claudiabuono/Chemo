@@ -189,15 +189,18 @@ public class Facade {
     OPERAZIONI CRUD PER ENTITA' PATIENT
      */
 
-    public void insertPatient(PatientBean patientBean, UserBean user){
+    public PatientBean insertPatient(PatientBean patient, UserBean user){
         try{
-            if(isUserAuthorized(user.getUsername(), 1))
-                patientQueryBean.insertDocument(patientBean);
+            if(isUserAuthorized(user.getUsername(), 1)){
+                patientQueryBean.insertDocument(patient);
+                return  patient;
+            }
             else
                 throw new Exception("Utente non autorizzato all'inserimento dei pazienti");
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
+        return null;
     };
 
     public PatientBean insertPatient(String taxCode, String name, String surname, Date birthDate, String city, String phoneNumber, String notes, UserBean user){
@@ -215,6 +218,18 @@ public class Facade {
         }
         return null;
     };
+
+    public void insertTherapy(String patientId, TherapyBean therapy, UserBean user) {
+        try{
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                patientQueryBean.insertDocument(therapy, patientId);
+            }
+            else
+                throw new Exception("Utente non autorizzato all'inserimento dei pazienti");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public void insertTherapy(int sessions, ArrayList<TherapyMedicineBean> medicines, int duration, int frequency, String patientId, UserBean user) {
         try{

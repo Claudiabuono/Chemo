@@ -4,7 +4,7 @@
   Date: 21/01/2023
   Time: 20:07
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,7 +19,7 @@
 <div id="page-content">
     <div id="add-appointments-box" class="box">
         <div id="box-name-row" class="row">
-            <h1 class="title">Nuove sedute</h1>
+            <h1 class="title">Chemo Nuove sedute</h1>
             <jsp:include page="./static/templates/loggedUserButtons.html"/>
         </div>
         <form id="add-appointments-content">
@@ -35,7 +35,7 @@
                         </div>
                         <div id="patient-check-id" class="column right checkbox-container">
                             <label class="checkbox-label">
-                                <input type="checkbox" name="patient-id" value="patient-id">
+                                <input type="checkbox" name="patient-checkbox" value="idpaziente">
                                 <span class="checkbox-custom rectangular"></span>
                             </label>
                         </div >
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <input type="button" class="button-primary-m submit-button" value="Crea calendario">
+            <input type="button" class="button-primary-m submit-button" value="Crea calendario" onclick="addAppointments()">
         </form>
     </div>
 </div>

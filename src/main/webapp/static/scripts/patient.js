@@ -1,4 +1,97 @@
+function validatePatientData(patient){
+    let validity = true;
+    //validazione del formato
+    if (!nameValidity(patient.name)) {
+        document.getElementById("name-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("name-validity").innerHTML = "";
+    }
+    if (!surnameValidity(patient.surname)) {
+        document.getElementById("surname-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("surname-validity").innerHTML = "";
+    }
+    if (!dateValidity(patient.birthDate)) {
+        document.getElementById("birthdate-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("birthdate-validity").innerHTML = "";
+    }
+    if (!cityValidity(patient.city)) {
+        document.getElementById("city-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("city-validity").innerHTML = "";
+    }
+    if (!taxCodeValidity(patient.taxCode)) {
+        document.getElementById("tax-code-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("tax-code-validity").innerHTML = "";
+    }
+    if (!phoneNumberValidity(patient.phoneNumber)) {
+        document.getElementById("phone-number-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("phone-number-validity").innerHTML = "";
+    }
+    if (!notesValidity(patient.notes)) {
+        document.getElementById("notes-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("phone-number-validity").innerHTML = "";
+    }
+    return validity;
+}
 
+function validateTherapyData(therapy){
+    var validity = true;
+    //validazione del formato
+    if (!conditionValidity(therapy.condition)) {
+        document.getElementById("condition-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("condition-validity").innerHTML = "";
+    }
+    if (!sessionsValidity(therapy.sessions)) {
+        document.getElementById("sessions-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("sessions-validity").innerHTML = "";
+    }
+    if (!frequencyValidity(therapy.frequency)) {
+        document.getElementById("frequency-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("frequency-validity").innerHTML = "";
+    }
+    if (!durationValidity(therapy.duration)) {
+        document.getElementById("duration-validity").innerHTML = "Formato errato";
+        validity = false;
+    } else {
+        document.getElementById("duration-validity").innerHTML = "";
+    }
+    for (let i = 0; i < therapy.medicinesNumber; i++) {
+        console.log("Id medicinale selezionato: " + therapy.medicines[i][0]);
+        if (!idValidity(therapy.medicines[i][0])) {
+            document.getElementById("medicine-" + i + "-validity").innerHTML = "Formato errato";
+            validity = false;
+        } else {
+            document.getElementById("medicine-" + i + "-validity").innerHTML = "";
+        }
+        console.log("Id medicinale selezionato: " + therapy.medicines[i][1]);
+        if (!doseValidity(therapy.medicines[i][1])) {
+            document.getElementById("dose-" + i + "-validity").innerHTML = "Formato errato";
+            validity = false;
+        } else {
+            document.getElementById("dose-" + i + "-validity").innerHTML = "";
+        }
+    }
+
+    return validity;
+}
 
 /* Funzioni per i dettagli del paziente*/
 
@@ -16,7 +109,8 @@ function addMedicineField(id, number) {
     firstfield.setAttribute("class", "field left");
     const label1 = document.createElement("label");
     label1.setAttribute("for", id + "-medicine-name-item-" + number);
-    label1.innerHTML = number + "° Medicinale";
+    let nextNumber = number + 1;
+    label1.innerHTML = nextNumber + "° Medicinale";
     const select1 = document.createElement("select");
     select1.setAttribute("id", id + "-medicine-name-item-" + number);
     select1.setAttribute("class", "input-field");
@@ -40,9 +134,9 @@ function addMedicineField(id, number) {
     newmedicine.appendChild(firstfield);
     newmedicine.appendChild(secondfield);
     document.getElementById(id + "-medicines").appendChild(newmedicine);
-    number += 1;
-    document.getElementById("new-medicines-number").innerHTML = number;
-    document.getElementById("add-medicine-" + id).setAttribute("onclick", "addMedicineField('" + id + "'," + number + ")");
+
+    document.getElementById("medicines-number").innerHTML = nextNumber;
+    document.getElementById("add-medicine-" + id).setAttribute("onclick", "addMedicineField('" + id + "'," + nextNumber + ")");
 }
 
 function editStatusButton(id) {
@@ -57,22 +151,19 @@ function editTherapyButtons(id, medicines) {
     document.getElementById("sessions-number").className = "input-field";
     document.getElementById("sessions-frequency").className = "input-field";
     document.getElementById("sessions-duration").className = "input-field";
-    var i = 0;
-    console.log(medicines);
+
     for (let i = 0; i < medicines; i++) {
-        console.log(i);
         document.getElementById("medicine-name-item-" + i ).className = "input-field";
         document.getElementById("medicine-dose-item-" + i ).className = "input-field";
     }
 
-    const nextmedicine = medicines + 1;
-    const addmedicine = document.createElement("input");
-    addmedicine.setAttribute("type", "button");
-    addmedicine.setAttribute("id", "add-medicine-saved");
-    addmedicine.setAttribute("class", "button-secondary-s rounded edit-button");
-    addmedicine.setAttribute("value", "Aggiungi medicinale");
-    addmedicine.setAttribute("onclick", "addMedicineField('saved'," + nextmedicine + ")");
-    document.getElementById("therapy-section").appendChild(addmedicine);
+    const addMedicine = document.createElement("input");
+    addMedicine.setAttribute("type", "button");
+    addMedicine.setAttribute("id", "add-medicine-saved");
+    addMedicine.setAttribute("class", "button-secondary-s rounded edit-button");
+    addMedicine.setAttribute("value", "Aggiungi medicinale");
+    addMedicine.setAttribute("onclick", "addMedicineField('saved'," + medicines + ")");
+    document.getElementById("therapy-section").appendChild(addMedicine);
 }
 
 
@@ -93,26 +184,31 @@ function addPatient() {
     var phoneNumber = document.getElementById("phone-number").value;
     var notes = document.getElementById("notes").value;
 
-    var validity = true;
-    //validazione del formato
-
-    if (validity) {
-        //i campi hanno tutti il formato corretto
+    const patient = {
+        name: name,
+        surname: surname,
+        birthDate: birthDate,
+        city: city,
+        taxCode: taxCode,
+        phoneNumber: phoneNumber,
+        notes: notes
+    };
+    console.log("Risultato controllo campi: " + validatePatientData(patient));
+    if (validatePatientData(patient)) {
         var request = new XMLHttpRequest();
         request.open('POST', "PatientServlet", true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.setRequestHeader('Authorization', 'Basic ');
         request.setRequestHeader('Accept', 'application/json');
-        var body = "action=createPatientProfile&name=" + name +"&surname=" + surname + "&birthDate=" +
+        var body = "action=createPatientProfile&name=" + name + "&surname=" + surname + "&birthDate=" +
             birthDate + "&city=" + city + "&taxCode=" + taxCode +
             "&phoneNumber=" + phoneNumber + "&notes=" + notes;
         request.send(body);
-
         request.onreadystatechange = function () {
-            if (request.readyState === 4 && request.status == 200) {
+            if (request.readyState === 4 && request.status === 200) {
                 //redirectToPage("patientDetails.jsp");
                 //alert(request.responseText);
-                if (request.getResponseHeader('OPERATION_RESULT')){
+                if (request.getResponseHeader('OPERATION_RESULT')) {
                     //window.location = "patientDetails.jsp";
                     const patientID = request.getResponseHeader('PATIENT_ID');
                     //recupero id dalla risposta
@@ -131,19 +227,25 @@ function addTherapy(id) {
     const frequency = document.getElementById("new-sessions-frequency").value;
     const duration = document.getElementById("new-sessions-duration").value;
     const sessions = document.getElementById("new-sessions-number").value;
-    const medicinesNumber = document.getElementById("new-medicines-number").innerHTML;
+    const medicinesNumber = document.getElementById("medicines-number").innerHTML;
     let medicines = [];
     let therapyMedicine = [];
-    for (let i = 1; i <= medicinesNumber; i++) {
+    for (let i = 0; i < medicinesNumber; i++) {
         therapyMedicine[0] = document.getElementById("new-medicine-name-item-" + i).value;
         therapyMedicine[1] = document.getElementById("new-medicine-dose-item-" + i).value;
-        medicines[i-1] = therapyMedicine;
+        medicines[i] = therapyMedicine;
     }
 
-    var validity = true;
-    //validazione del formato
+    const therapy = {
+        condition: condition,
+        sessions: sessions,
+        frequency: frequency,
+        duration: duration,
+        medicinesNumber: medicinesNumber,
+        medicines: medicines
+    };
 
-    if (validity) {
+    if (validateTherapyData(therapy)) {
         //i campi hanno tutti il formato corretto
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
@@ -151,7 +253,7 @@ function addTherapy(id) {
             body += "&medicineId" + i + "=" + medicines[i][0];
             body += "&medicineDose" + i + "=" + medicines[i][1];
         }
-        sendTherapyData(body)
+        sendTherapyData(body);
     }
 }
 function sendTherapyData(body){
@@ -163,7 +265,7 @@ function sendTherapyData(body){
     request.send(body);
 
     request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status == 200) {
+        if (request.readyState === 4 && request.status === 200) {
             //redirectToPage("patientDetails.jsp");
             //alert(request.responseText);
             if (request.getResponseHeader('OPERATION_RESULT')){
@@ -182,7 +284,7 @@ function submitUpdatedTherapy(id) {
     const frequency = document.getElementById("sessions-frequency").value;
     const duration = document.getElementById("sessions-duration").value;
     const sessions = document.getElementById("sessions-number").value;
-    const medicinesNumber = document.getElementById("saved-medicines-number").innerHTML;
+    const medicinesNumber = document.getElementById("medicines-number").innerHTML;
     let medicines = [];
     let therapyMedicine = [];
     for (let i = 0; i < medicinesNumber; i++) {
@@ -191,10 +293,16 @@ function submitUpdatedTherapy(id) {
         medicines[i] = therapyMedicine;
     }
 
-    var validity = true;
-    //validazione del formato
+    const therapy = {
+        condition: condition,
+        sessions: sessions,
+        frequency: frequency,
+        duration: duration,
+        medicinesNumber: medicinesNumber,
+        medicines: medicines
+    };
 
-    if (validity) {
+    if (validateTherapyData(therapy)) {
         //i campi hanno tutti il formato corretto
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
@@ -231,7 +339,7 @@ function submitUpdatedStatus(id){
         request.send(body);
 
         request.onreadystatechange = function () {
-            if (request.readyState === 4 && request.status == 200) {
+            if (request.readyState === 4 && request.status === 200) {
                 //redirectToPage("patientDetails.jsp");
                 //alert(request.responseText);
                 if (request.getResponseHeader('OPERATION_RESULT')){
