@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Pagina paziente</title>
-    <script src="./static/scripts/patient.js"></script>
+    <link rel="stylesheet" href="./static/styles/patientDetails.css">
 </head>
 <body>
 <%
@@ -33,9 +33,9 @@
             } else {
                 String patientStatus;
                 if (patient.getStatus())
-                    patientStatus = "status-avaliable";
+                    patientStatus = "status-available";
                 else
-                    patientStatus = "status-unavaliable";
+                    patientStatus = "status-unavailable";
 %>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>

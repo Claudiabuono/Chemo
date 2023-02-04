@@ -26,7 +26,7 @@
             <div class="title-section">
                 <h2 class="title">Selezione pazienti</h2>
             </div>
-            <fieldset id="patient-list" class="result-box-container">
+            <div id="patient-list" class="result-box-container">
                 <div id="patient-box-id" class="box form">
                     <div class="first-row">
                         <div class="column left">
@@ -45,7 +45,7 @@
                         <p class="right">Numero sedute: 6</p>
                     </div>
                 </div>
-            </fieldset>
+            </div>
             <input type="button" class="button-primary-m submit-button" value="Crea calendario" onclick="addAppointments()">
         </form>
     </div>
