@@ -98,10 +98,10 @@ a:visited:hover {
     margin-left: 0;
 }
 
-.status-avaliable {
+.status-available {
     color: var(--avaliable);
 }
-.status-unavaliable {
+.status-unavailable {
     color: var(--unavaliable);
 }
 
