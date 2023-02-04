@@ -119,6 +119,20 @@ public class Facade {
         return null;
     }
 
+    public boolean insertMedicine(MedicineBean medicine, UserBean user){
+        try{
+            if(isUserAuthorized(user.getUsername(), 2)){
+                medicineQueryBean.insertDocument(medicine);
+                return true;
+            }else
+                throw new Exception("Utente non autorizzato all'inserimento di medicinali");
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return false;
+    }
+
     public void insertMedicinePackage(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
@@ -185,6 +199,19 @@ public class Facade {
         return medicines;
     };
 
+    public ArrayList<MedicineBean> findAllMedicines(UserBean user) {
+        try {
+            if(isUserAuthorized(user.getUsername(), 2))
+                return medicineQueryBean.findAll();
+            else
+                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
+    }
+
     /*
     OPERAZIONI CRUD PER ENTITA' PATIENT
      */
@@ -193,7 +220,7 @@ public class Facade {
         try{
             if(isUserAuthorized(user.getUsername(), 1)){
                 patientQueryBean.insertDocument(patient);
-                return  patient;
+                return patient;
             }
             else
                 throw new Exception("Utente non autorizzato all'inserimento dei pazienti");

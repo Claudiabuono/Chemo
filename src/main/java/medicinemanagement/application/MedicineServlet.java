@@ -1,7 +1,6 @@
 package medicinemanagement.application;
 
 import connector.Facade;
-import patientmanagement.application.PatientBean;
 import userManagement.application.UserBean;
 
 import javax.servlet.RequestDispatcher;
@@ -51,11 +50,20 @@ public class MedicineServlet extends HttpServlet {
             switch (action) {
                 case "insertMedicine" -> { //Inserimento medicinale
                     //Inserisco il medicinale
-                    MedicineBean medicine = facade.insertMedicine(request.getParameter("name"), request.getParameter("ingredients"), user);
+                    MedicineBean medicine = new MedicineBean(request.getParameter("name"), request.getParameter("ingredients"));
 
-                    //Salvo l'id del medicinale nell'header della response, così da poterlo reindirizzare alla sua pagina
-                    response.addHeader("OPERATION_RESULT","true");
-                    response.addHeader("MEDICINE_ID", medicine.getId());
+                    //Controllo di validità
+                    if(!(medicineValidation(medicine))) {
+                        response.addHeader("OPERATION_RESULT","false");
+                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                    } else {
+                        facade.insertMedicine(medicine, user);
+
+                        //Salvo l'id del medicinale nell'header della response, così da poterlo reindirizzare alla sua pagina
+                        response.addHeader("OPERATION_RESULT","true");
+                        response.addHeader("MEDICINE_ID", medicine.getId());
+                    }
+
                 }
 
                 case "insertMedicinePackage" -> { //Inserimento confezione medicinale
@@ -102,5 +110,9 @@ public class MedicineServlet extends HttpServlet {
         catch (Exception e) {
             return null;
         }
+    }
+
+    private boolean medicineValidation(MedicineBean medicine) {
+        return true;
     }
 }

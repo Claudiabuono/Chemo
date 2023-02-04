@@ -164,16 +164,19 @@ public class MedicineQueryBean {
     private MongoCollection<Document> getCollection() {
         MongoDatabase mongoDatabase = DatabaseConnector.getDatabase();
 
-        MongoCollection<Document> collection = mongoDatabase.getCollection("medicinale");
+        MongoCollection<Document> collection = mongoDatabase.getCollection("medicine");
         System.out.println("Collection 'medicinale' recuperata con successo");
         return collection;
     }
 
     private Document createDocument(MedicineBean medicine) {
-        return new Document("_id", new ObjectId(medicine.getId()))
+        ObjectId objectId = new ObjectId();
+        medicine.setId(objectId.toString());
+        return new Document("_id", objectId)
                 .append("name", medicine.getName())
                 .append("ingredients", medicine.getIngredients())
-                .append("amount", medicine.getAmount());
+                .append("amount", medicine.getAmount())
+                .append("package", medicine.getPackages());
     }
 
     private Document createDocument(PackageBean box) {
