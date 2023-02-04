@@ -13,29 +13,48 @@ import patientmanagement.application.PatientBean;
 import patientmanagement.application.TherapyBean;
 import patientmanagement.application.TherapyMedicineBean;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class PatientQueryBean {
 
     //Inserimento singolo documento nella Collection
-    public void insertDocument(PatientBean patient) {
-        //Recupera la Collection
+    public boolean insertDocument(PatientBean patient) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone( "Europe/Rome"),Locale.ITALY);
+        Date today = calendar.getTime();
         MongoCollection<Document> collection = getCollection();
 
-        //Crea il documento da inserire nella Collection
-        Document document = createDocument(patient);
-
-        //Inserisci il documento nella collection
-        collection.insertOne(document);
-
-        System.out.println("Documento inserito con successo nella Collection");
+        if(patient.getName().length() < 1 || patient.getName().length() > 32){
+            System.out.println("ERROR: name lenght incorrect!");
+            return false;
+        }else if(patient.getSurname().length() < 1 || patient.getSurname().length() > 32){
+            System.out.println("ERROR: surname lenght incorrect!");
+            return false;
+        }else if(patient.getBirthDate().compareTo(today) > 0){
+            System.out.println("ERROR: date format incorrect!");
+            return false;
+        }else if(patient.getCity().length() < 1 || patient.getCity().length() > 50){
+            System.out.println("ERROR: city lenght incorrect!");
+            return false;
+        }else if(patient.getTaxCode().length() != 16){
+            System.out.println("ERROR: taxcode lenght incorrect!");
+            return false;
+        }else if(patient.getPhoneNumber().length() != 10){
+            System.out.println("ERROR: phoneNumber lenght incorrect!");
+            return false;
+        }else if(patient.getNotes().length() > 255){
+            System.out.println("ERROR: notes lenght incorrect!");
+            return false;
+        }else{
+            Document document = createDocument(patient);
+            collection.insertOne(document);
+            System.out.println("Documento inserito con successo nella Collection");
+            return true;
+        }
     }
 
     //Inserimento terapia in un paziente
-    public void insertDocument(TherapyBean therapy, String patientId) {
+    public boolean insertDocument(TherapyBean therapy, String patientId) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -47,15 +66,31 @@ public class PatientQueryBean {
 
         //Recupera il documento del paziente
         Document patientDoc = collection.find(filter).first();
+        if(therapy.getSessions() < 0){
+            System.out.println("ERROR: session non valid!");
+            return false;
+        }else if(therapy.getMedicines().size() < 0){
+            System.out.println("ERROR: not a single medicines found!");
+            return false;
+        }else if(therapy.getFrequency() < 0){
+            System.out.println("ERROR: frequency non valid!");
+            return false;
+        }else if(therapy.getDuration() < 0){
+            System.out.println("ERROR: duration non valid!");
+            return false;
+        }else if(patientDoc == null){
+            System.out.println("ERROR: patient with id " + patientId + " not found!");
+            return false;
+        }
 
         //Inserisci il documento della terapia nel documento del paziente
         collection.updateOne(patientDoc, new Document("$set", therapyDocument));
-
         System.out.println("Documento inserito con successo nella Collection");
+        return true;
     }
 
     //Inserimento collezione di documenti nella Collection
-    public void insertDocuments(ArrayList<PatientBean> patients) {
+    public boolean insertDocuments(ArrayList<PatientBean> patients) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -68,8 +103,8 @@ public class PatientQueryBean {
 
         //Inserisci i documenti nella collection
         collection.insertMany(docs);
-
         System.out.println("Documenti inseriti con successo nella Collection");
+        return true;
     }
 
     //Elimina documento dalla Collection
@@ -87,17 +122,59 @@ public class PatientQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String key, Object valKey) {
+    public boolean updateDocument(String id, String valId, String key, Object valKey) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea il filtro
         Bson filter = Filters.eq(id, new ObjectId(valId));
-
+        if(key.equalsIgnoreCase("notes") && valKey.toString().length() < 1){
+            System.out.println("ERROR: new length notes too short");
+            return false;
+        }else if(key.equalsIgnoreCase("condition") && valKey.toString().length() < 1){
+            System.out.println("ERROR: condition too short");
+            return false;
+        }else if(key.equalsIgnoreCase("frequency")){
+            String fr = String.valueOf(valKey);
+            int frequency = Integer.parseInt(fr);
+            if(frequency <= 0) {
+                System.out.println("ERROR: frequency cant be less than 1");
+                return false;
+            }
+        }else if(key.equalsIgnoreCase("duration")){
+            String dr = String.valueOf(valKey);
+            int duration = Integer.parseInt(dr);
+            if(duration <= 0) {
+                System.out.println("ERROR: duration cant be less than 1");
+                return false;
+            }
+        }else if(key.equalsIgnoreCase("dose")){
+            String ds = String.valueOf(valKey);
+            int dose = Integer.parseInt(ds);
+            if(dose <= 0) {
+                System.out.println("ERROR: dose cant be less than 1");
+                return false;
+            }
+        }else if(key.equalsIgnoreCase("numbers")){
+            String ss = String.valueOf(valKey);
+            int session = Integer.parseInt(ss);
+            if(session < 0) {
+                System.out.println("ERROR: session cant be less than 1");
+                return false;
+            }
+        }
         //Aggiorna il documento
         collection.updateOne(filter, Updates.set(key, valKey));
-
         System.out.println("Documento aggiornato con successo nella Collection");
+        return true;
+    }
+
+    public boolean updateTherapy(String id, String valId, String key, TherapyBean therapyBean){
+        MongoCollection<Document> collection = getCollection();
+        Bson filter = Filters.eq(id, new ObjectId(valId));
+        collection.updateOne(filter, Updates.set(key, therapyBean));
+        System.out.println("Documento aggiornato con successo nella Collection");
+        return true;
     }
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
