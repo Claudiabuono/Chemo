@@ -16,16 +16,22 @@ import java.util.List;
 
 public class PlannerQueryBean {
     //Inserimento singolo documento nella collection
-    public void insertDocument(PlannerBean plannerBean){
+    public boolean insertDocument(PlannerBean plannerBean){
         MongoCollection<Document> collection = getCollection();
         Document doc = createDocument(plannerBean);
-
         collection.insertOne(doc);
+
+        if(plannerBean.getAppointments().size() == 0){
+            System.out.println("ERROR: No appointments selected to create the schedule");
+            return false;
+        }
+
         System.out.println("Inserimento documento avvenuto con successo!");
+        return true;
     }
 
     //Inserimento singolo documento nella collection, nel caso in cui l'agenda non sia popolata
-    public void insertDocument(PlannerBean plannerBean, ArrayList<AppointmentBean> appuntamenti){
+    public boolean insertDocument(PlannerBean plannerBean, ArrayList<AppointmentBean> appuntamenti){
         MongoCollection<Document> collection = getCollection();
         for(AppointmentBean app : appuntamenti){
             plannerBean.getAppointments().add(app);
@@ -34,6 +40,7 @@ public class PlannerQueryBean {
 
         collection.insertOne(doc);
         System.out.println("Inserimento documento avvenuto con successo!");
+        return true;
     }
 
     //Inserimento collezione di documenti nella collection
@@ -94,10 +101,10 @@ public class PlannerQueryBean {
     private Document createDocument(PlannerBean plannerBean){
         List<AppointmentBean> app = plannerBean.getAppointments();
 
-        Document doc = new Document("id", plannerBean.getId())
-                .append("dataInizio", plannerBean.startDate)
-                .append("dataFine", plannerBean.endDate)
-                .append("appuntamenti", app);
+        Document doc = new Document("_id", plannerBean.getId())
+                .append("startDate", plannerBean.startDate)
+                .append("endDate", plannerBean.endDate)
+                .append("appointments", app);
 
         return doc;
     }

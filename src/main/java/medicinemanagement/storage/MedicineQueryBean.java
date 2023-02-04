@@ -18,17 +18,23 @@ import java.util.List;
 public class MedicineQueryBean {
 
     //Inserimento singolo documento nella Collection
-    public void insertDocument(MedicineBean medicine) {
+    public boolean insertDocument(MedicineBean medicine) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
         //Crea il documento da inserire nella Collection
         Document document = createDocument(medicine);
-
+        if(medicine.getName().length() < 0 || medicine.getName().length() > 32){
+            System.out.println("ERROR: name length incorrect!");
+            return false;
+        }else if(medicine.getIngredients().length() > 100){
+            System.out.println("ERROR: ingredients length out of range!");
+            return false;
+        }
         //Inserisci il documento nella collection
         collection.insertOne(document);
-
         System.out.println("Documento inserito con successo nella Collection");
+        return true;
     }
 
     //Inserimento singolo documento in un medicinale
