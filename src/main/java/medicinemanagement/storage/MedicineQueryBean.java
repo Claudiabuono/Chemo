@@ -115,7 +115,7 @@ public class MedicineQueryBean {
 
         while (it.hasNext()) {
             Document document = it.next();
-            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", PackageBean.class));
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
             MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
             medicines.add(medicine);
         }
@@ -134,7 +134,7 @@ public class MedicineQueryBean {
         Document document = collection.find(filter).first();
 
         //Crea il medicinale da restituire
-        MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", PackageBean.class)));
+        MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", Document.class)));
 
         return medicine;
     }
@@ -151,7 +151,7 @@ public class MedicineQueryBean {
 
         while (it.hasNext()) {
             Document document = it.next();
-            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", PackageBean.class));
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
             MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
             medicines.add(medicine);
         }
@@ -188,8 +188,21 @@ public class MedicineQueryBean {
         return new Document("package", document);
     }
 
-    private ArrayList<PackageBean> convertToArray(List<PackageBean> packageBeans) {
-        return new ArrayList<>(packageBeans);
+    private ArrayList<PackageBean> convertToArray(List<Document> packages) {
+        //Se non ci sono package restituisco null
+        if (packages == null)
+            return null;
+
+        //Se ci sono package
+
+        //Inserisco i package in un ArrayList
+        ArrayList<PackageBean> packageArrayList = new ArrayList<>();
+
+        for(Document d : packages)
+            packageArrayList.add(new PackageBean(d.getBoolean("status"), d.getDate("expiryDate"), d.getInteger("capacity"), d.getString("packageId")));
+
+        //Restituisco l'ArrayList
+        return packageArrayList;
     }
 
 }
