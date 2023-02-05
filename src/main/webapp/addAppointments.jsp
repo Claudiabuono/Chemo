@@ -4,15 +4,34 @@
   Date: 21/01/2023
   Time: 20:07
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"
+         import="userManagement.application.UserBean"%>
+<%@ page import="patientmanagement.application.PatientBean" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="connector.Facade" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Chemo | Nuove sedute</title>
+    <title>Chemo Nuove sedute</title>
     <link rel="stylesheet" href="./static/styles/checkbox.css">
 </head>
 <body>
+<%
+    HttpSession sessione=request.getSession(false);
+    if (sessione == null) {
+        //redirect alla pagina di error 401 Unauthorized
+        response.sendRedirect("./error401.jsp");
+    } else {
+        UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
+        if (user == null || user.getType() != 1) {
+            if (user == null) {
+                response.sendRedirect("./error401.jsp");
+            } else {
+                response.sendRedirect("./error403.jsp");
+            }
+        } else {
+%>
 <header>
     <jsp:include page="static/templates/userHeaderLogged.html"/>
 </header>
@@ -27,28 +46,52 @@
                 <h2 class="title">Selezione pazienti</h2>
             </div>
             <div id="patient-list" class="result-box-container">
+                <%
+                    Facade facade = new Facade();
+                    ArrayList<PatientBean> patients = new ArrayList<PatientBean>();
+
+                    patients = facade.findPatients("status", true, user);
+
+                    if (patients.size() == 0) {
+                        //visualizzazione messaggio nessun paziente trovato
+                %>
+                <div class="result-box-container">
+                    <h2 class="no-result">Nessun paziente disponibile</h2>
+                </div>
+                <%
+                } else {
+                    for (PatientBean patient:patients) {
+                %>
                 <div id="patient-box-id" class="box form">
                     <div class="first-row">
                         <div class="column left">
-                            <h2 class="result-name">Mario Rossi</h2>
-                            <p>RSSMRA68E01H703R</p>
+                            <h2 class="result-name"><%=patient.getName()%> <%=patient.getSurname()%></h2>
+                            <p><%=patient.getTaxCode()%></p>
                         </div>
                         <div id="patient-check-id" class="column right checkbox-container">
                             <label class="checkbox-label">
-                                <input type="checkbox" name="patient-id" value="patient-id">
+                                <input type="checkbox" name="patient-id" value="<%=patient.getPatientId()%>">
                                 <span class="checkbox-custom rectangular"></span>
                             </label>
                         </div >
                     </div>
                     <div class="row">
-                        <h3 class="left">Tumore al pancreas</h3>
-                        <p class="right">Numero sedute: 6</p>
+                        <h3 class="left"><%=patient.getCondition()%></h3>
+                        <p class="right">Numero sedute: <%=patient.getTherapy().getSessions()%></p>
                     </div>
                 </div>
+                <%
+                        }
+                    }
+                %>
             </div>
             <input type="button" class="button-primary-m submit-button" value="Crea calendario">
         </form>
     </div>
 </div>
+<%
+        }
+    }
+%>
 </body>
 </html>
