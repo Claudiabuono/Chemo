@@ -1,6 +1,8 @@
 package medicinemanagement.application;
 
 import connector.Facade;
+import patientmanagement.application.TherapyBean;
+import patientmanagement.application.TherapyMedicineBean;
 import userManagement.application.UserBean;
 
 import javax.servlet.RequestDispatcher;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +23,7 @@ public class MedicineServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Recupero l'action dalla request
+        //Recupero dalla request il parametro id del medicinale
         String id = request.getParameter("id");
 
         if (id != null) {
@@ -40,7 +43,7 @@ public class MedicineServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Recupero l'action dalla request
+        //Recupero dalla request il parametro action
         String action = request.getParameter("action");
 
         //Recupero l'utente dalla sessione
@@ -63,15 +66,33 @@ public class MedicineServlet extends HttpServlet {
                         response.addHeader("OPERATION_RESULT","true");
                         response.addHeader("MEDICINE_ID", medicine.getId());
                     }
-
                 }
 
-                case "insertMedicinePackage" -> { //Inserimento confezione medicinale
-                    //Inserisco il box
-                    facade.insertMedicinePackage(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
+                case "insertPackage" -> { //Inserimento confezione medicinale
+                    //serve recuperare il primo id valido utilizzabile dal db
+                    String packageId = "0";
+                    //packageId = request.getParameter("medicineId");
+                    //boolean status = Boolean.parseBoolean(request.getParameter("status"));
 
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    String medicineId = request.getParameter("medicineId");
+                    int capacity = Integer.parseInt(request.getParameter("capacity"));
+                    Date expiryDate = dateParser(request.getParameter("expiryDate"));
+
+                    PackageBean medicinePackage = new PackageBean(true, expiryDate, capacity, packageId);
+
+                    if (!packageValidation(medicinePackage)) {
+                        response.addHeader("OPERATION_RESULT","false");
+                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                    } else {
+                        // Inserisco la confezione nel medicinale
+                        facade.insertMedicinePackage(medicineId, medicinePackage, user);
+                        // Recupero il medicinale e gli incremento la quantità aggiornando il db
+                        ArrayList<MedicineBean> medicines = facade.findMedicines("_id", medicineId, user);
+                        medicines.get(0).setAmount(medicines.get(0).getAmount() + 1);
+                        facade.insertMedicine(medicines.get(0), user);
+
+                        response.addHeader("OPERATION_RESULT","true");
+                    }
                 }
 
                 case "searchMedicine" -> { //Ricerca medicinale
@@ -113,6 +134,40 @@ public class MedicineServlet extends HttpServlet {
     }
 
     private boolean medicineValidation(MedicineBean medicine) {
+        if (!nameValidity(medicine.getName())) {
+            return false;
+        }
+        if (!ingredientsValidity(medicine.getIngredients())) {
+            return false;
+        }
         return true;
+    }
+    private boolean packageValidation(PackageBean medicinePackage) {
+        if (!capacityValidity(medicinePackage.getCapacity())) {
+            return false;
+        }
+        if (!dateValidity(medicinePackage.getParsedExpiryDate())) {
+            return false;
+        }
+        return true;
+    }
+    private boolean numberValidity(String notes) {
+        String format = "^[0-9]+$";
+        return notes.matches(format);
+    }
+    private boolean dateValidity(String date) {
+        String format = "^(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
+        return date.matches(format);
+    }
+    private boolean nameValidity(String name) {
+        String format = "^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$";
+        return name.matches(format);
+    }
+    private boolean ingredientsValidity(String ingredients) {
+        String format = "^[A-Za-z0-9][A-Za-z0-9'\\-]+([ A-Za-z0-9][A-Za-z0-9'-]+)*$";
+        return ingredients.matches(format);
+    }
+    private boolean capacityValidity(Integer capacity) {
+        return numberValidity(String.valueOf(capacity));
     }
 }

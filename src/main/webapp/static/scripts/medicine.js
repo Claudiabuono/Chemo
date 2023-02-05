@@ -84,9 +84,9 @@ function addMedicine() {
     }
 }
 
-function addPackage() {
-    const capacity = document.getElementById("new-package-capacity").value;
-    const expiryDate = document.getElementById("new-package-expiry-date").value;
+function addPackage(id) {
+    const capacity = document.getElementById("package-new-capacity").value;
+    const expiryDate = document.getElementById("package-new-expiry-date").value;
 
     const medicinePackage = {
         capacity: capacity,
@@ -99,14 +99,13 @@ function addPackage() {
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.setRequestHeader('Authorization', 'Basic ');
         request.setRequestHeader('Accept', 'application/json');
-        var body = "action=insertMedicinePackage&capacity=" + medicinePackage.capacity + "&expiryDate=" + medicinePackage.expiryDate;
+        var body = "action=insertPackage&medicineId=" + id + "&capacity=" + medicinePackage.capacity + "&expiryDate=" + medicinePackage.expiryDate;
         request.send(body);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 if (request.getResponseHeader('OPERATION_RESULT')) {
-                    const medicineID = request.getResponseHeader('MEDICINE_ID');
                     //recupero id dalla risposta
-                    redirectToMedicineDetails(medicineID);
+                    redirectToMedicineDetails(id);
                 } else {
                     //errore creazione paziente
                 }

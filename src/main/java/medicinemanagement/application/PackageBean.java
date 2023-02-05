@@ -1,5 +1,7 @@
 package medicinemanagement.application;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PackageBean {
@@ -29,6 +31,10 @@ public class PackageBean {
 
     public Date getExpiryDate() {
         return expiryDate;
+    }
+
+    public String getParsedExpiryDate() {
+        return dateParser(expiryDate);
     }
 
     public int getCapacity() {
@@ -67,5 +73,10 @@ public class PackageBean {
                 ", capacity=" + capacity +
                 ", packageId='" + packageId + '\'' +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

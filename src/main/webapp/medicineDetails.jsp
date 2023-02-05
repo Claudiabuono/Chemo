@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8"
          import="userManagement.application.UserBean"%>
+<%@ page import="medicinemanagement.application.MedicineBean" %>
+<%@ page import="medicinemanagement.application.PackageBean" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -25,6 +27,10 @@
             //è presente una sessione senza utente
             response.sendRedirect("./error401.jsp");
         } else {
+            MedicineBean medicine = (MedicineBean) request.getAttribute("medicine");
+            if (medicine == null) {
+                response.sendRedirect("./error403.jsp");
+            } else {
 %>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
@@ -49,7 +55,7 @@
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="name">Nome</label>
-                    <input required id="name" class="input-field inactive" type="text" name="name" value="ciclofosfamide">
+                    <input required id="name" class="input-field inactive" type="text" name="name" value="<%=medicine.getName()%>">
                     <p id="name-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
                 <div class="field right">
@@ -58,7 +64,7 @@
                 </div>
             </div>
             <label for="ingredients">Ingredienti</label>
-            <input required id="ingredients" class="input-field inactive" type="text" name="ingredients" value="ciclososfamide, monoidrata">
+            <input required id="ingredients" class="input-field inactive" type="text" name="ingredients" value="<%=medicine.getIngredients()%>">
             <p id="ingredients-validity" class="validity-paragraph status-unavailable"></p>
         </div>
         <div class="title-section">
@@ -82,16 +88,32 @@
                         <p id="package-new-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
-                <input type="button" class="button-primary-m submit-button" value="Salva confezione" onclick="addPackage()">
+                <input type="button" class="button-primary-m submit-button" value="Salva confezione" onclick="addPackage('<%=medicine.getId()%>')">
             </div>
         </div>
         <div id="medicine-available-packages">
             <div class="title-section">
                 <h3 class="title">Confezioni in magazzino</h3>
             </div>
+            <%
+                if (medicine.getPackages().size() == 0) {
+            %>
+            <div class="result-box-container">
+                <h2 class="no-result">Nessuna confezione in magazzino</h2>
+            </div>
+            <%
+            } else {
+                String packageStatus;
+                for (PackageBean medicinePackage:medicine.getPackages()) {
+                    //visualizzazione box singolo paziente
+                    if (medicinePackage.getStatus())
+                        packageStatus = "status-available";
+                    else
+                        packageStatus = "status-unavailable";
+            %>
             <div id="package-idconfezione" class="box form">
                 <div class="title-section">
-                    <h3 class="title">ID 1</h3>
+                    <h3 class="title">ID <%=medicinePackage.getPackageId()%></h3>
                     <div id="package-data-buttons" class="form-section-buttons">
                         <%--
                         <input type="button" id="delete-package-button" class="button-tertiary-m rounded edit-button" value="Elimina confezione">
@@ -103,34 +125,50 @@
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="id-package-capacity">Capacità (in ml)</label>
-                        <input required id="id-package-capacity" class="input-field inactive" type="number" name="capacity" min="0" value="500">
+                        <input required id="id-package-capacity" class="input-field inactive" type="number" name="capacity" min="0" value="<%=medicinePackage.getCapacity()%>">
                         <p id="package-idconfezione-capacity-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
                         <label for="id-package-expiry-date">Scadenza</label>
-                        <input required id="id-package-expiry-date" class="input-field inactive" type="date" name="expiryDate" value="2027-03-19">
+                        <input required id="id-package-expiry-date" class="input-field inactive" type="date" name="expiryDate" value="<%=medicinePackage.getParsedExpiryDate()%>">
                         <p id="package-idconfezione-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
                 <label for="id-package-status">Stato della confezione</label>
                 <div class="input-fields-row">
-                    <div id="status-icon" class="icon status-available">
+                    <div id="status-icon" class="icon <%=packageStatus%>">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
                             <path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z"/>
                         </svg>
                     </div>
                     <div class="field">
                         <select id="id-package-status" class="input-field inactive" name="status">
+                            <%
+                                if (medicinePackage.getStatus()){
+                            %>
                             <option value="true" selected>Valido</option>
                             <option value="false">Scaduto</option>
+                            <%
+                                } else {
+                            %>
+                            <option value="true">Valido</option>
+                            <option value="false" selected>Scaduto</option>
+                            <%
+                                }
+                            %>
                         </select>
                     </div>
                 </div>
             </div>
+            <%
+                    }
+                }
+            %>
         </div>
     </div>
 </div>
 <%
+            }
         }
     }
 %>
