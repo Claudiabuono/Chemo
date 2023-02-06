@@ -113,9 +113,12 @@ public class MedicineServlet extends HttpServlet {
                     //Recupero i medicinali
                     ArrayList<MedicineBean> medicines = facade.findAllMedicines(user);
 
-                    //Aggiungo lista di medicinali e numero di medicinali alla request
-                    request.setAttribute("medicineNumber", medicines.size());
-                    request.setAttribute("medicineResults", medicines);
+                    //Aggiungo lista di medicinali e numero di medicinali alla response
+                    response.addHeader("medicineNumber", String.valueOf(medicines.size()));
+                    for (int i = 0; i < medicines.size(); i++) {
+                        response.addHeader("medicineId" + i, medicines.get(i).getId());
+                        response.addHeader("medicineName" + i, medicines.get(i).getName());
+                    }
 
                     //Aggiungo l'header
                     response.addHeader("OPERATION_RESULT","true");

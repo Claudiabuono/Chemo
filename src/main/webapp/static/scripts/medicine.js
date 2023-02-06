@@ -35,6 +35,44 @@ function validatePackageData(medicinePackage, id){
 }
 
 
+
+function findAllMedicines(select) {
+    var request = new XMLHttpRequest();
+    request.open('POST', "MedicineServlet", false);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+    request.setRequestHeader('Authorization', 'Basic ');
+    request.setRequestHeader('Accept', 'application/json');
+    var body = "action=findAllMedicines";
+    request.send(body);
+    if (request.status === 200) {
+        if (request.getResponseHeader('OPERATION_RESULT')) {
+            const medicineNumber = request.getResponseHeader('medicineNumber');
+            var medicineId = [];
+            var medicineName = [];
+            for (let i = 0; i < medicineNumber; i++) {
+                medicineId[i] = request.getResponseHeader('medicineId' + i);
+                medicineName[i] = request.getResponseHeader('medicineName' + i);
+            }
+
+            const option0 = document.createElement("option");
+            option0.setAttribute("value", "null");
+            option0.innerHTML = "Seleziona medicinale";
+            select.appendChild(option0);
+
+            for (let i = 0; i < medicineNumber; i++){
+                const option = document.createElement("option");
+                option.setAttribute("value", medicineId[i]);
+                option.innerHTML = medicineName[i];
+                select.appendChild(option);
+            }
+            return select;
+        } else {
+            //errore modifica select
+            return null;
+        }
+    }
+}
+
 function addPackageForm() {
     document.getElementById("new-package-button").className = "hidden";
     document.getElementById("new-package-form").className = "box";

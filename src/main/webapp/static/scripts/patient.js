@@ -100,7 +100,7 @@ function addTherapyForm() {
     document.getElementById("new-therapy-form").className = "box form";
 }
 
-function addMedicineField(id, number) {
+async function addMedicineField(id, number) {
     const newmedicine = document.createElement("div");
     newmedicine.setAttribute("id", id + "-medicine-item-" + number);
     newmedicine.setAttribute("class", "input-fields-row");
@@ -111,10 +111,13 @@ function addMedicineField(id, number) {
     label1.setAttribute("for", id + "-medicine-name-item-" + number);
     let nextNumber = number + 1;
     label1.innerHTML = nextNumber + "° Medicinale";
-    const select1 = document.createElement("select");
+    var select1 = document.createElement("select");
     select1.setAttribute("id", id + "-medicine-name-item-" + number);
     select1.setAttribute("class", "input-field");
     select1.setAttribute("name", "medicineName" + number);
+    //chiamata servlet per ottenere i medicinali
+    select1 = findAllMedicines(select1);
+    console.log("Valore della select: " + select1);
     firstfield.appendChild(label1);
     firstfield.appendChild(select1);
 

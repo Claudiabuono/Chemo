@@ -9,6 +9,7 @@
          import="java.util.ArrayList"
          import="userManagement.application.UserBean"
          import="patientmanagement.application.PatientBean"%>
+<%@ page import="medicinemanagement.application.MedicineBean" %>
 <html>
 <head>
     <title>Chemo | Storico pazienti</title>
@@ -62,9 +63,17 @@
                     <div class="field left">
                         <label for="search-patient-medicine">Medicinale</label>
                         <select id="search-patient-medicine" class="input-field" name="patientMedicine">
-                            <option value="na" selected>Seleziona medicinale</option>
-                            <option value="id-medicinale-1">Nome medicinale 1</option>
-                            <option value="id-medicinale-2">Nome medicinale 2</option>
+                            <option value="null" selected>Seleziona medicinale</option>
+                            <%
+                                ArrayList<MedicineBean> medicines = new ArrayList<MedicineBean>();
+                                Facade facade = new Facade();
+                                medicines = facade.findAllMedicines(user);
+                                for (MedicineBean medicine: medicines) {
+                            %>
+                            <option value="<%=medicine.getId()%>"><%=medicine.getName()%></option>
+                            <%
+                                }
+                            %>
                         </select>
                     </div>
                     <div class="field right">
@@ -85,7 +94,7 @@
                 if (request.getAttribute("patientsResult") == null) {
                     //nessuna richiesta di ricerca
                     //si visualizzano tutti i pazienti
-                    Facade facade = new Facade();
+                    facade = new Facade();
                     patients = facade.findAllPatients(user);
                 } else {
                     patients = (ArrayList<PatientBean>) request.getAttribute("patientsResult");

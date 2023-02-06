@@ -211,7 +211,7 @@ public class Facade {
 
     public ArrayList<MedicineBean> findAllMedicines(UserBean user) {
         try {
-            if(isUserAuthorized(user.getUsername(), 2))
+            if(isUserAuthorized(user.getUsername(), 1) || isUserAuthorized(user.getUsername(), 2))
                 return medicineQueryBean.findAll();
             else
                 throw new Exception("Utente non autorizzato alla modifica di medicinali");
