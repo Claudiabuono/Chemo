@@ -37,17 +37,26 @@ public class MedicineQueryBean {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
-        //Crea il documento da inserire nella Collection
-        Document packageDocument = createDocument(newPackage);
-
         //Crea il filtro
         Bson filter = Filters.eq("_id", new ObjectId(medicineId));
 
         //Recupera il documento del medicinale
         Document medicineDocument = collection.find(filter).first();
 
+        //Aggiorna l'amount di package
+        int amount = medicineDocument.getInteger("amount");
+        collection.updateOne(medicineDocument, new Document("$set", new Document("amount", amount+1)));
+
+        //Aggiorna l'id del package
+        newPackage.setPackageId(String.valueOf(amount));
+
+        //Crea il documento da inserire nella Collection
+        Document packageDocument = createDocument(newPackage);
+
+        medicineDocument = collection.find(filter).first();
+
         //Inserisci il documento nella collection
-        collection.updateOne(medicineDocument, new Document("$set", packageDocument));
+        collection.updateOne(medicineDocument, new Document("$push", packageDocument));
 
         System.out.println("Documento inserito con successo nella Collection");
     }
@@ -85,7 +94,7 @@ public class MedicineQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String key, String valKey) {
+    public void updateDocument(String id, String valId, String key, Object valKey) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 

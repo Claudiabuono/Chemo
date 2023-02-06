@@ -140,7 +140,7 @@ public class Facade {
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di medicinali");
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
     public void insertMedicinePackage(String medicineId, String boxId, boolean status, Date expiryDate, int capacity, UserBean user) {
@@ -180,14 +180,14 @@ public class Facade {
         }
     };
 
-    public void updateMedicine(String id, String valId, String key, String valKey, UserBean user){
+    public void updateMedicine(String id, String valId, String key, Object valKey, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 2)){
                 medicineQueryBean.updateDocument(id, valId, key, valKey);
             }else
                 throw new Exception("Utente non autorizzato alla modifica di medicinali");
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     };
 
@@ -216,7 +216,6 @@ public class Facade {
             else
                 throw new Exception("Utente non autorizzato alla modifica di medicinali");
         } catch (Exception e) {
-            //System.out.println(e.getMessage());
             e.printStackTrace();
         }
 

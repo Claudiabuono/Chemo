@@ -60,7 +60,7 @@
                 </div>
                 <div class="field right">
                     <label for="amount">Quantità</label>
-                    <input required id="amount" class="input-field inactive" type="text" name="amount" value="1">
+                    <input required id="amount" class="input-field inactive" type="text" name="amount" value="<%=medicine.getAmount()%>">
                 </div>
             </div>
             <label for="ingredients">Ingredienti</label>

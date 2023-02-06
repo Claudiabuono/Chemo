@@ -69,27 +69,21 @@ public class MedicineServlet extends HttpServlet {
                 }
 
                 case "insertPackage" -> { //Inserimento confezione medicinale
-                    //serve recuperare il primo id valido utilizzabile dal db
-                    String packageId = "0";
-                    //packageId = request.getParameter("medicineId");
-                    //boolean status = Boolean.parseBoolean(request.getParameter("status"));
-
+                    //Recupero i parametri dalla request
                     String medicineId = request.getParameter("medicineId");
                     int capacity = Integer.parseInt(request.getParameter("capacity"));
                     Date expiryDate = dateParser(request.getParameter("expiryDate"));
 
-                    PackageBean medicinePackage = new PackageBean(true, expiryDate, capacity, packageId);
+                    //Creo una confezione
+                    PackageBean medicinePackage = new PackageBean(true, expiryDate, capacity, "");
 
+                    //Controllo validazione
                     if (!packageValidation(medicinePackage)) {
                         response.addHeader("OPERATION_RESULT","false");
                         request.setAttribute("errorMessage", "I dati inseriti non sono validi");
                     } else {
                         // Inserisco la confezione nel medicinale
                         facade.insertMedicinePackage(medicineId, medicinePackage, user);
-                        // Recupero il medicinale e gli incremento la quantità aggiornando il db
-                        ArrayList<MedicineBean> medicines = facade.findMedicines("_id", medicineId, user);
-                        medicines.get(0).setAmount(medicines.get(0).getAmount() + 1);
-                        facade.insertMedicine(medicines.get(0), user);
 
                         response.addHeader("OPERATION_RESULT","true");
                     }
