@@ -108,6 +108,18 @@ public class MedicineServlet extends HttpServlet {
                         requestDispatcher.forward(request, response);
                     }
                 }
+
+                case "findAllMedicines" -> {
+                    //Recupero i medicinali
+                    ArrayList<MedicineBean> medicines = facade.findAllMedicines(user);
+
+                    //Aggiungo lista di medicinali e numero di medicinali alla request
+                    request.setAttribute("medicineNumber", medicines.size());
+                    request.setAttribute("medicineResults", medicines);
+
+                    //Aggiungo l'header
+                    response.addHeader("OPERATION_RESULT","true");
+                }
             }
         }
         catch (Throwable e) {
