@@ -90,8 +90,46 @@ public class MedicineServlet extends HttpServlet {
                 }
 
                 case "searchMedicine" -> { //Ricerca medicinale
-                    //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("name", request.getParameter("name"), user);
+                    //Recupero i filtri
+                    ArrayList<String> keys = new ArrayList<>();
+                    ArrayList<Object> values = new ArrayList<>();
+                    String parameter;
+                    boolean findAll = true; //booleano che ci serve per capire se non sono stati selezionati parametri nella ricerca, quindi per indicare che serve una findAll
+
+                    //Nome
+                    parameter = request.getParameter("medicineName");
+                    if(parameter != null && !(parameter.equals(""))) {
+                        keys.add("name");
+                        values.add(parameter);
+                        findAll = false;
+                    }
+
+                    //Data di scadenza
+                    String date = request.getParameter("expiryDate");
+                    System.out.println(date);
+                    if(date != null) {
+                        keys.add("expiryDate");
+                        values.add(date);
+                        findAll = false;
+                    }
+
+                    //Stato
+                    parameter = request.getParameter("medicineStatus");
+                    if(parameter != null && !(parameter.equals("na"))) {
+                        keys.add("status");
+                        values.add(Boolean.parseBoolean(parameter));
+                        findAll = false;
+                    }
+
+                    //Creo l'ArrayList da restituire
+                    ArrayList<MedicineBean> medicines;
+
+                    //Se non sono stati selezionati parametri, allora dobbiamo effettuare una ricerca di tutti i medicinali
+                    if (findAll)
+                        medicines = facade.findAllMedicines(user);
+                    //Altrimenti ci serve una ricerca in base ai parametri selezionati
+                    else
+                        medicines = facade.findMedicines(keys, values, user);
 
                     if(medicines.size() == 1) { //Un solo medicinale trovato
                         //Aggiungo il parametro alla request

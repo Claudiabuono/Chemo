@@ -13,8 +13,12 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static com.mongodb.client.model.Filters.elemMatch;
 
 public class MedicineQueryBean {
 
@@ -132,6 +136,74 @@ public class MedicineQueryBean {
         return medicines;
     }
 
+    public ArrayList<MedicineBean> findDocument(ArrayList<String> key, ArrayList<Object> value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = null;
+        Bson finalFilter = null;
+        Pattern regex;
+        int i = 0;
+
+        do {
+            System.out.println("i: " + i + " filter: " + key.get(i));
+            //Controllo di che tipo di valore si tratta
+            switch (key.get(i)) {
+                case "name" -> { //Nome
+                    regex = Pattern.compile(Pattern.quote((String) value.get(i)), Pattern.CASE_INSENSITIVE);
+                    if (i == 0)
+                        finalFilter = Filters.eq(key.get(i), regex);
+                    else
+                        filter = Filters.eq(key.get(i), regex);
+                }
+
+                case "status" -> { //Stato
+                    if((boolean) value.get(i)) { //Disponibile
+                        if (i == 0)
+                            finalFilter = Filters.gt("amount", 0);
+                        else
+                            filter = Filters.gt("amount", 0);
+                    } else { //Esaurito
+                        if (i == 0)
+                            finalFilter = Filters.eq("amount", 0);
+                        else
+                            filter = Filters.eq("amount", 0);
+                    }
+                }
+
+                case "expiryDate" -> { //Data scadenza: medicinali con almeno un package in scadenza entro quella data
+                    if (i == 0)
+                        finalFilter = Document.parse("{'package': {$elemMatch: { expiryDate: { $lt: ISODate('"+value.get(i)+"')}}}}");
+                    else
+                        filter = Document.parse("{'package': {$elemMatch: { expiryDate: { $lt: ISODate('"+value.get(i)+"')}}}}");
+                }
+            }
+
+            if (i > 0)
+                finalFilter = Filters.and(finalFilter, filter);
+
+            i++;
+        } while (i < key.size());
+
+        System.out.println(finalFilter);
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find(finalFilter);
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
+            medicines.add(medicine);
+        }
+
+        return medicines;
+    }
+
     public MedicineBean findDocumentById(String value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
@@ -142,10 +214,8 @@ public class MedicineQueryBean {
         //Cerca il documento
         Document document = collection.find(filter).first();
 
-        //Crea il medicinale da restituire
-        MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", Document.class)));
-
-        return medicine;
+        //Restituisce il medicinale
+        return new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", Document.class)));
     }
 
     public ArrayList<MedicineBean> findAll() {

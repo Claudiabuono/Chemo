@@ -49,7 +49,7 @@
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="search-medicine-expiry-date">Scadenza</label>
-                        <input type="date" id="search-medicine-expiry-date" class="input-field">
+                        <input type="date" id="search-medicine-expiry-date" class="input-field" name="expiryDate">
                     </div>
                     <div class="field right">
                         <label for="search-medicine-status">Stato</label>
