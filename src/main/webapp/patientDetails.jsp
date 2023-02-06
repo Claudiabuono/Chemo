@@ -193,8 +193,8 @@
                         <p id="medicine-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
-                        <label for="new-medicine-dose-item-0">Dose (in ml)</label>
-                        <input required id="new-medicine-dose-item-0" class="input-field" type="text" name="medicineDose1">
+                        <label for="medicine-dose-item-0">Dose (in ml)</label>
+                        <input required id="medicine-dose-item-0" class="input-field" type="text" name="medicineDose1">
                         <p id="dose-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>

@@ -108,31 +108,39 @@ async function addMedicineField(id, number) {
     const firstfield = document.createElement("div");
     firstfield.setAttribute("class", "field left");
     const label1 = document.createElement("label");
-    label1.setAttribute("for", id + "-medicine-name-item-" + number);
+    label1.setAttribute("for", "medicine-name-item-" + number);
     let nextNumber = number + 1;
     label1.innerHTML = nextNumber + "° Medicinale";
     var select1 = document.createElement("select");
-    select1.setAttribute("id", id + "-medicine-name-item-" + number);
+    select1.setAttribute("id", "medicine-name-item-" + number);
     select1.setAttribute("class", "input-field");
     select1.setAttribute("name", "medicineName" + number);
     //chiamata servlet per ottenere i medicinali
     select1 = findAllMedicines(select1);
     console.log("Valore della select: " + select1);
+    const validity1 = document.createElement("p");
+    validity1.setAttribute("id", "medicine-" + number + "-validity");
+    validity1.setAttribute("class", "validity-paragraph status-unavailable");
     firstfield.appendChild(label1);
     firstfield.appendChild(select1);
+    firstfield.appendChild(validity1);
 
     const secondfield = document.createElement("div");
     secondfield.setAttribute("class", "field right");
     const label2 = document.createElement("label");
-    label2.setAttribute("for", id + "-medicine-dose-item-" + number);
+    label2.setAttribute("for", "medicine-dose-item-" + number);
     label2.innerHTML = "Dose (in ml)";
     const input2 = document.createElement("input");
-    input2.setAttribute("id", id + "-medicine-dose-item-" + number);
+    input2.setAttribute("id", "medicine-dose-item-" + number);
     input2.setAttribute("class", "input-field");
     input2.setAttribute("type", "text");
     input2.setAttribute("name", "medicineDose" + number);
+    const validity2 = document.createElement("p");
+    validity2.setAttribute("id", "dose-" + number + "-validity");
+    validity2.setAttribute("class", "validity-paragraph status-unavailable");
     secondfield.appendChild(label2);
     secondfield.appendChild(input2);
+    secondfield.appendChild(validity2);
 
     newmedicine.appendChild(firstfield);
     newmedicine.appendChild(secondfield);
@@ -234,8 +242,8 @@ function addTherapy(id) {
     let medicines = [];
     let therapyMedicine = [];
     for (let i = 0; i < medicinesNumber; i++) {
-        therapyMedicine[0] = document.getElementById("new-medicine-name-item-" + i).value;
-        therapyMedicine[1] = document.getElementById("new-medicine-dose-item-" + i).value;
+        therapyMedicine[0] = document.getElementById("medicine-name-item-" + i).value;
+        therapyMedicine[1] = document.getElementById("medicine-dose-item-" + i).value;
         medicines[i] = therapyMedicine;
     }
 
