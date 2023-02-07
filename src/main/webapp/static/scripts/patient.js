@@ -1,13 +1,13 @@
 function validatePatientData(patient){
     let validity = true;
     //validazione del formato
-    if (!nameValidity(patient.name)) {
+    if (!namesValidity(patient.name)) {
         document.getElementById("name-validity").innerHTML = "Formato errato";
         validity = false;
     } else {
         document.getElementById("name-validity").innerHTML = "";
     }
-    if (!surnameValidity(patient.surname)) {
+    if (!namesValidity(patient.surname)) {
         document.getElementById("surname-validity").innerHTML = "Formato errato";
         validity = false;
     } else {

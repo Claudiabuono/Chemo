@@ -181,7 +181,7 @@ public class MedicineServlet extends HttpServlet {
     }
 
     private boolean medicineValidation(MedicineBean medicine) {
-        if (!nameValidity(medicine.getName())) {
+        if (!medicineNameValidity(medicine.getName())) {
             return false;
         }
         if (!ingredientsValidity(medicine.getIngredients())) {
@@ -210,7 +210,14 @@ public class MedicineServlet extends HttpServlet {
         String format = "^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$";
         return name.matches(format);
     }
+    private boolean medicineNameValidity(String name) {
+        if (name.length() > 32)
+            return false;
+        return nameValidity(name);
+    }
     private boolean ingredientsValidity(String ingredients) {
+        if (ingredients.length() > 100)
+            return false;
         String format = "^[A-Za-z0-9][A-Za-z0-9'\\-]+([ A-Za-z0-9][A-Za-z0-9'-]+)*$";
         return ingredients.matches(format);
     }

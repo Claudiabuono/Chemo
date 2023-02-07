@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -230,16 +232,16 @@ public class PatientServlet extends HttpServlet {
     }
 
     private boolean patientValidation(PatientBean patient){
-        if (!nameValidity(patient.getName())) {
+        if (!namesValidity(patient.getName())) {
             return false;
         }
-        if (!nameValidity(patient.getSurname())) {
+        if (!namesValidity(patient.getSurname())) {
             return false;
         }
         if (!dateValidity(dateReverseParser(patient.getBirthDate()))) {
             return false;
         }
-        if (!nameValidity(patient.getCity())) {
+        if (!cityValidity(patient.getCity())) {
             return false;
         }
         if (!taxCodeValidity(patient.getTaxCode())) {
@@ -286,12 +288,27 @@ public class PatientServlet extends HttpServlet {
         return notes.matches(format);
     }
     private boolean dateValidity(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate newDate = LocalDate.parse(date, formatter );
+        LocalDate currentDate = LocalDate.now();
+        if (newDate.isAfter(currentDate))
+            return false;
         String format = "^(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
         return date.matches(format);
     }
     private boolean nameValidity(String name) {
         String format = "^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$";
         return name.matches(format);
+    }
+    private boolean namesValidity(String name) {
+        if (name.length() > 32)
+            return false;
+        return nameValidity(name);
+    }
+    private boolean cityValidity(String city) {
+        if (city.length() > 32)
+            return false;
+        return nameValidity(city);
     }
     private boolean taxCodeValidity(String taxCode) {
         String format = "^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$";
@@ -302,6 +319,8 @@ public class PatientServlet extends HttpServlet {
         return phoneNumber.matches(format);
     }
     private boolean notesValidity(String notes) {
+        if (notes.length() > 255)
+            return false;
         String format = "^[A-Za-z0-9][A-Za-z0-9'.,\\n-]+([ A-Za-z0-9][A-Za-z0-9'.,\\n-]+)*$";
         return notes.matches(format);
     }
