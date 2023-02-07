@@ -227,7 +227,9 @@ public class PatientQueryBean {
     }
 
     private Document createDocument(PatientBean patient) {
-        return new Document("_id", new ObjectId(patient.getPatientId()))
+        ObjectId objectId = new ObjectId();
+        patient.setPatientId(objectId.toString());
+        return new Document("_id", objectId)
                 .append("taxCode", patient.getTaxCode())
                 .append("name", patient.getName())
                 .append("surname", patient.getSurname())
