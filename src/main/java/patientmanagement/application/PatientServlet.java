@@ -160,7 +160,7 @@ public class PatientServlet extends HttpServlet {
 
                     //Medicinale
                     parameter = request.getParameter("patientMedicine");
-                    if(parameter != null && !(parameter.equals("na"))) {
+                    if(parameter != null && !(parameter.equals("null"))) {
                         keys.add("medicine");
                         values.add(parameter);
                         findAll = false;
