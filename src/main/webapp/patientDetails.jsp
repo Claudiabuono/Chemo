@@ -4,8 +4,7 @@
   Date: 12/01/2023
   Time: 16:43
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"
-         import="patientmanagement.application.PatientServlet"
+<%@ page contentType="text/html;charset=UTF-8"
          import="patientmanagement.application.PatientBean"
          import="userManagement.application.UserBean"%>
 
@@ -14,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Pagina paziente</title>
-    <script src="./static/scripts/patient.js"></script>
+    <link rel="stylesheet" href="./static/styles/patientDetails.css">
 </head>
 <body>
 <%
@@ -32,11 +31,11 @@
             if (patient == null) {
                 response.sendRedirect("./error403.jsp");
             } else {
-                String patientStatus = "status-unavaliable";
+                String patientStatus;
                 if (patient.getStatus())
-                    patientStatus = "status-avaliable";
+                    patientStatus = "status-available";
                 else
-                    patientStatus = "status-unavaliable";
+                    patientStatus = "status-unavailable";
 %>
 <header>
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
@@ -117,22 +116,24 @@
                         <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                     </svg>
                 </div>
-                <select id="status" class="input-field inactive" name="status">
-                    <%
-                        if (patient.getStatus()){
-                    %>
-                    <option value="true" selected>Disponibile</option>
-                    <option value="false">Non disponibile</option>
-                    <%
+                <div class="field">
+                    <label for="status">Stato del paziente</label>
+                    <select id="status" class="input-field inactive" name="status">
+                        <%
+                            if (patient.getStatus()){
+                        %>
+                        <option value="true" selected>Disponibile</option>
+                        <option value="false">Non disponibile</option>
+                        <%
                         } else {
-                    %>
-                    <option value="true">Disponibile</option>
-                    <option value="false" selected>Non disponibile</option>
-                    <%
-                        }
-                    %>
-
-                </select>
+                        %>
+                        <option value="true">Disponibile</option>
+                        <option value="false" selected>Non disponibile</option>
+                        <%
+                            }
+                        %>
+                    </select>
+                </div>
             </div>
         </div>
         <%
@@ -147,39 +148,47 @@
             </div>
             <label for="new-condition">Patologia</label>
             <input required id="new-condition" class="input-field" type="text" name="condition">
+            <p id="condition-validity" class="validity-paragraph status-unavailable"></p>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="new-sessions-number">Numero di sedute</label>
                     <input required id="new-sessions-number" class="input-field" type="number" name="sessionNumber" value="6">
+                    <p id="sessions-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
                 <div class="field right">
                     <label for="new-sessions-frequency">Numero sedute a settimana</label>
                     <input required id="new-sessions-frequency" class="input-field" type="number" name="sessionFrequency" value="1">
+                    <p id="frequency-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="new-sessions-duration">Durata seduta (in minuti)</label>
                     <input required id="new-sessions-duration" class="input-field" type="number" name="sessionDuration" value="60">
+                    <p id="duration-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
-            <p id="new-medicines-number" class="hidden">1</p>
+            <p id="medicines-number" class="hidden">1</p>
             <div id="new-medicines">
-                <div id="new-medicine-item-1" class="input-fields-row">
+                <div id="new-medicine-item-0" class="input-fields-row">
                     <div class="field left">
-                        <label for="new-medicine-name-item-1">1° Medicinale</label>
-                        <select id="new-medicine-name-item-1" class="input-field" name="medicineName1">
-                            <option value="id-medicinale-1" selected>Nome medicinale 1</option>
-                            <option value="id-medicinale-1">Nome medicinale 2</option>
+                        <label for="medicine-name-item-0">1° Medicinale</label>
+                        <select id="medicine-name-item-0" class="input-field" name="medicineName1">
+                            <option value="false" selected>Seleziona medicinale</option>
+                            <option value="63b6b0854938c69a8a227461">Nome medicinale 1</option>
+                            <option value="63b6b0854938c69a8a227461">Nome medicinale 2</option>
+                            <option value="63b6b0854938c69a8a227461">Nome medicinale 3</option>
                         </select>
+                        <p id="medicine-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
-                        <label for="new-medicine-dose-item-1">Dose (in ml)</label>
-                        <input required id="new-medicine-dose-item-1" class="input-field" type="text" name="medicineDose1">
+                        <label for="new-medicine-dose-item-0">Dose (in ml)</label>
+                        <input required id="new-medicine-dose-item-0" class="input-field" type="text" name="medicineDose1">
+                        <p id="dose-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
             </div>
-            <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 2)">
+            <input type="button" id="add-medicine-new" class="button-secondary-s rounded" value="Aggiungi medicinale" onclick="addMedicineField('new', 1)">
             <input type="button" class="button-primary-m submit-button" value="Salva terapia" onclick="addTherapy('<%=patient.getPatientId()%>')">
         </div>
 
@@ -198,33 +207,39 @@
                 </div>
                 <label for="condition">Patologia</label>
                 <input required id="condition" class="input-field inactive" type="text" name="condition" value="<%=patient.getCondition()%>">
+                <p id="condition-validity" class="validity-paragraph status-unavailable"></p>
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-number">Numero di sedute</label>
                         <input required id="sessions-number" class="input-field inactive" type="number" name="sessionNumber" value="<%=patient.getTherapy().getSessions()%>">
+                        <p id="sessions-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
                         <label for="sessions-frequency">Numero sedute a settimana</label>
                         <input required id="sessions-frequency" class="input-field inactive" type="number" name="sessionFrequency" value="<%=patient.getTherapy().getFrequency()%>">
+                        <p id="frequency-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
                 <div class="input-fields-row">
                     <div class="field left">
                         <label for="sessions-duration">Durata seduta (in minuti)</label>
                         <input required id="sessions-duration" class="input-field inactive" type="number" name="sessionDuration" value="<%=patient.getTherapy().getDuration()%>">
+                        <p id="duration-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
-                <p id="saved-medicines-number" class="hidden">1</p>
+                <p id="medicines-number" class="hidden">1</p>
                 <div id="saved-medicines">
                     <% for(int i = 0; i < patient.getTherapy().getMedicines().size(); i++) { %>
                     <div id="medicine-item-<%=i%>" class="input-fields-row">
                         <div class="field left">
                             <label for="medicine-name-item-<%=i%>"><%=i+1%>° Medicinale</label>
                             <input required id="medicine-name-item-<%=i%>" class="input-field inactive" type="text" name="medicineName<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getMedicineId()%>">
+                            <p id="medicine-<%=i%>-validity" class="validity-paragraph status-unavailable"></p>
                         </div>
                         <div class="field right">
                             <label for="medicine-dose-item-<%=i%>">Dose (in ml)</label>
                             <input required id="medicine-dose-item-<%=i%>" class="input-field inactive" type="text" name="medicineDose<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getDose()%>">
+                            <p id="dose-<%=i%>-validity" class="validity-paragraph status-unavailable"></p>
                         </div>
                     </div>
                     <% } %>

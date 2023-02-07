@@ -95,13 +95,13 @@
             </div>
             <%
                     } else {
-                        String patientStatus = "status-unavaliable";
+                        String patientStatus;
                         for (PatientBean patient:patients) {
                             //visualizzazione box singolo paziente
                             if (patient.getStatus())
-                                patientStatus = "status-avaliable";
+                                patientStatus = "status-available";
                             else
-                                patientStatus = "status-unavaliable";
+                                patientStatus = "status-unavailable";
             %>
             <div class="result-box-container">
                 <button type="submit" id="patient-box-id" class="box" onclick="redirectToPatientDetails('<%=patient.getPatientId()%>')">

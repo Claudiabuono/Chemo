@@ -3,14 +3,13 @@
   User: anton
   Date: 19/01/2023
   Time: 20:35
-  To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Chemo | Nuovo medicinale</title>
+    <title>Chemo Nuovo medicinale</title>
 </head>
 <body>
 <header>
@@ -30,10 +29,12 @@
                 <div class="field left">
                     <label for="name">Nome</label>
                     <input required id="name" class="input-field" type="text" name="name">
+                    <p id="name-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <label for="ingredients">Ingredienti</label>
             <input required id="ingredients" class="input-field" type="text" name="ingredients">
+            <p id="ingredients-validity" class="validity-paragraph status-unavailable"></p>
             <input type="button" class="button-primary-m submit-button" value="Aggiungi medicinale">
         </div>
     </div>

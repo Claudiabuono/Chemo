@@ -5,13 +5,12 @@
   Time: 17:29
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Chemo | Scheda medicinale</title>
-    <script src="./static/scripts/medicineDetails.js"></script>
 </head>
 <body>
 <header>
@@ -38,6 +37,7 @@
                 <div class="field left">
                     <label for="name">Nome</label>
                     <input required id="name" class="input-field inactive" type="text" name="name" value="ciclofosfamide">
+                    <p id="name-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
                 <div class="field right">
                     <label for="amount">Quantità</label>
@@ -46,6 +46,7 @@
             </div>
             <label for="ingredients">Ingredienti</label>
             <input required id="ingredients" class="input-field inactive" type="text" name="ingredients" value="ciclososfamide, monoidrata">
+            <p id="ingredients-validity" class="validity-paragraph status-unavailable"></p>
         </div>
         <div class="title-section">
             <h2 class="title">Magazzino</h2>
@@ -60,16 +61,18 @@
                     <div class="field left">
                         <label for="new-package-capacity">Capacità (in ml)</label>
                         <input required id="new-package-capacity" class="input-field" type="number" min="0" name="capacity">
+                        <p id="package-new-capacity-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
                         <label for="new-package-expiry-date">Scadenza</label>
                         <input required id="new-package-expiry-date" class="input-field" type="date" name="expiryDate">
+                        <p id="package-new-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
                 <input type="button" class="button-primary-m submit-button" value="Salva confezione">
             </div>
         </div>
-        <div id="medicine-avaliable-packages">
+        <div id="medicine-available-packages">
             <div class="title-section">
                 <h3 class="title">Confezioni in magazzino</h3>
             </div>
@@ -88,22 +91,27 @@
                     <div class="field left">
                         <label for="id-package-capacity">Capacità (in ml)</label>
                         <input required id="id-package-capacity" class="input-field inactive" type="number" name="capacity" min="0" value="500">
+                        <p id="package-idconfezione-capacity-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
                         <label for="id-package-expiry-date">Scadenza</label>
                         <input required id="id-package-expiry-date" class="input-field inactive" type="date" name="expiryDate" value="2027-03-19">
+                        <p id="package-idconfezione-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
+                <label for="id-package-status">Stato della confezione</label>
                 <div class="input-fields-row">
-                    <div id="status-icon" class="icon status-avaliable">
+                    <div id="status-icon" class="icon status-available">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
                             <path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z"/>
                         </svg>
                     </div>
-                    <select id="id-package-status" class="input-field inactive" name="status">
-                        <option value="true" selected>Valido</option>
-                        <option value="false">Scaduto</option>
-                    </select>
+                    <div class="field">
+                        <select id="id-package-status" class="input-field inactive" name="status">
+                            <option value="true" selected>Valido</option>
+                            <option value="false">Scaduto</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

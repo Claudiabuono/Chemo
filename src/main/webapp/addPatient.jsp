@@ -4,7 +4,7 @@
   Date: 09/01/2023
   Time: 20:32
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"
+<%@ page contentType="text/html;charset=UTF-8"
          import="userManagement.application.UserBean" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -45,26 +45,31 @@
                 <div class="field left">
                     <label for="name">Nome</label>
                     <input required id="name" class="input-field" type="text" name="name">
+                    <p id="name-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
                 <div class="field right">
                     <label for="surname">Cognome</label>
                     <input required id="surname" class="input-field" type="text" name="surname">
+                    <p id="surname-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="birthdate">Data di nascita</label>
                     <input required id="birthdate" class="input-field" type="date" name="birthdate">
+                    <p id="birthdate-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
                 <div class="field right">
                     <label for="city">Città di nascita</label>
                     <input required id="city" class="input-field" type="text" name="city">
+                    <p id="city-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <div class="input-fields-row">
                 <div class="field left">
                     <label for="tax-code">Codice fiscale</label>
                     <input required id="tax-code" class="input-field" type="text" name="taxCode">
+                    <p id="tax-code-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <div class="title-section">
@@ -74,6 +79,7 @@
                 <div class="field left">
                     <label for="phone-number">Numero di telefono</label>
                     <input required id="phone-number" class="input-field" type="tel" name="phoneNumber">
+                    <p id="phone-number-validity" class="validity-paragraph status-unavailable"></p>
                 </div>
             </div>
             <div class="title-section">
@@ -81,6 +87,7 @@
             </div>
             <label for="notes">Allergie ed intolleranze</label>
             <input required id="notes" class="input-field" type="text" name="notes">
+            <p id="notes-validity" class="validity-paragraph status-unavailable"></p>
             <input type="button" class="button-primary-m submit-button" value="Aggiungi paziente" onclick="addPatient()">
         </div>
     </div>
