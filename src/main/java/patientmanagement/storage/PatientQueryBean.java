@@ -66,16 +66,16 @@ public class PatientQueryBean {
 
         //Recupera il documento del paziente
         Document patientDoc = collection.find(filter).first();
-        if(therapy.getSessions() < 0){
+        if(therapy.getSessions() <= 0){
             System.out.println("ERROR: session non valid!");
             return false;
         }else if(therapy.getMedicines().size() < 0){
             System.out.println("ERROR: not a single medicines found!");
             return false;
-        }else if(therapy.getFrequency() < 0){
+        }else if(therapy.getFrequency() <= 0){
             System.out.println("ERROR: frequency non valid!");
             return false;
-        }else if(therapy.getDuration() < 0){
+        }else if(therapy.getDuration() <= 0){
             System.out.println("ERROR: duration non valid!");
             return false;
         }else if(patientDoc == null){
