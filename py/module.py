@@ -52,10 +52,13 @@ def fitness(generation, patients):
             for j in range(len(patients) - 1):
                 for k in range(len(patients) - 2):
                     fit = 0
-                    if j == i+1 and k == j+1:
-                        if patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId'] and patients[lista_indici_pazienti[j]]['medicineId'] == patients[lista_indici_pazienti[k]]['medicineId']:
+                    if j == i + 1 and k == j + 1:
+                        if patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]][
+                            'medicineId'] and patients[lista_indici_pazienti[j]]['medicineId'] == \
+                                patients[lista_indici_pazienti[k]]['medicineId']:
                             fit += 0.7
-                        elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]]['medicineId']:
+                        elif patients[lista_indici_pazienti[i]]['medicineId'] == patients[lista_indici_pazienti[j]][
+                            'medicineId']:
                             fit += 0.3
                     fit_of_indi += fit
 
@@ -80,7 +83,7 @@ def medConsume(medicine, patients, totQuant):
     return totQuant
 
 
-#La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
+# La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
 def countConflict(schedule):
     lista_indici_pazienti = indexPatients(schedule)
     res = []
@@ -107,7 +110,7 @@ def crossover(ind1, ind2, numPatients):
     newIndi = []
     values = []
 
-    for elem in range(int(len(ind1)/2)):
+    for elem in range(int(len(ind1) / 2)):
         if ind1[elem].index(1) not in values:
             values.append(ind1[elem].index(1))
             newIndi.append(ind1[elem])
@@ -117,7 +120,6 @@ def crossover(ind1, ind2, numPatients):
             if elem.index(1) not in values:
                 values.append(elem.index(1))
                 newIndi.append(elem)
-
 
     if len(newIndi) < numPatients:
         for i in range(numPatients):
@@ -129,7 +131,46 @@ def crossover(ind1, ind2, numPatients):
     return newIndi
 
 
+def rouletteWheel(fitness):
+    winners = []
+    pos = 0
+    i = 0
+    probabilities = []
+    total_fitness = sum(fitness)  # calcolo del valore di fitness totale
+    for value in fitness:
+        probabilities.append({"position": pos,
+                              "probability": value / total_fitness})  # viene creato un array dove vengono memorizzate le probabilità e gli indici di esse (questi corrispondono agli indici che gli individui hanno nell'array popolazione)
+        pos += 1
+
+    print(probabilities)
+
+    while i < len(fitness):  # il ciclo viene iterato tante volte quanti sono gli individui della popolazione
+        win = random.choice(probabilities)  # viene estratto il vincitore
+        if win.get(
+                "position") not in winners:  # se il vincitore non è gia presente tra quelli precedentemente estratti viene aggiunto all'array
+            winners.append(win.get("position"))
+        i += 1
+    print(winners)
+    return winners
+
+
+def mutation(individual):
+
+    nraw = len(patients) - 1
+    row1 = random.randint(0, nraw)
+    row2 = random.randint(0, nraw)
+    temp = individual[row1]
+    individual[row1] = individual[row2]
+    individual[row2] = temp
+
+    return individual
+
+
 gen = generation(patients, 6, 6, 5)
 fit = fitness(gen, patients)
 print(fit)
+rouletteWheel(fit)
+indi = gen[0]
+indi = mutation(indi)
+print(indi)
 
