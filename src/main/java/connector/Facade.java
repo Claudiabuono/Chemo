@@ -194,7 +194,7 @@ public class Facade {
     public ArrayList<MedicineBean> findMedicines(String key, Object value, UserBean user){
         ArrayList<MedicineBean> medicines = new ArrayList<>();
         try{
-            if(isUserAuthorized(user.getUsername(), 2)){
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)){
                 if(key.equals("_id"))  {
                     medicines.add(medicineQueryBean.findDocumentById(String.valueOf(value)));
                     return medicines;
@@ -212,7 +212,7 @@ public class Facade {
     public ArrayList<MedicineBean> findMedicines(ArrayList<String> key, ArrayList<Object> value, UserBean user){
         ArrayList<MedicineBean> medicines = new ArrayList<>();
         try{
-            if(isUserAuthorized(user.getUsername(), 2)){
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)){
                 return medicineQueryBean.findDocument(key, value);
             }else
                 throw new Exception("Utente non autorizzato alla modifica di medicinali");

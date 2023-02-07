@@ -106,8 +106,8 @@ public class MedicineServlet extends HttpServlet {
 
                     //Data di scadenza
                     String date = request.getParameter("expiryDate");
-                    System.out.println(date);
-                    if(date != null) {
+                    System.out.println("date: "+date);
+                    if(date != null && !date.equals("")) {
                         keys.add("expiryDate");
                         values.add(date);
                         findAll = false;
