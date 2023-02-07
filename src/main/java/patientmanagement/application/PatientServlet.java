@@ -278,7 +278,7 @@ public class PatientServlet extends HttpServlet {
         return true;
     }
     private boolean idValidity(String id) {
-        String format = "^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$";
+        String format = "^[a-f\\d]{24}$";
         return id.matches(format);
     }
     private boolean numberValidity(String notes) {

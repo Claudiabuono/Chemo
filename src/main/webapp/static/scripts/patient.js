@@ -81,7 +81,7 @@ function validateTherapyData(therapy){
         } else {
             document.getElementById("medicine-" + i + "-validity").innerHTML = "";
         }
-        console.log("Id medicinale selezionato: " + therapy.medicines[i][1]);
+        console.log("Dose medicinale selezionato: " + therapy.medicines[i][1]);
         if (!doseValidity(therapy.medicines[i][1])) {
             document.getElementById("dose-" + i + "-validity").innerHTML = "Formato errato";
             validity = false;
@@ -264,6 +264,7 @@ function addTherapy(id) {
             body += "&medicineId" + i + "=" + medicines[i][0];
             body += "&medicineDose" + i + "=" + medicines[i][1];
         }
+        console.log(body);
         sendTherapyData(body);
     }
 }
@@ -285,6 +286,7 @@ function sendTherapyData(body){
                 redirectToPatientDetails(patientID);
             } else {
                 //errore aggiunta terapia
+                console.log(request.getResponseHeader('errorMessage'))
             }
         }
     };
