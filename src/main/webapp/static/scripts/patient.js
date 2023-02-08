@@ -74,15 +74,15 @@ function validateTherapyData(therapy){
         document.getElementById("duration-validity").innerHTML = "";
     }
     for (let i = 0; i < therapy.medicinesNumber; i++) {
-        console.log("Id medicinale selezionato: " + therapy.medicines[i][0]);
-        if (!idValidity(therapy.medicines[i][0])) {
+        console.log("Id medicinale selezionato: " + therapy.medicines[i].id);
+        if (!idValidity(therapy.medicines[i].id)) {
             document.getElementById("medicine-" + i + "-validity").innerHTML = "Formato errato";
             validity = false;
         } else {
             document.getElementById("medicine-" + i + "-validity").innerHTML = "";
         }
-        console.log("Dose medicinale selezionato: " + therapy.medicines[i][1]);
-        if (!doseValidity(therapy.medicines[i][1])) {
+        console.log("Dose medicinale selezionato: " + therapy.medicines[i].dose);
+        if (!doseValidity(therapy.medicines[i].dose)) {
             document.getElementById("dose-" + i + "-validity").innerHTML = "Formato errato";
             validity = false;
         } else {
@@ -240,11 +240,14 @@ function addTherapy(id) {
     const sessions = document.getElementById("new-sessions-number").value;
     const medicinesNumber = document.getElementById("medicines-number").innerHTML;
     let medicines = [];
-    let therapyMedicine = [];
     for (let i = 0; i < medicinesNumber; i++) {
-        therapyMedicine[0] = document.getElementById("medicine-name-item-" + i).value;
-        therapyMedicine[1] = document.getElementById("medicine-dose-item-" + i).value;
-        medicines[i] = therapyMedicine;
+        var medicine = {
+            id: "",
+            dose: ""
+        };
+        medicine.id = document.getElementById("medicine-name-item-" + i).value;
+        medicine.dose = document.getElementById("medicine-dose-item-" + i).value;
+        medicines[i] = medicine;
     }
 
     const therapy = {
@@ -261,10 +264,9 @@ function addTherapy(id) {
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
         for (let i = 0; i < medicinesNumber; i++) {
-            body += "&medicineId" + i + "=" + medicines[i][0];
-            body += "&medicineDose" + i + "=" + medicines[i][1];
+            body += "&medicineId" + i + "=" + medicines[i].id;
+            body += "&medicineDose" + i + "=" + medicines[i].dose;
         }
-        console.log(body);
         sendTherapyData(body);
     }
 }
