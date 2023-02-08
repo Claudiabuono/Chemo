@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +69,8 @@ public class PlannerServlet extends HttpServlet {
                     gson.toJson(patientsJson, new FileWriter("D:\\Chemo\\py\\patients.json"));
 
                     //Faccio eseguire il processo del modulo di IA
-                    System.out.println("non ho minimamente idea di come si faccia");
+                    String path = Paths.get(System.getProperty("user.dir"), "py", "module.py").toString();
+                    Process process = Runtime.getRuntime().exec(new String[]{"py", path});
 
                     //Recupero la lista degli id dei pazienti restituita dal modulo
                     List<String> patientIds = null;
@@ -84,17 +87,23 @@ public class PlannerServlet extends HttpServlet {
                         e.printStackTrace();
                     }
 
-                    //Popolo la lista di appuntamente
-                    //tutte le istanze di Date() sono placeholder per ora
+                    //Popolo la lista di appuntamenti
+                    Calendar calendar = Calendar.getInstance();
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
                     for(int i = 0; i < patientIds.size(); i++) {
-                        Date date = new Date();
+                        Date date = new Date(); //Placeholder data dell'appuntamento
                         int seat = 3;
                         appointments.add(new AppointmentBean(patientIds.get(0), date, String.valueOf(seat)));
                     }
 
+                    //Recupero primo e ultimo giorno della settimana
+                    calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
+                    Date firstDay = calendar.getTime();
+                    calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMaximum(Calendar.DAY_OF_WEEK));
+                    Date lastDay = calendar.getTime();
+
                     //Creo l'istanza del planner settimanale e la aggiungo al database
-                    PlannerBean planner = new PlannerBean("id", new Date(), new Date(), appointments);
+                    PlannerBean planner = new PlannerBean("id", firstDay, lastDay, appointments);
                     facade.insertPlanner(planner, user);
 
                     //Aggiungo la lista di id alla request
