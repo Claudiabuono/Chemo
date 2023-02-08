@@ -102,6 +102,17 @@ public class Facade {
         }
     }
 
+    public void insertPlanner(PlannerBean planner, UserBean user){
+        try{
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                plannerQueryBean.insertDocument(planner);
+            }else
+                throw new Exception("Utente non autorizzato all'inserimento di un planner");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     /*
     OPERAZIONI CRUD PER ENTITA' MEDICINE
      */

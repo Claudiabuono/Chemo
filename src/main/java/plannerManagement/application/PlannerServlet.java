@@ -19,6 +19,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/PlannerServlet")
@@ -68,26 +69,40 @@ public class PlannerServlet extends HttpServlet {
                     //Faccio eseguire il processo del modulo di IA
                     System.out.println("non ho minimamente idea di come si faccia");
 
+                    //Recupero la lista degli id dei pazienti restituita dal modulo
+                    List<String> patientIds = null;
                     try {
                         //Creo il file reader
                         Reader reader = Files.newBufferedReader(Path.of("D:\\Chemo\\py\\patients.json"));
 
                         //Converto l'array di JSON in una lista di String
-                        List<String> patientIds = gson.fromJson(reader, new TypeToken<List<String>>(){}.getType());
+                        patientIds = gson.fromJson(reader, new TypeToken<List<String>>(){}.getType());
 
                         //Chiudo il reader
                         reader.close();
-
-                        //Aggiungo la lista di id alla request
-                        request.setAttribute("patientIds", patientIds);
-
-                        //Mando la richiesta con il dispatcher
-                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("planner.jsp");
-                        requestDispatcher.forward(request, response);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
+                    //Popolo la lista di appuntamente
+                    //tutte le istanze di Date() sono placeholder per ora
+                    ArrayList<AppointmentBean> appointments = new ArrayList<>();
+                    for(int i = 0; i < patientIds.size(); i++) {
+                        Date date = new Date();
+                        int seat = 3;
+                        appointments.add(new AppointmentBean(patientIds.get(0), date, String.valueOf(seat)));
+                    }
+
+                    //Creo l'istanza del planner settimanale e la aggiungo al database
+                    PlannerBean planner = new PlannerBean("id", new Date(), new Date(), appointments);
+                    facade.insertPlanner(planner, user);
+
+                    //Aggiungo la lista di id alla request
+                    request.setAttribute("patientIds", patientIds);
+
+                    //Mando la richiesta con il dispatcher
+                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("planner.jsp");
+                    requestDispatcher.forward(request, response);
                 }
 
                 case "deletePlanner" -> {
