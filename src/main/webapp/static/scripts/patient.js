@@ -1,13 +1,13 @@
 function validatePatientData(patient){
     let validity = true;
     //validazione del formato
-    if (!nameValidity(patient.name)) {
+    if (!namesValidity(patient.name)) {
         document.getElementById("name-validity").innerHTML = "Formato errato";
         validity = false;
     } else {
         document.getElementById("name-validity").innerHTML = "";
     }
-    if (!surnameValidity(patient.surname)) {
+    if (!namesValidity(patient.surname)) {
         document.getElementById("surname-validity").innerHTML = "Formato errato";
         validity = false;
     } else {
@@ -74,15 +74,15 @@ function validateTherapyData(therapy){
         document.getElementById("duration-validity").innerHTML = "";
     }
     for (let i = 0; i < therapy.medicinesNumber; i++) {
-        console.log("Id medicinale selezionato: " + therapy.medicines[i][0]);
-        if (!idValidity(therapy.medicines[i][0])) {
+        console.log("Id medicinale selezionato: " + therapy.medicines[i].id);
+        if (!idValidity(therapy.medicines[i].id)) {
             document.getElementById("medicine-" + i + "-validity").innerHTML = "Formato errato";
             validity = false;
         } else {
             document.getElementById("medicine-" + i + "-validity").innerHTML = "";
         }
-        console.log("Id medicinale selezionato: " + therapy.medicines[i][1]);
-        if (!doseValidity(therapy.medicines[i][1])) {
+        console.log("Dose medicinale selezionato: " + therapy.medicines[i].dose);
+        if (!doseValidity(therapy.medicines[i].dose)) {
             document.getElementById("dose-" + i + "-validity").innerHTML = "Formato errato";
             validity = false;
         } else {
@@ -100,7 +100,7 @@ function addTherapyForm() {
     document.getElementById("new-therapy-form").className = "box form";
 }
 
-function addMedicineField(id, number) {
+async function addMedicineField(id, number) {
     const newmedicine = document.createElement("div");
     newmedicine.setAttribute("id", id + "-medicine-item-" + number);
     newmedicine.setAttribute("class", "input-fields-row");
@@ -108,28 +108,39 @@ function addMedicineField(id, number) {
     const firstfield = document.createElement("div");
     firstfield.setAttribute("class", "field left");
     const label1 = document.createElement("label");
-    label1.setAttribute("for", id + "-medicine-name-item-" + number);
+    label1.setAttribute("for", "medicine-name-item-" + number);
     let nextNumber = number + 1;
     label1.innerHTML = nextNumber + "° Medicinale";
-    const select1 = document.createElement("select");
-    select1.setAttribute("id", id + "-medicine-name-item-" + number);
+    var select1 = document.createElement("select");
+    select1.setAttribute("id", "medicine-name-item-" + number);
     select1.setAttribute("class", "input-field");
     select1.setAttribute("name", "medicineName" + number);
+    //chiamata servlet per ottenere i medicinali
+    select1 = findAllMedicines(select1);
+    console.log("Valore della select: " + select1);
+    const validity1 = document.createElement("p");
+    validity1.setAttribute("id", "medicine-" + number + "-validity");
+    validity1.setAttribute("class", "validity-paragraph status-unavailable");
     firstfield.appendChild(label1);
     firstfield.appendChild(select1);
+    firstfield.appendChild(validity1);
 
     const secondfield = document.createElement("div");
     secondfield.setAttribute("class", "field right");
     const label2 = document.createElement("label");
-    label2.setAttribute("for", id + "-medicine-dose-item-" + number);
+    label2.setAttribute("for", "medicine-dose-item-" + number);
     label2.innerHTML = "Dose (in ml)";
     const input2 = document.createElement("input");
-    input2.setAttribute("id", id + "-medicine-dose-item-" + number);
+    input2.setAttribute("id", "medicine-dose-item-" + number);
     input2.setAttribute("class", "input-field");
     input2.setAttribute("type", "text");
     input2.setAttribute("name", "medicineDose" + number);
+    const validity2 = document.createElement("p");
+    validity2.setAttribute("id", "dose-" + number + "-validity");
+    validity2.setAttribute("class", "validity-paragraph status-unavailable");
     secondfield.appendChild(label2);
     secondfield.appendChild(input2);
+    secondfield.appendChild(validity2);
 
     newmedicine.appendChild(firstfield);
     newmedicine.appendChild(secondfield);
@@ -229,11 +240,14 @@ function addTherapy(id) {
     const sessions = document.getElementById("new-sessions-number").value;
     const medicinesNumber = document.getElementById("medicines-number").innerHTML;
     let medicines = [];
-    let therapyMedicine = [];
     for (let i = 0; i < medicinesNumber; i++) {
-        therapyMedicine[0] = document.getElementById("new-medicine-name-item-" + i).value;
-        therapyMedicine[1] = document.getElementById("new-medicine-dose-item-" + i).value;
-        medicines[i] = therapyMedicine;
+        var medicine = {
+            id: "",
+            dose: ""
+        };
+        medicine.id = document.getElementById("medicine-name-item-" + i).value;
+        medicine.dose = document.getElementById("medicine-dose-item-" + i).value;
+        medicines[i] = medicine;
     }
 
     const therapy = {
@@ -250,8 +264,8 @@ function addTherapy(id) {
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
         for (let i = 0; i < medicinesNumber; i++) {
-            body += "&medicineId" + i + "=" + medicines[i][0];
-            body += "&medicineDose" + i + "=" + medicines[i][1];
+            body += "&medicineId" + i + "=" + medicines[i].id;
+            body += "&medicineDose" + i + "=" + medicines[i].dose;
         }
         sendTherapyData(body);
     }
@@ -274,6 +288,7 @@ function sendTherapyData(body){
                 redirectToPatientDetails(patientID);
             } else {
                 //errore aggiunta terapia
+                console.log(request.getResponseHeader('errorMessage'))
             }
         }
     };

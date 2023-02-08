@@ -1,24 +1,26 @@
 package medicinemanagement.application;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BoxBean {
+public class PackageBean {
 
     //Parametri
     private boolean status;
     private Date expiryDate;
     private int capacity;
-    private String boxId;
+    private String packageId;
 
     //Costruttori
-    public BoxBean() {
+    public PackageBean() {
     }
 
-    public BoxBean(boolean status, Date expiryDate, int capacity, String boxId) {
+    public PackageBean(boolean status, Date expiryDate, int capacity, String packageId) {
         this.status = status;
         this.expiryDate = expiryDate;
         this.capacity = capacity;
-        this.boxId = boxId;
+        this.packageId = packageId;
     }
 
     //Getters
@@ -31,12 +33,16 @@ public class BoxBean {
         return expiryDate;
     }
 
+    public String getParsedExpiryDate() {
+        return dateParser(expiryDate);
+    }
+
     public int getCapacity() {
         return capacity;
     }
 
-    public String getBoxId() {
-        return boxId;
+    public String getPackageId() {
+        return packageId;
     }
 
 
@@ -53,19 +59,24 @@ public class BoxBean {
         this.capacity = capacity;
     }
 
-    public void setBoxId(String boxId) {
-        this.boxId = boxId;
+    public void setPackageId(String packageId) {
+        this.packageId = packageId;
     }
 
     //Metodi ereditati da Object
 
     @Override
     public String toString() {
-        return "StockBean{" +
+        return "PackageBean{" +
                 "status=" + status +
                 ", expiryDate=" + expiryDate +
                 ", capacity=" + capacity +
-                ", boxId='" + boxId + '\'' +
+                ", packageId='" + packageId + '\'' +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

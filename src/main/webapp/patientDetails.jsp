@@ -7,6 +7,10 @@
 <%@ page contentType="text/html;charset=UTF-8"
          import="patientmanagement.application.PatientBean"
          import="userManagement.application.UserBean"%>
+<%@ page import="medicinemanagement.application.MedicineBean" %>
+<%@ page import="connector.Facade" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Objects" %>
 
 <!DOCTYPE html>
 <html lang="it">
@@ -175,15 +179,22 @@
                         <label for="medicine-name-item-0">1° Medicinale</label>
                         <select id="medicine-name-item-0" class="input-field" name="medicineName1">
                             <option value="false" selected>Seleziona medicinale</option>
-                            <option value="63b6b0854938c69a8a227461">Nome medicinale 1</option>
-                            <option value="63b6b0854938c69a8a227461">Nome medicinale 2</option>
-                            <option value="63b6b0854938c69a8a227461">Nome medicinale 3</option>
+                            <%
+                                ArrayList<MedicineBean> medicines = new ArrayList<MedicineBean>();
+                                Facade facade = new Facade();
+                                medicines = facade.findAllMedicines(user);
+                                for (MedicineBean medicine: medicines) {
+                            %>
+                            <option value="<%=medicine.getId()%>"><%=medicine.getName()%></option>
+                            <%
+                                }
+                            %>
                         </select>
                         <p id="medicine-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                     <div class="field right">
-                        <label for="new-medicine-dose-item-0">Dose (in ml)</label>
-                        <input required id="new-medicine-dose-item-0" class="input-field" type="text" name="medicineDose1">
+                        <label for="medicine-dose-item-0">Dose (in ml)</label>
+                        <input required id="medicine-dose-item-0" class="input-field" type="text" name="medicineDose1">
                         <p id="dose-0-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
@@ -233,7 +244,25 @@
                     <div id="medicine-item-<%=i%>" class="input-fields-row">
                         <div class="field left">
                             <label for="medicine-name-item-<%=i%>"><%=i+1%>° Medicinale</label>
-                            <input required id="medicine-name-item-<%=i%>" class="input-field inactive" type="text" name="medicineName<%=i%>" value="<%=patient.getTherapy().getMedicines().get(i).getMedicineId()%>">
+                            <select required id="medicine-name-item-<%=i%>" class="input-field inactive" name="medicineName<%=i%>">
+                                <option value="false" selected>Seleziona medicinale</option>
+                                <%
+                                    ArrayList<MedicineBean> medicines = new ArrayList<MedicineBean>();
+                                    Facade facade = new Facade();
+                                    medicines = facade.findAllMedicines(user);
+                                    for (MedicineBean medicine: medicines) {
+                                        if (Objects.equals(medicine.getId(), patient.getTherapy().getMedicines().get(i).getMedicineId())){
+                                %>
+                                <option value="<%=medicine.getId()%>" selected><%=medicine.getName()%></option>
+                                <%
+                                        } else {
+                                %>
+                                <option value="<%=medicine.getId()%>"><%=medicine.getName()%></option>
+                                <%
+                                        }
+                                    }
+                                %>
+                            </select>
                             <p id="medicine-<%=i%>-validity" class="validity-paragraph status-unavailable"></p>
                         </div>
                         <div class="field right">
