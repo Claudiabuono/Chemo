@@ -209,30 +209,42 @@ public class PatientQueryBean {
         MongoCollection<Document> collection = getCollection();
 
         //Crea il filtro
-        Bson finalFilter;
-        Bson filter;
+        Bson finalFilter = null;
+        Bson filter = null;
         Pattern regex;
+        int i = 0;
 
-        //Controllo se il primo elemento della lista dei valori è una stringa, se così creo la regex per la stringa
-        if (value.get(0) instanceof String) {
-            regex = Pattern.compile(Pattern.quote((String) value.get(0)), Pattern.CASE_INSENSITIVE);
-            finalFilter = Filters.eq(key.get(0), regex);
-        }
-        else
-            finalFilter = Filters.eq(key.get(0), value.get(0));
+        //Ciclo sull'array di filtri
+        do {
+            switch (key.get(i)) {
+                case "name", "surname" -> { //Nome e Cognome lavorano con le regex
+                    regex = Pattern.compile(Pattern.quote((String) value.get(i)), Pattern.CASE_INSENSITIVE);
+                    if (i == 0)
+                        finalFilter = Filters.eq(key.get(i), regex);
+                    else
+                        filter = Filters.eq(key.get(i), regex);
+                }
 
-        //Ciclo su ogni elemento della lista
-        for(int i = 1; i < key.size(); i++) {
-            //Controllo se l'elemento i-esimo della lista dei valori è una stringa, se così creo la regex per la stringa
-            if (value.get(i) instanceof String) {
-                regex = Pattern.compile(Pattern.quote((String) value.get(i)), Pattern.CASE_INSENSITIVE);
-                filter = Filters.eq(key.get(i), regex);
+                case "status" -> { //Stato paziente
+                    if (i == 0)
+                        finalFilter = Filters.eq(key.get(i), value.get(i));
+                    else
+                        filter = Filters.eq(key.get(i), value.get(i));
+                }
+
+                case "medicine" -> { //Medicinale nella terapia
+                    if (i == 0)
+                        finalFilter = Document.parse("{'therapy.medicines': {$elemMatch: {medicineId: '"+value.get(i)+"'}}}");
+                    else
+                        filter = Document.parse("{'therapy.medicines': {$elemMatch: {medicineId: '"+value.get(i)+"'}}}");
+                }
             }
-            else
-                filter = Filters.eq(key.get(i), value.get(i));
 
-            finalFilter = Filters.and(finalFilter, filter);
-        }
+            if (i > 0)
+                finalFilter = Filters.and(finalFilter, filter);
+
+            i++;
+        } while(i < key.size());
 
         //Cerca il documento
         FindIterable<Document> iterDoc = collection.find(finalFilter);
@@ -304,7 +316,9 @@ public class PatientQueryBean {
     }
 
     private Document createDocument(PatientBean patient) {
-        return new Document("_id", new ObjectId(patient.getPatientId()))
+        ObjectId objectId = new ObjectId();
+        patient.setPatientId(objectId.toString());
+        return new Document("_id", objectId)
                 .append("taxCode", patient.getTaxCode())
                 .append("name", patient.getName())
                 .append("surname", patient.getSurname())

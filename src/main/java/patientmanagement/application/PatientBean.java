@@ -28,7 +28,6 @@ public class PatientBean {
     }
 
     public PatientBean(String taxCode, String name, String surname, Date dataNascita, String city, String phoneNumber, boolean status, String notes) {
-        this.patientId = new ObjectId().toString();
         this.taxCode = taxCode;
         this.name = name;
         this.surname = surname;

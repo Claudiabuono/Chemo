@@ -6,14 +6,19 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
-import medicinemanagement.application.BoxBean;
+import medicinemanagement.application.PackageBean;
 import medicinemanagement.application.MedicineBean;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import static com.mongodb.client.model.Filters.elemMatch;
 
 public class MedicineQueryBean {
 
@@ -37,19 +42,31 @@ public class MedicineQueryBean {
         return true;
     }
 
-    //Inserimento singolo documento in un medicinale
-    public void insertDocument(BoxBean box, String medicineId) {
+    //Inserimento una confezione in un medicinale
+    public void insertDocument(PackageBean newPackage, String medicineId) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
-        //Crea il documento da inserire nella Collection
-        Document document = createDocument(box);
-
         //Crea il filtro
-        Bson filter = Filters.eq("id", medicineId);
+        Bson filter = Filters.eq("_id", new ObjectId(medicineId));
+
+        //Recupera il documento del medicinale
+        Document medicineDocument = collection.find(filter).first();
+
+        //Aggiorna l'amount di package
+        int amount = medicineDocument.getInteger("amount");
+        collection.updateOne(medicineDocument, new Document("$set", new Document("amount", amount+1)));
+
+        //Aggiorna l'id del package
+        newPackage.setPackageId(String.valueOf(amount));
+
+        //Crea il documento da inserire nella Collection
+        Document packageDocument = createDocument(newPackage);
+
+        medicineDocument = collection.find(filter).first();
 
         //Inserisci il documento nella collection
-        collection.findOneAndUpdate(filter, document);
+        collection.updateOne(medicineDocument, new Document("$push", packageDocument));
 
         System.out.println("Documento inserito con successo nella Collection");
     }
@@ -87,7 +104,7 @@ public class MedicineQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String key, String valKey) {
+    public void updateDocument(String id, String valId, String key, Object valKey) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -102,7 +119,7 @@ public class MedicineQueryBean {
 
     //Ricerca di un documento nella Collection data una coppia (key, value)
 
-    public ArrayList<MedicineBean> findDocument(String key, String value) {
+    public ArrayList<MedicineBean> findDocument(String key, Object value) {
         //Recupera la Collection
         MongoCollection<Document> collection = getCollection();
 
@@ -117,10 +134,113 @@ public class MedicineQueryBean {
 
         while (it.hasNext()) {
             Document document = it.next();
-            ArrayList<BoxBean> boxBeans = convertToArray(document.getList("box", BoxBean.class));
-            MedicineBean medicine = new MedicineBean(document.getString("id"), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), boxBeans);
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
             medicines.add(medicine);
         }
+
+        return medicines;
+    }
+
+    public ArrayList<MedicineBean> findDocument(ArrayList<String> key, ArrayList<Object> value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = null;
+        Bson finalFilter = null;
+        Pattern regex;
+        int i = 0;
+
+        do {
+            System.out.println("i: " + i + " filter: " + key.get(i));
+            //Controllo di che tipo di valore si tratta
+            switch (key.get(i)) {
+                case "name" -> { //Nome
+                    regex = Pattern.compile(Pattern.quote((String) value.get(i)), Pattern.CASE_INSENSITIVE);
+                    if (i == 0)
+                        finalFilter = Filters.eq(key.get(i), regex);
+                    else
+                        filter = Filters.eq(key.get(i), regex);
+                }
+
+                case "status" -> { //Stato
+                    if((boolean) value.get(i)) { //Disponibile
+                        if (i == 0)
+                            finalFilter = Filters.gt("amount", 0);
+                        else
+                            filter = Filters.gt("amount", 0);
+                    } else { //Esaurito
+                        if (i == 0)
+                            finalFilter = Filters.eq("amount", 0);
+                        else
+                            filter = Filters.eq("amount", 0);
+                    }
+                }
+
+                case "expiryDate" -> { //Data scadenza: medicinali con almeno un package in scadenza entro quella data
+                    if (i == 0)
+                        finalFilter = Document.parse("{'package': {$elemMatch: { expiryDate: { $lt: ISODate('"+value.get(i)+"')}}}}");
+                    else
+                        filter = Document.parse("{'package': {$elemMatch: { expiryDate: { $lt: ISODate('"+value.get(i)+"')}}}}");
+                }
+            }
+
+            if (i > 0)
+                finalFilter = Filters.and(finalFilter, filter);
+
+            i++;
+        } while (i < key.size());
+
+        System.out.println(finalFilter);
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find(finalFilter);
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
+            medicines.add(medicine);
+        }
+
+        return medicines;
+    }
+
+    public MedicineBean findDocumentById(String value) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(value));
+
+        //Cerca il documento
+        Document document = collection.find(filter).first();
+
+        //Restituisce il medicinale
+        return new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), convertToArray(document.getList("package", Document.class)));
+    }
+
+    public ArrayList<MedicineBean> findAll() {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Cerca il documento
+        FindIterable<Document> iterDoc = collection.find();
+
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<MedicineBean> medicines = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Document document = it.next();
+            ArrayList<PackageBean> packageBeans = convertToArray(document.getList("package", Document.class));
+            MedicineBean medicine = new MedicineBean(document.get(("_id")).toString(), document.getString("name"), document.getString("ingredients"), document.getInteger("amount"), packageBeans);
+            medicines.add(medicine);
+        }
+
         return medicines;
     }
 
@@ -129,28 +249,45 @@ public class MedicineQueryBean {
     private MongoCollection<Document> getCollection() {
         MongoDatabase mongoDatabase = DatabaseConnector.getDatabase();
 
-        MongoCollection<Document> collection = mongoDatabase.getCollection("medicinale");
+        MongoCollection<Document> collection = mongoDatabase.getCollection("medicine");
         System.out.println("Collection 'medicinale' recuperata con successo");
         return collection;
     }
 
     private Document createDocument(MedicineBean medicine) {
-        return new Document("id", medicine.getId())
+        ObjectId objectId = new ObjectId();
+        medicine.setId(objectId.toString());
+        return new Document("_id", objectId)
                 .append("name", medicine.getName())
                 .append("ingredients", medicine.getIngredients())
                 .append("amount", medicine.getAmount())
-                .append("box", medicine.getBox());
+                .append("package", medicine.getPackages());
     }
 
-    private Document createDocument(BoxBean box) {
-        return new Document("id", box.getBoxId())
+    private Document createDocument(PackageBean box) {
+        Document document = new Document("packageId", box.getPackageId())
                 .append("status", box.getStatus())
                 .append("capacity", box.getCapacity())
                 .append("expiryDate", box.getExpiryDate());
+
+        return new Document("package", document);
     }
 
-    private ArrayList<BoxBean> convertToArray(List<BoxBean> boxBeans) {
-        return new ArrayList<>(boxBeans);
+    private ArrayList<PackageBean> convertToArray(List<Document> packages) {
+        //Se non ci sono package restituisco null
+        if (packages == null)
+            return null;
+
+        //Se ci sono package
+
+        //Inserisco i package in un ArrayList
+        ArrayList<PackageBean> packageArrayList = new ArrayList<>();
+
+        for(Document d : packages)
+            packageArrayList.add(new PackageBean(d.getBoolean("status"), d.getDate("expiryDate"), d.getInteger("capacity"), d.getString("packageId")));
+
+        //Restituisco l'ArrayList
+        return packageArrayList;
     }
 
 }

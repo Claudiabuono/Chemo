@@ -1,14 +1,18 @@
 package medicinemanagement.application;
 
 import connector.Facade;
+import patientmanagement.application.TherapyBean;
+import patientmanagement.application.TherapyMedicineBean;
 import userManagement.application.UserBean;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,8 +22,28 @@ public class MedicineServlet extends HttpServlet {
     private static final Facade facade = new Facade();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Recupero dalla request il parametro id del medicinale
+        String id = request.getParameter("id");
+
+        if (id != null) {
+            //Recupero l'utente dalla sessione
+            UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
+
+            //Cerco il medicinale richiesto
+            ArrayList<MedicineBean> medicine = facade.findMedicines("_id", id, user);
+
+            //Imposto i dati del paziente come attributo
+            request.setAttribute("medicine", medicine.get(0));
+
+            //Reindirizzo alla pagina del paziente
+            getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/medicineDetails.jsp"))).forward(request, response);
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Recupero l'action dalla request
+        //Recupero dalla request il parametro action
         String action = request.getParameter("action");
 
         //Recupero l'utente dalla sessione
@@ -29,78 +53,113 @@ public class MedicineServlet extends HttpServlet {
             switch (action) {
                 case "insertMedicine" -> { //Inserimento medicinale
                     //Inserisco il medicinale
-                    facade.insertMedicine(request.getParameter("id"), request.getParameter("name"), request.getParameter("ingredients"), Integer.parseInt(request.getParameter("amount")), user);
+                    MedicineBean medicine = new MedicineBean(request.getParameter("name"), request.getParameter("ingredients"));
 
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    //Controllo di validità
+                    if(!(medicineValidation(medicine))) {
+                        response.addHeader("OPERATION_RESULT","false");
+                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                    } else {
+                        facade.insertMedicine(medicine, user);
+
+                        //Salvo l'id del medicinale nell'header della response, così da poterlo reindirizzare alla sua pagina
+                        response.addHeader("OPERATION_RESULT","true");
+                        response.addHeader("MEDICINE_ID", medicine.getId());
+                    }
                 }
 
-                case "insertMedicineBox" -> { //Inserimento confezione medicinale
-                    //Inserisco il box
-                    facade.insertMedicineBox(request.getParameter("id"), request.getParameter("BoxId"), Boolean.parseBoolean(request.getParameter("status")), dateParser(request.getParameter("expiryDate")), Integer.parseInt(request.getParameter("capacity")), user);
+                case "insertPackage" -> { //Inserimento confezione medicinale
+                    //Recupero i parametri dalla request
+                    String medicineId = request.getParameter("medicineId");
+                    int capacity = Integer.parseInt(request.getParameter("capacity"));
+                    Date expiryDate = dateParser(request.getParameter("expiryDate"));
 
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
+                    //Creo una confezione
+                    PackageBean medicinePackage = new PackageBean(true, expiryDate, capacity, "");
 
-                case "deleteMedicineBox" -> {
-                    //Rimuovo il box
-                    facade.removeMedicineBox(request.getParameter("boxId"), user);
+                    //Controllo validazione
+                    if (!packageValidation(medicinePackage)) {
+                        response.addHeader("OPERATION_RESULT","false");
+                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                    } else {
+                        // Inserisco la confezione nel medicinale
+                        facade.insertMedicinePackage(medicineId, medicinePackage, user);
 
-                    //Reindirizzo alla pagina lista dei medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        response.addHeader("OPERATION_RESULT","true");
+                    }
                 }
 
                 case "searchMedicine" -> { //Ricerca medicinale
-                    //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("name", request.getParameter("name"));
+                    //Recupero i filtri
+                    ArrayList<String> keys = new ArrayList<>();
+                    ArrayList<Object> values = new ArrayList<>();
+                    String parameter;
+                    boolean findAll = true; //booleano che ci serve per capire se non sono stati selezionati parametri nella ricerca, quindi per indicare che serve una findAll
+
+                    //Nome
+                    parameter = request.getParameter("medicineName");
+                    if(parameter != null && !(parameter.equals(""))) {
+                        keys.add("name");
+                        values.add(parameter);
+                        findAll = false;
+                    }
+
+                    //Data di scadenza
+                    String date = request.getParameter("expiryDate");
+                    System.out.println("date: "+date);
+                    if(date != null && !date.equals("")) {
+                        keys.add("expiryDate");
+                        values.add(date);
+                        findAll = false;
+                    }
+
+                    //Stato
+                    parameter = request.getParameter("medicineStatus");
+                    if(parameter != null && !(parameter.equals("na"))) {
+                        keys.add("status");
+                        values.add(Boolean.parseBoolean(parameter));
+                        findAll = false;
+                    }
+
+                    //Creo l'ArrayList da restituire
+                    ArrayList<MedicineBean> medicines;
+
+                    //Se non sono stati selezionati parametri, allora dobbiamo effettuare una ricerca di tutti i medicinali
+                    if (findAll)
+                        medicines = facade.findAllMedicines(user);
+                    //Altrimenti ci serve una ricerca in base ai parametri selezionati
+                    else
+                        medicines = facade.findMedicines(keys, values, user);
 
                     if(medicines.size() == 1) { //Un solo medicinale trovato
                         //Aggiungo il parametro alla request
                         request.setAttribute("medicineResults", medicines.get(0));
 
-                        //Reindirizzo alla pagina del singolo medicinale
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        //Reindirizzo alla pagina paziente
+                        response.sendRedirect("MedicineServlet?id=" + medicines.get(0).getId());
                     } else { //Più medicinali trovati
                         //Aggiungo il parametro alla request
                         request.setAttribute("medicineResults", medicines);
 
-                        //Reindirizzo alla pagina della lista medicinali
-                        response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                        //Mando la richiesta con il dispatcher
+                        RequestDispatcher requestDispatcher = request.getRequestDispatcher("medicinesList.jsp");
+                        requestDispatcher.forward(request, response);
                     }
                 }
 
-                case "viewMedicineList" -> { //Visualizza lista medicinali
+                case "findAllMedicines" -> {
                     //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("", request.getParameter(""));
+                    ArrayList<MedicineBean> medicines = facade.findAllMedicines(user);
 
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines);
+                    //Aggiungo lista di medicinali e numero di medicinali alla response
+                    response.addHeader("medicineNumber", String.valueOf(medicines.size()));
+                    for (int i = 0; i < medicines.size(); i++) {
+                        response.addHeader("medicineId" + i, medicines.get(i).getId());
+                        response.addHeader("medicineName" + i, medicines.get(i).getName());
+                    }
 
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
-                case "viewAvailableMedicinesList" -> { //Visualizza lista medicinali disponibili
-                    //Recupero i medicinali
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("status", "true");
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines);
-
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
-                }
-
-                case "viewMedicinePage" -> { //Visualizza pagina medicinale
-                    //Recupero il medicinale
-                    ArrayList<MedicineBean> medicines = facade.findMedicines("", request.getParameter(""));
-
-                    //Aggiungo il parametro alla request
-                    request.setAttribute("medicinesResults", medicines.get(0));
-
-                    //Reindirizzo alla pagina della lista medicinali
-                    response.sendRedirect(""); //todo: aggiungere jsp una volta creata
+                    //Aggiungo l'header
+                    response.addHeader("OPERATION_RESULT","true");
                 }
             }
         }
@@ -112,12 +171,57 @@ public class MedicineServlet extends HttpServlet {
 
     //Metodi di supporto
     private Date dateParser(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return format.parse(date);
         }
         catch (Exception e) {
             return null;
         }
+    }
+
+    private boolean medicineValidation(MedicineBean medicine) {
+        if (!medicineNameValidity(medicine.getName())) {
+            return false;
+        }
+        if (!ingredientsValidity(medicine.getIngredients())) {
+            return false;
+        }
+        return true;
+    }
+    private boolean packageValidation(PackageBean medicinePackage) {
+        if (!capacityValidity(medicinePackage.getCapacity())) {
+            return false;
+        }
+        if (!dateValidity(medicinePackage.getParsedExpiryDate())) {
+            return false;
+        }
+        return true;
+    }
+    private boolean numberValidity(String notes) {
+        String format = "^[0-9]+$";
+        return notes.matches(format);
+    }
+    private boolean dateValidity(String date) {
+        String format = "^(19|20)[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
+        return date.matches(format);
+    }
+    private boolean nameValidity(String name) {
+        String format = "^[A-Za-z][A-Za-z'-]+([ A-Za-z][A-Za-z'-]+)*$";
+        return name.matches(format);
+    }
+    private boolean medicineNameValidity(String name) {
+        if (name.length() > 32)
+            return false;
+        return nameValidity(name);
+    }
+    private boolean ingredientsValidity(String ingredients) {
+        if (ingredients.length() > 100)
+            return false;
+        String format = "^[A-Za-z0-9][A-Za-z0-9'\\-]+([ A-Za-z0-9][A-Za-z0-9'-]+)*$";
+        return ingredients.matches(format);
+    }
+    private boolean capacityValidity(Integer capacity) {
+        return numberValidity(String.valueOf(capacity));
     }
 }
