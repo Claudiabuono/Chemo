@@ -25,7 +25,8 @@
     /*Colours fot status*/
     --avaliable: green;
     --unavaliable: red;
-    --warning: yellow;
+    --warning: #ffff4b;
+    --warning-text: #727224;
 }
 
 body {
@@ -150,8 +151,8 @@ a:visited:hover {
 }
 
 #box-name-row .title {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 #box-name-row #user-details-link {

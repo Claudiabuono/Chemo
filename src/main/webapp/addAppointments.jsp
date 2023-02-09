@@ -36,6 +36,7 @@
     <jsp:include page="static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="add-appointments-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Nuove sedute</h1>
@@ -85,7 +86,7 @@
                     }
                 %>
             </div>
-            <input type="button" class="button-primary-m submit-button" value="Crea calendario">
+            <input type="button" class="button-primary-m submit-button" value="Crea calendario" onclick="addAppointments()">
         </form>
     </div>
 </div>
