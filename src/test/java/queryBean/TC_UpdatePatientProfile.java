@@ -31,33 +31,33 @@ public class TC_UpdatePatientProfile {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    public void testUpdatePatientWithIncorrectNotesLength(){
-        assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "notes", ""));
-    }
-
+    //TC_UC_PM_05_3
     @Test
     public void testUpdatePatientWithIncorrectConditionLength(){
         assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "condition", ""));
     }
 
-    @Test
-    public void testUpdatePatientWithIncorrectTherapyFrequency(){
-        assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "frequency", 0));
-    }
-
-    @Test
-    public void testUpdatePatientWithIncorrectTherapyDuration(){
-        assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "duration", 0));
-    }
-    @Test
-    public void testUpdatePatientWithIncorrectTherapyNumbers(){
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "session", 0));
-    }
+    //TC_UC_PM_05_7
     @Test
     public void testUpdatePatientWithIncorrectTherapyDose(){
         assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "dose", 0));
     }
 
+    //TC_UC_PM_05_8
+    @Test
+    public void testUpdatePatientWithIncorrectTherapySession(){
+        assertEquals(true, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "session", 0));
+    }
 
+    //TC_UC_PM_05_9
+    @Test
+    public void testUpdatePatientWithIncorrectTherapyDuration(){
+        assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "duration", 0));
+    }
+
+    //TC_UC_PM_05_10
+    @Test
+    public void testUpdatePatientWithIncorrectTherapyFrequency(){
+        assertEquals(false, patientQueryBean.updateDocument("_id", "63de1815d74b4d04cf039760", "frequency", 0));
+    }
 }

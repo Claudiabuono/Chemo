@@ -33,6 +33,7 @@ public class TC_CreateNewSchedule {
         MockitoAnnotations.initMocks(this);
     }
 
+    //TC_UC_PM_03_2
     @Test
     public void testCreateCorrectNewSchedule(){
         try {
@@ -54,6 +55,7 @@ public class TC_CreateNewSchedule {
 
     }
 
+    //TC_UC_PM_03_1
     @Test
     public void testCreateScheduleWithNoAppointments(){
         try {

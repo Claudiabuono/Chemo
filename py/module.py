@@ -155,22 +155,57 @@ def rouletteWheel(fitness):
 
 
 def mutation(individual):
+    val = [0, 1]
+    prob = [.99, .01]
+    probMutation = random.choices(val, prob)
+    if probMutation[0] == 1:
+        nraw = len(patients) - 1
+        row1 = random.randint(0, nraw)
+        row2 = random.randint(0, nraw)
+        temp = individual[row1]
+        individual[row1] = individual[row2]
+        individual[row2] = temp
+        return individual
+    else:
+        return individual
 
-    nraw = len(patients) - 1
-    row1 = random.randint(0, nraw)
-    row2 = random.randint(0, nraw)
-    temp = individual[row1]
-    individual[row1] = individual[row2]
-    individual[row2] = temp
+def algorithm():
+    population = generation(patients, 6, 5, 5)
+    populationSize = len(population)
+    max_fit = 0
 
-    return individual
+    while populationSize != 1:
+        fit = fitness(population, patients)
+        max_next = max(fit)
+        if max_next < max_fit:
+            return best
+        else:
+            best = population[fit.index(max_next)]
+            max_fit = max_next
 
+        selectedIndividuals = rouletteWheel(fit)
 
-gen = generation(patients, 6, 6, 5)
-fit = fitness(gen, patients)
-print(fit)
-rouletteWheel(fit)
-indi = gen[0]
-indi = mutation(indi)
-print(indi)
+        if len(selectedIndividuals) <= 2:
+            return best
 
+        nextGen = []
+        for i in range(len(selectedIndividuals)):
+            for j in range(len(selectedIndividuals) - 1):
+                if j == i + 1:
+                    newIndi = crossover(population[selectedIndividuals[i]], population[selectedIndividuals[j]],
+                                        len(patients))
+                    newIndi = mutation(newIndi)
+                    nextGen.append(newIndi)
+                    newIndi = []
+        population = nextGen
+        populationSize = len(population)
+        print(populationSize)
+
+population = algorithm()
+print(len(population))
+resultList = []
+for elem in population:
+    resultList.append(patients[elem.index(1)]['_id'])
+
+with open("resultSchedule.json", "w") as outfile:
+    json.dump(resultList, outfile, indent=4, separators=(', ', ': '))
