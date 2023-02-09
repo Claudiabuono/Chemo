@@ -12,7 +12,9 @@ import org.bson.types.ObjectId;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -117,7 +119,7 @@ public class PlannerQueryBean {
         Document document = collection.find(filter).first();
 
 
-        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", AppointmentBean.class)));
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", Document.class)));
     }
 
     public PlannerBean findLastDocument() {
@@ -151,7 +153,26 @@ public class PlannerQueryBean {
         return doc;
     }
 
-    private ArrayList<AppointmentBean> convertToArray(List<AppointmentBean> list){
-        return new ArrayList<>(list);
+    private ArrayList<AppointmentBean> convertToArray(List<Document> list){
+        if(list == null)
+            return null;
+
+        ArrayList<AppointmentBean> appointments = new ArrayList<>();
+
+        for(Document d : list)
+            appointments.add(new AppointmentBean(d.getString("patientId"), dateParser(d.getString("date")), d.getString("seat")));
+
+        return appointments;
+    }
+
+
+    private Date dateParser(String date) {
+        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
+        try {
+            return pattern.parse(date);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 }
