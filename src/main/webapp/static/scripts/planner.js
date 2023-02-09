@@ -2,6 +2,9 @@ function addAppointments() {
     var checkedPatients = getCheckedBoxes("patient-checkbox");
     if (checkedPatients == null) {
         // errore: deve essere selezionato almeno un paziente
+        bootstrap_alert.warning("Seleziona almeno un paziente");
+        window.scrollTo(0, 0);
+
     } else {
         var request = new XMLHttpRequest();
         request.open('POST', "PlannerServlet", true);
@@ -21,7 +24,7 @@ function addAppointments() {
                     redirectToPlanner();
                 } else {
                     // errore creazione agenda
-                    window.location.replace("addAppointments.jsp");
+                    window.location.replace("planner.jsp");
                 }
             }
         };
