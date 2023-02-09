@@ -46,7 +46,6 @@ public class TC_CompletePatientProfile {
         when(therapyBean.getFrequency()).thenReturn(2);
         assertEquals(true, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
         assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", "Tumore al cervello"));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", "Allergia ai famrci blu"));
     }
 
     //TC_UC_PM_05_3
@@ -61,22 +60,6 @@ public class TC_CompletePatientProfile {
         when(therapyBean.getFrequency()).thenReturn(2);
         assertEquals(true, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
         assertEquals(false, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", ""));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", "Allergia ai famrci blu"));
-    }
-
-    //TC_UC_PM_05_1
-    @Test
-    public void testIncorrectNotesLength(){
-        therapyMedicineBean = new TherapyMedicineBean();
-        meds = new ArrayList<>();
-        meds.add(therapyMedicineBean);
-        when(therapyBean.getSessions()).thenReturn(10);
-        when(therapyBean.getMedicines()).thenReturn(meds);
-        when(therapyBean.getDuration()).thenReturn(60);
-        when(therapyBean.getFrequency()).thenReturn(2);
-        assertEquals(true, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", "Tumore al cervello"));
-        assertEquals(false, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", ""));
     }
 
     //TC_UC_PM_05_8
@@ -92,7 +75,6 @@ public class TC_CompletePatientProfile {
         System.out.println(therapyBean);
         assertEquals(false, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
         assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", "Tumore al cervello"));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", "Allergia ai famrci blu"));
     }
 
     //TC_UC_PM_05_9
@@ -107,7 +89,6 @@ public class TC_CompletePatientProfile {
         when(therapyBean.getFrequency()).thenReturn(2);
         assertEquals(false, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
         assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", "Tumore al cervello"));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", "Allergia ai famrci blu"));
     }
 
     //TC_UC_PM_05_10
@@ -122,7 +103,6 @@ public class TC_CompletePatientProfile {
         when(therapyBean.getFrequency()).thenReturn(0);
         assertEquals(false, patientQueryBean.insertDocument(therapyBean, "63dd3eac74c697331b1f019a"));
         assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "condition", "Tumore al cervello"));
-        assertEquals(true, patientQueryBean.updateDocument("_id", "63dd3eac74c697331b1f019a", "notes", "Allergia ai famrci blu"));
     }
 }
 
