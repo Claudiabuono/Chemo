@@ -1,6 +1,8 @@
 function addAppointments() {
-    var checkedPatients = getCheckedBoxes("patient-checkbox");
-    if (checkedPatients == null) {
+    var checkedPatients = $('input[name="patient-id"]:checked');
+    //var checkedPatients = getCheckedBoxes("patient-id");
+
+    if (!(checkedPatients.length > 0)) {
         // errore: deve essere selezionato almeno un paziente
         bootstrap_alert.warning("Seleziona almeno un paziente");
         window.scrollTo(0, 0);
