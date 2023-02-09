@@ -2,7 +2,6 @@ package plannerManagement.application;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import connector.CmdExec;
 import connector.Facade;
 import patientmanagement.application.PatientBean;
 import userManagement.application.UserBean;
@@ -28,6 +27,56 @@ import java.util.List;
 public class PlannerServlet extends HttpServlet {
 
     private static Facade facade = new Facade();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Recupero l'utente dalla sessione
+        UserBean user = (UserBean) request.getSession().getAttribute("currentSessionUser");
+
+        //Recupero l'id dalla request
+        String id = request.getParameter("id");
+
+        ArrayList<PlannerBean> planners = facade.findAllPlanners(user);
+        PlannerBean plannerToVisualize;
+        String beforeVisualizedId, lastestPlannerId, afterVisualizedId;
+
+        if(id == null) {
+            plannerToVisualize = planners.get(planners.size()-1);
+
+            int beforeLastestIndex = planners.indexOf(plannerToVisualize)-1;
+            beforeVisualizedId = planners.get(beforeLastestIndex).getId();
+            lastestPlannerId = plannerToVisualize.getId();
+            afterVisualizedId = "";
+        } else {
+            plannerToVisualize = facade.findPlanners("_id", id, user).get(0);
+            PlannerBean lastestPlanner = planners.get(planners.size()-1);
+            lastestPlannerId = lastestPlanner.getId();
+
+            if(plannerToVisualize.equals(lastestPlanner)) {
+                int beforeLastestIndex = planners.indexOf(plannerToVisualize)-1;
+                beforeVisualizedId = planners.get(beforeLastestIndex).getId();
+                afterVisualizedId = "";
+            } else if(plannerToVisualize.equals(planners.get(0))) {
+                beforeVisualizedId = "";
+                afterVisualizedId = planners.get(1).getId();
+            } else {
+                int beforeVisualizedIndex = planners.indexOf(plannerToVisualize) -1;
+                int afterVisualizedIndex = planners.indexOf(plannerToVisualize) +1;
+                beforeVisualizedId = planners.get(beforeVisualizedIndex).getId();
+                afterVisualizedId = planners.get(afterVisualizedIndex).getId();
+            }
+
+            //Imposto i dati nella request
+            request.setAttribute("plannerToVisualize", plannerToVisualize);
+            request.setAttribute("lastestPlannerId", lastestPlannerId);
+            request.setAttribute("beforeVisualizedId", beforeVisualizedId);
+            request.setAttribute("afterVisualizedId", afterVisualizedId);
+
+            //Reindirizzo alla pagina del paziente
+            getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/planner.jsp"))).forward(request, response);
+
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -76,7 +125,7 @@ public class PlannerServlet extends HttpServlet {
                     List<String> patientIds = null;
                     try {
                         //Creo il file reader
-                        Reader reader = Files.newBufferedReader(Path.of("D:\\Chemo\\py\\patients.json"));
+                        Reader reader = Files.newBufferedReader(Path.of("D:\\Chemo\\py\\resultSchedule.json"));
 
                         //Converto l'array di JSON in una lista di String
                         patientIds = gson.fromJson(reader, new TypeToken<List<String>>(){}.getType());

@@ -65,9 +65,40 @@ public class Facade {
     /*
     OPERAZIONI CRUD PER ENTITA' PLANNER
      */
-    public ArrayList<PlannerBean> findPlanners(String chiave, String valore){
-        return plannerQueryBean.findDocument(chiave, valore);
+    public ArrayList<PlannerBean> findPlanners(String chiave, String valore, UserBean user){
+        ArrayList<PlannerBean> planners = new ArrayList<>();
+        if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)) {
+            if(chiave.equals("_id")) {
+                planners.add(plannerQueryBean.findDocumentById(valore));
+                return planners;
+            } else {
+                return plannerQueryBean.findDocument(chiave, valore);
+            }
+        }
+
+        return null;
     }
+
+    public PlannerBean findLastestPlanner(UserBean user) {
+        if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
+            return plannerQueryBean.findLastDocument();
+
+        return null;
+    }
+
+    public ArrayList<PlannerBean> findAllPlanners(UserBean user) {
+        try {
+            if(isUserAuthorized(user.getUsername(), 1) || isUserAuthorized(user.getUsername(), 2))
+                return plannerQueryBean.findAll();
+            else
+                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public void updatePlanner(String id, String valId, String chiave, String valoreChiave){
         plannerQueryBean.updateDocument(id, valId, chiave, valoreChiave);

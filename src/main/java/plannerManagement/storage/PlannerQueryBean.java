@@ -7,6 +7,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
 
@@ -83,10 +85,50 @@ public class PlannerQueryBean {
         while(it.hasNext()){
             Document document = (Document) it.next();
             ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
-            PlannerBean planner = new PlannerBean(document.getString("id"), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
             p.add(planner);
         }
         return p;
+    }
+
+    public ArrayList<PlannerBean> findAll(){
+        MongoCollection<Document> collection = getCollection();
+        FindIterable<Document> iterDoc = collection.find();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PlannerBean> p = new ArrayList<>();
+
+        while(it.hasNext()){
+            Document document = (Document) it.next();
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
+            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            p.add(planner);
+        }
+        return p;
+    }
+
+    public PlannerBean findDocumentById(String id) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(id));
+
+        //Cerca il documento
+        Document document = collection.find(filter).first();
+
+
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", AppointmentBean.class)));
+    }
+
+    public PlannerBean findLastDocument() {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Cerca il documento
+        Document document = collection.find().sort(new Document("_id", -1)).first();
+
+
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", AppointmentBean.class)));
     }
 
     private MongoCollection<Document> getCollection(){
@@ -110,11 +152,6 @@ public class PlannerQueryBean {
     }
 
     private ArrayList<AppointmentBean> convertToArray(List<AppointmentBean> list){
-        ArrayList<AppointmentBean> appointments = new ArrayList<>();
-        for(AppointmentBean app : list){
-            appointments.add(app);
-        }
-
-        return appointments;
+        return new ArrayList<>(list);
     }
 }
