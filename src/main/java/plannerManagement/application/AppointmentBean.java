@@ -7,9 +7,11 @@ public class AppointmentBean {
     private Date date;
     private String chair;
 
+    private int duration;
+
     public AppointmentBean() {}
 
-    public AppointmentBean(String idPatient, Date date, String chair) {
+    public AppointmentBean(String idPatient, Date date, String chair, int duration) {
         this.idPatient = idPatient;
         this.date = date;
         this.chair = chair;
@@ -27,6 +29,10 @@ public class AppointmentBean {
         return chair;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
     public void setIdPatient(String idPatient) {
         this.idPatient = idPatient;
     }
@@ -39,12 +45,17 @@ public class AppointmentBean {
         this.chair = chair;
     }
 
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
         return "AppointmentBean{" +
                 "idPatient='" + idPatient + '\'' +
                 ", date=" + date +
                 ", chair='" + chair + '\'' +
+                ", duration=" + duration +
                 '}';
     }
 }

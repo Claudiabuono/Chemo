@@ -67,21 +67,30 @@ public class Facade {
      */
     public ArrayList<PlannerBean> findPlanners(String chiave, String valore, UserBean user){
         ArrayList<PlannerBean> planners = new ArrayList<>();
-        if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)) {
-            if(chiave.equals("_id")) {
-                planners.add(plannerQueryBean.findDocumentById(valore));
-                return planners;
-            } else {
-                return plannerQueryBean.findDocument(chiave, valore);
+        try {
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)) {
+                if(chiave.equals("_id")) {
+                    planners.add(plannerQueryBean.findDocumentById(valore));
+                    return planners;
+                } else {
+                    return plannerQueryBean.findDocument(chiave, valore);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return null;
     }
 
     public PlannerBean findLastestPlanner(UserBean user) {
-        if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
-            return plannerQueryBean.findLastDocument();
+        try {
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
+                return plannerQueryBean.findLastDocument();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         return null;
     }

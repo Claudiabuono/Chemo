@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
 
+import javax.print.Doc;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,7 +104,6 @@ public class PlannerQueryBean {
             Document document = (Document) it.next();
             ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
             PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
-            System.out.println(planner);
             p.add(planner);
         }
         return p;
@@ -138,7 +138,7 @@ public class PlannerQueryBean {
         DatabaseConnector conn = new DatabaseConnector();
         MongoDatabase db = conn.getDatabase();
 
-        MongoCollection<Document> coll = db.getCollection("planner");
+        MongoCollection<Document> coll = db.getCollection("agenda");
         System.out.println("Collection \'agenda\' recuperata con successo");
         return coll;
     }
@@ -146,12 +146,10 @@ public class PlannerQueryBean {
     private Document createDocument(PlannerBean plannerBean){
         List<AppointmentBean> app = plannerBean.getAppointments();
 
-        Document doc = new Document("_id", plannerBean.getId())
+        return new Document("_id", plannerBean.getId())
                 .append("startDate", plannerBean.startDate)
                 .append("endDate", plannerBean.endDate)
                 .append("appointments", app);
-
-        return doc;
     }
 
     private ArrayList<AppointmentBean> convertToArray(List<Document> list){
@@ -160,8 +158,9 @@ public class PlannerQueryBean {
 
         ArrayList<AppointmentBean> appointments = new ArrayList<>();
 
-        for(Document d : list)
-            appointments.add(new AppointmentBean(d.getString("patientId"), dateParser(d.getString("date")), d.getString("seat")));
+        for(Document d : list) {
+            appointments.add(new AppointmentBean(d.getString("patientId"), d.getDate("date"), d.getString("seat"), d.getInteger("duration")));
+        }
 
         return appointments;
     }
