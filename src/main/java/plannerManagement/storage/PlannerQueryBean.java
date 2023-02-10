@@ -103,7 +103,7 @@ public class PlannerQueryBean {
         while(it.hasNext()){
             Document document = (Document) it.next();
             ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
-            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), appointments);
             p.add(planner);
         }
         return p;
@@ -146,9 +146,11 @@ public class PlannerQueryBean {
     private Document createDocument(PlannerBean plannerBean){
         List<AppointmentBean> app = plannerBean.getAppointments();
 
-        return new Document("_id", plannerBean.getId())
-                .append("startDate", plannerBean.startDate)
-                .append("endDate", plannerBean.endDate)
+        ObjectId objectId = new ObjectId();
+        plannerBean.setId(objectId.toString());
+        return new Document("_id", objectId)
+                .append("start", plannerBean.startDate)
+                .append("end", plannerBean.endDate)
                 .append("appointments", app);
     }
 

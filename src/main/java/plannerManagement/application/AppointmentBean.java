@@ -15,6 +15,7 @@ public class AppointmentBean {
         this.idPatient = idPatient;
         this.date = date;
         this.chair = chair;
+        this.duration = duration;
     }
 
     public String getIdPatient() {

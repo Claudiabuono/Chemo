@@ -5,11 +5,11 @@ import json
 # utilizziamo un file condiviso tra i due linguaggi: Java scrive l'input, preso da Python, e Python
 # scrive l'output preso da Java per visualizzare lo schedule
 
-file = open('patients.json', 'r')
+file = open('D:\\Chemo\\py\\patients.json', 'r')  # PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
 patients = json.loads(file.read())
 print("Patients number: " + str(len(patients)))
 
-file = open('medicines.json', 'r')
+file = open('D:\\Chemo\\py\\medicines.json', 'r')  # PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
 medicines = json.loads(file.read())
 
 
@@ -169,6 +169,7 @@ def mutation(individual):
     else:
         return individual
 
+
 def algorithm():
     population = generation(patients, 6, 5, 5)
     populationSize = len(population)
@@ -201,11 +202,13 @@ def algorithm():
         populationSize = len(population)
         print(populationSize)
 
+
 population = algorithm()
 print(len(population))
 resultList = []
 for elem in population:
-    resultList.append(patients[elem.index(1)]['_id'])
+    resultList.append(patients[elem.index(1)]['patientId'])
 
-with open("resultSchedule.json", "w") as outfile:
+# PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
+with open("D:\\Chemo\\py\\resultSchedule.json", "w") as outfile:
     json.dump(resultList, outfile, indent=4, separators=(', ', ': '))

@@ -129,10 +129,10 @@ public class Facade {
 
     }
 
-    public void insertPlanner(String id, Date startDate, Date endDate, ArrayList<AppointmentBean> appointments, UserBean user){
+    public void insertPlanner(Date startDate, Date endDate, ArrayList<AppointmentBean> appointments, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 1)) {
-                PlannerBean planner = new PlannerBean(id, startDate, endDate, appointments);
+                PlannerBean planner = new PlannerBean(startDate, endDate, appointments);
                 plannerQueryBean.insertDocument(planner);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di un planner");

@@ -14,10 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +25,8 @@ import java.util.List;
 public class PlannerServlet extends HttpServlet {
 
     private static Facade facade = new Facade();
+    private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
+    private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,26 +35,27 @@ public class PlannerServlet extends HttpServlet {
 
         //Recupero l'id dalla request
         String id = request.getParameter("id");
+        System.out.println("id: "+id);
 
         ArrayList<PlannerBean> planners = facade.findAllPlanners(user);
         PlannerBean plannerToVisualize;
-        String beforeVisualizedId, lastestPlannerId, afterVisualizedId;
+        String beforeVisualizedId, latestPlannerId, afterVisualizedId;
 
         if(id == null) {
             plannerToVisualize = planners.get(planners.size()-1);
 
             int beforeLastestIndex = planners.indexOf(plannerToVisualize)-1;
             beforeVisualizedId = planners.get(beforeLastestIndex).getId();
-            lastestPlannerId = plannerToVisualize.getId();
+            latestPlannerId = plannerToVisualize.getId();
             afterVisualizedId = "";
         } else {
             plannerToVisualize = facade.findPlanners("_id", id, user).get(0);
-            PlannerBean lastestPlanner = planners.get(planners.size()-1);
-            lastestPlannerId = lastestPlanner.getId();
+            PlannerBean latestPlanner = planners.get(planners.size()-1);
+            latestPlannerId = latestPlanner.getId();
 
-            if(plannerToVisualize.equals(lastestPlanner)) {
-                int beforeLastestIndex = planners.indexOf(plannerToVisualize)-1;
-                beforeVisualizedId = planners.get(beforeLastestIndex).getId();
+            if(plannerToVisualize.equals(latestPlanner)) {
+                int beforeLatestIndex = planners.indexOf(plannerToVisualize)-1;
+                beforeVisualizedId = planners.get(beforeLatestIndex).getId();
                 afterVisualizedId = "";
             } else if(plannerToVisualize.equals(planners.get(0))) {
                 beforeVisualizedId = "";
@@ -70,7 +69,7 @@ public class PlannerServlet extends HttpServlet {
 
             //Imposto i dati nella request
             request.setAttribute("plannerToVisualize", plannerToVisualize);
-            request.setAttribute("latestPlannerId", lastestPlannerId);
+            request.setAttribute("latestPlannerId", latestPlannerId);
             request.setAttribute("beforeVisualizedId", beforeVisualizedId);
             request.setAttribute("afterVisualizedId", afterVisualizedId);
             request.setAttribute("weekDate", getWeekDate(plannerToVisualize.getStartDate(), plannerToVisualize.getEndDate()));
@@ -116,17 +115,9 @@ public class PlannerServlet extends HttpServlet {
                         patientsJson.add(patientJSON);
                     }
 
-//                    System.out.println("PatientsJSON:");
-//                    System.out.println(patientsJson);
-//                    System.out.println("-------------");
-
-                    //Creazione file della directory
-                    String dirName = "D:\\Chemo\\py\\";
-                    File dir = new File(dirName);
-
                     //Recupero il file di input
                     String inputFileName = "patients.json";
-                    File inputFile = new File(dir, inputFileName);
+                    File inputFile = new File(PY_DIR, inputFileName);
 
                     //Inizializzo GSON
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -143,16 +134,21 @@ public class PlannerServlet extends HttpServlet {
                     //Faccio eseguire il processo del modulo di IA
                     String pythonFileName = "module.py";
                     String pythonFilePath = "D:\\Chemo\\py\\module.py";
-                    Runtime.getRuntime().exec(new String[]{"py", pythonFilePath});
-                    //String path = Paths.get(System.getProperty("user.dir"), "py", "module.py").toString();
+                    Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", pythonFilePath});
+                    //String path = Paths.get(System.getProperty("user.PY_DIR"), "py", "module.py").toString();
                     //Process process = Runtime.getRuntime().exec(new String[]{"py", path});
+
+                    //Se resultSchedule è vuoto quando viene effettuata la schedulazione allora la servlet va avanti per i fatti suoi prima che il modulo di IA abbia finito
+                    //Non è proprio una soluzione elegante ma il tempo stringe e non credo di avere il tempo di fare qualcosa più a grana fine
+                    //todo: magari se riesco a farlo un po' più a grana fine è meglio
+                    Thread.sleep(500);
 
                     //Recupero la lista degli id dei pazienti restituita dal modulo
                     List<String> patientIds = null;
 
                     //Recupero il file di output
                     String outputFileName = "resultSchedule.json";
-                    File outputFile = new File(dir, outputFileName);
+                    File outputFile = new File(PY_DIR, outputFileName);
 
                     //Apro il file JSON contenente i risultati del modulo di IA
                     try (FileReader reader = new FileReader(outputFile)){
@@ -167,20 +163,21 @@ public class PlannerServlet extends HttpServlet {
                     Calendar calendar = Calendar.getInstance();
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
                     for (String patientId : patientIds) {
-                        Date date = new Date(); //Placeholder data dell'appuntamento
-                        int seat = 3;
-                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), 1));
+                        Date date = new Date(); //todo: data
+                        int seat = 3; //todo: seat
+                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), 1)); //todo: durata appuntamento
                     }
                     System.out.println(appointments);
 
                     //Recupero primo e ultimo giorno della settimana
+                    //todo: fix
                     calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
                     Date firstDay = calendar.getTime();
                     calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMaximum(Calendar.DAY_OF_WEEK));
                     Date lastDay = calendar.getTime();
 
                     //Creo l'istanza del planner settimanale e la aggiungo al database
-                    PlannerBean planner = new PlannerBean("id", firstDay, lastDay, appointments);
+                    PlannerBean planner = new PlannerBean(firstDay, lastDay, appointments);
                     facade.insertPlanner(planner, user);
 
                     //Aggiungo la lista di id alla request

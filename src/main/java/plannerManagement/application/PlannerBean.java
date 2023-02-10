@@ -16,14 +16,19 @@ public class PlannerBean {
     public PlannerBean(){}
 
     //Non prevede l'inserimento diretto degli appuntamenti, istanziando solamente l'agenda senza popolarla
-    public PlannerBean(String id, Date startDate, Date endDate) {
-        this.id = id;
+    public PlannerBean(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.appointments = new ArrayList<>();
     }
 
     //Prevede l'inserimento diretto degli appuntamenti, instanziando e popolando l'agenda
+
+    public PlannerBean(Date startDate, Date endDate, ArrayList<AppointmentBean> appointments) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.appointments = appointments;
+    }
 
     public PlannerBean(String id, Date startDate, Date endDate, ArrayList<AppointmentBean> appointments) {
         this.id = id;
