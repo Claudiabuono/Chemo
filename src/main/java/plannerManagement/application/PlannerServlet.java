@@ -18,6 +18,8 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,11 +70,12 @@ public class PlannerServlet extends HttpServlet {
 
             //Imposto i dati nella request
             request.setAttribute("plannerToVisualize", plannerToVisualize);
-            request.setAttribute("lastestPlannerId", lastestPlannerId);
+            request.setAttribute("latestPlannerId", lastestPlannerId);
             request.setAttribute("beforeVisualizedId", beforeVisualizedId);
             request.setAttribute("afterVisualizedId", afterVisualizedId);
+            request.setAttribute("weekDate", getWeekDate(plannerToVisualize.getStartDate(), plannerToVisualize.getEndDate()));
 
-            //Reindirizzo alla pagina del paziente
+            //Reindirizzo alla pagina del calendario
             getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/planner.jsp"))).forward(request, response);
 
         }
@@ -204,5 +207,68 @@ public class PlannerServlet extends HttpServlet {
         public int getDose() {
             return dose;
         }
+    }
+
+    private String getWeekDate(Date startDate, Date endDate){
+        //Formattazione della data da visualizzare nel calendario
+        Format formatterMonth = new SimpleDateFormat("MM");
+        String startMonth = formatterMonth.format(startDate);
+        String endMonth = formatterMonth.format(endDate);
+
+        //Aggiunta primo mese
+        String date = convertMonth(startMonth);
+
+        if (!startMonth.equals(endMonth)) {
+            //Aggiunta secondo mese
+            date += "- ";
+            date += convertMonth(startMonth);
+        }
+        //Aggiunta anno
+        Format formatterYear = new SimpleDateFormat("yyyy");
+        date += formatterYear.format(startDate);
+
+        return date;
+    }
+
+    private String convertMonth(String month){
+        switch (month) {
+            case "01" -> {
+                return "Gennaio ";
+            }
+            case "02" -> {
+                return "Febbraio ";
+            }
+            case "03" -> {
+                return "Marzo ";
+            }
+            case "04" -> {
+                return "Aprile ";
+            }
+            case "05" -> {
+                return "Maggio ";
+            }
+            case "06" -> {
+                return "Giugno ";
+            }
+            case "07" -> {
+                return "Luglio ";
+            }
+            case "08" -> {
+                return "Agosto ";
+            }
+            case "09" -> {
+                return "Settembre ";
+            }
+            case "10" -> {
+                return "Ottobre ";
+            }
+            case "11" -> {
+                return "Novembre ";
+            }
+            case "12" -> {
+                return "Dicembre ";
+            }
+        }
+        return null;
     }
 }

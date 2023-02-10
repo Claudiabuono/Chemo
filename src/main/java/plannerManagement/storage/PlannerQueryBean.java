@@ -86,7 +86,7 @@ public class PlannerQueryBean {
 
         while(it.hasNext()){
             Document document = (Document) it.next();
-            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
             PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
             p.add(planner);
         }
@@ -101,8 +101,9 @@ public class PlannerQueryBean {
 
         while(it.hasNext()){
             Document document = (Document) it.next();
-            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
             PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            System.out.println(planner);
             p.add(planner);
         }
         return p;
@@ -130,14 +131,14 @@ public class PlannerQueryBean {
         Document document = collection.find().sort(new Document("_id", -1)).first();
 
 
-        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", AppointmentBean.class)));
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", Document.class)));
     }
 
     private MongoCollection<Document> getCollection(){
         DatabaseConnector conn = new DatabaseConnector();
         MongoDatabase db = conn.getDatabase();
 
-        MongoCollection<Document> coll = db.getCollection("agenda");
+        MongoCollection<Document> coll = db.getCollection("planner");
         System.out.println("Collection \'agenda\' recuperata con successo");
         return coll;
     }

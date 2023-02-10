@@ -2,6 +2,8 @@ package plannerManagement.application;
 
 import plannerManagement.application.AppointmentBean;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -38,8 +40,16 @@ public class PlannerBean {
         return startDate;
     }
 
+    public String getParsedStartDate() {
+        return dateParser(startDate);
+    }
+
     public Date getEndDate() {
         return endDate;
+    }
+
+    public String getParsedEndDate() {
+        return dateParser(endDate);
     }
 
     public ArrayList<AppointmentBean> getAppointments() {
@@ -70,5 +80,10 @@ public class PlannerBean {
                 ", dataFine=" + endDate +
                 ", appuntamenti=" + appointments +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

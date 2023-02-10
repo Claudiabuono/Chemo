@@ -33,9 +33,13 @@ function addAppointments() {
     }
 }
 
-function redirectToPlanner() {
+function redirectToPlanner(id) {
+    if (id == null) {
+        window.location.replace("PlannerServlet");
+    } else {
+        alert("Lavori in corso: redirect a planner con id non ancora disponibile.")
+    }
     // genera un redirect alla servlet paziente creando una richiesta get
-    window.location.replace("PlannerServlet");
 }
 
 function getCheckedBoxes(checkboxName) {

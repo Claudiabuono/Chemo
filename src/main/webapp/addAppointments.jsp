@@ -23,13 +23,12 @@
         //redirect alla pagina di error 401 Unauthorized
         response.sendRedirect("./error401.jsp");
     } else {
+        if (sessione.getAttribute("currentSessionUser") == null) {
+            response.sendRedirect("./error401.jsp");
+        }
         UserBean user = (UserBean) sessione.getAttribute("currentSessionUser");
-        if (user == null || user.getType() != 1) {
-            if (user == null) {
-                response.sendRedirect("./error401.jsp");
-            } else {
-                response.sendRedirect("./error403.jsp");
-            }
+        if (user.getType() != 1) {
+            response.sendRedirect("./error403.jsp");
         } else {
 %>
 <header>
