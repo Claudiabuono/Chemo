@@ -1,6 +1,7 @@
 package plannerManagement.application;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import connector.Facade;
 import patientmanagement.application.PatientBean;
@@ -12,9 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -91,18 +91,17 @@ public class PlannerServlet extends HttpServlet {
 
         try {
             switch (action) {
-                case "createPlanner" -> {
-                    //Inizializzo GSON
-                    Gson gson = new Gson();
-
+                case "addAppointments" -> {
                     //Recupero il numero di pazienti dalla request
-                    int patientNumber = Integer.parseInt(request.getParameter("patientNumber"));
+                    int patientNumber = Integer.parseInt(request.getParameter("patientsNumber"));
+
+                    System.out.println("PatientNumber: " +patientNumber);
 
                     //Inserisco ogni paziente nell'array di PatientJSON
-                    ArrayList<PatientJSON> patientsJson = new ArrayList<>();
+                    List<PatientJSON> patientsJson = new ArrayList<>();
                     for(int i = 0; i < patientNumber; i++) {
                         //Recupero l'id paziente
-                        String patientId = request.getParameter("patientId" + i);
+                        String patientId = request.getParameter("patient" + i);
 
                         //Recupero il paziente corrispondente
                         PatientBean patient = facade.findPatients("_id", patientId, user).get(0);
@@ -117,24 +116,49 @@ public class PlannerServlet extends HttpServlet {
                         patientsJson.add(patientJSON);
                     }
 
-                    //Scrivo il contenuto nel file JSON
-                    gson.toJson(patientsJson, new FileWriter("D:\\Chemo\\py\\patients.json"));
+//                    System.out.println("PatientsJSON:");
+//                    System.out.println(patientsJson);
+//                    System.out.println("-------------");
+
+                    //Creazione file della directory
+                    String dirName = "D:\\Chemo\\py\\";
+                    File dir = new File(dirName);
+
+                    //Recupero il file di input
+                    String inputFileName = "patients.json";
+                    File inputFile = new File(dir, inputFileName);
+
+                    //Inizializzo GSON
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String json = gson.toJson(patientsJson, new TypeToken<List<PatientJSON>>(){}.getType());
+
+                    //Scrivo nel file JSON
+                    try (FileWriter writer = new FileWriter(inputFile)) {
+                        writer.append(json);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
 
                     //Faccio eseguire il processo del modulo di IA
-                    String path = Paths.get(System.getProperty("user.dir"), "py", "module.py").toString();
-                    Process process = Runtime.getRuntime().exec(new String[]{"py", path});
+                    String pythonFileName = "module.py";
+                    String pythonFilePath = "D:\\Chemo\\py\\module.py";
+                    Runtime.getRuntime().exec(new String[]{"py", pythonFilePath});
+                    //String path = Paths.get(System.getProperty("user.dir"), "py", "module.py").toString();
+                    //Process process = Runtime.getRuntime().exec(new String[]{"py", path});
 
                     //Recupero la lista degli id dei pazienti restituita dal modulo
                     List<String> patientIds = null;
-                    try {
-                        //Creo il file reader
-                        Reader reader = Files.newBufferedReader(Path.of("D:\\Chemo\\py\\resultSchedule.json"));
+
+                    //Recupero il file di output
+                    String outputFileName = "resultSchedule.json";
+                    File outputFile = new File(dir, outputFileName);
+
+                    //Apro il file JSON contenente i risultati del modulo di IA
+                    try (FileReader reader = new FileReader(outputFile)){
 
                         //Converto l'array di JSON in una lista di String
                         patientIds = gson.fromJson(reader, new TypeToken<List<String>>(){}.getType());
-
-                        //Chiudo il reader
-                        reader.close();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -142,11 +166,12 @@ public class PlannerServlet extends HttpServlet {
                     //Popolo la lista di appuntamenti
                     Calendar calendar = Calendar.getInstance();
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
-                    for(int i = 0; i < patientIds.size(); i++) {
+                    for (String patientId : patientIds) {
                         Date date = new Date(); //Placeholder data dell'appuntamento
                         int seat = 3;
-                        appointments.add(new AppointmentBean(patientIds.get(0), date, String.valueOf(seat)));
+                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), 1));
                     }
+                    System.out.println(appointments);
 
                     //Recupero primo e ultimo giorno della settimana
                     calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
@@ -171,42 +196,9 @@ public class PlannerServlet extends HttpServlet {
                 }
             }
         } catch (Throwable e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-    }
-
-
-    //Inner Class per scrivere tutto l'array in patients.json, contiene solo i dati necessari al file
-    private static class PatientJSON {
-        String patientId;
-        String medicineId;
-        int dose;
-
-        //Costruttori
-
-        public PatientJSON() {
-        }
-
-        public PatientJSON(String patientId, String medicineId, int dose) {
-            this.patientId = patientId;
-            this.medicineId = medicineId;
-            this.dose = dose;
-        }
-
-        //Getters
-
-        public String getPatientId() {
-            return patientId;
-        }
-
-        public String getMedicineId() {
-            return medicineId;
-        }
-
-        public int getDose() {
-            return dose;
-        }
     }
 
     private String getWeekDate(Date startDate, Date endDate){
@@ -270,5 +262,47 @@ public class PlannerServlet extends HttpServlet {
             }
         }
         return null;
+    }
+
+
+    //Inner Class che contiene i dati da passare al JSON
+    private static class PatientJSON {
+        String patientId;
+        String medicineId;
+        int dose;
+
+        //Costruttori
+
+        public PatientJSON() {
+        }
+
+        public PatientJSON(String patientId, String medicineId, int dose) {
+            this.patientId = patientId;
+            this.medicineId = medicineId;
+            this.dose = dose;
+        }
+
+        //Getters
+
+        public String getPatientId() {
+            return patientId;
+        }
+
+        public String getMedicineId() {
+            return medicineId;
+        }
+
+        public int getDose() {
+            return dose;
+        }
+
+        @Override
+        public String toString() {
+            return "PatientJSON{" +
+                    "patientId='" + patientId + '\'' +
+                    ", medicineId='" + medicineId + '\'' +
+                    ", dose=" + dose +
+                    '}';
+        }
     }
 }
