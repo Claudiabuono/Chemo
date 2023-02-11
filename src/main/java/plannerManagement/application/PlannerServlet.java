@@ -7,7 +7,6 @@ import connector.Facade;
 import patientmanagement.application.PatientBean;
 import userManagement.application.UserBean;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.*;
+import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 @WebServlet("/PlannerServlet")
 public class PlannerServlet extends HttpServlet {
@@ -27,6 +26,7 @@ public class PlannerServlet extends HttpServlet {
     private static final Facade facade = new Facade();
     private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
     private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
+    private static final ZoneId TIMEZONE = ZoneId.of("Europe/Paris"); //Fuso orario usato da java.time
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -38,6 +38,7 @@ public class PlannerServlet extends HttpServlet {
         System.out.println("id: "+id);
 
         ArrayList<PlannerBean> planners = facade.findAllPlanners(user);
+        System.out.println("Retrieved: "+planners.size()+" planners");
         PlannerBean plannerToVisualize;
         String beforeVisualizedId, latestPlannerId, afterVisualizedId;
 
@@ -136,8 +137,6 @@ public class PlannerServlet extends HttpServlet {
                     String pythonFileName = "module.py";
                     String pythonFilePath = "D:\\Chemo\\py\\module.py";
                     Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", pythonFilePath});
-                    //String path = Paths.get(System.getProperty("user.PY_DIR"), "py", "module.py").toString();
-                    //Process process = Runtime.getRuntime().exec(new String[]{"py", path});
 
                     //Se resultSchedule è vuoto quando viene effettuata la schedulazione allora la servlet va avanti per i fatti suoi prima che il modulo di IA abbia finito
                     //Non è proprio una soluzione elegante ma il tempo stringe e non credo di avere il tempo di fare qualcosa più a grana fine
@@ -160,30 +159,40 @@ public class PlannerServlet extends HttpServlet {
                         e.printStackTrace();
                     }
 
+                    //Recupero primo e ultimo giorno della settimana
+                    LocalDate now = LocalDate.now(TIMEZONE);
+                    LocalDate firstDayOfWeek = now.with(previousOrSame(DayOfWeek.MONDAY));
+                    LocalDate lastDayOfWeek = now.with(previousOrSame(DayOfWeek.FRIDAY));
+
                     //Popolo la lista di appuntamenti
+                    int startingHour = 10;
+                    int actualHour = startingHour;
+                    int i = 0;
                     Calendar calendar = Calendar.getInstance();
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
                     for (String patientId : patientIds) {
-                        Date date = new Date(); //todo: data
-                        int seat = 3; //todo: seat
-                        int duration = 60;  //todo: durata appuntamento
-                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), duration));
+                        int seat = new Random().nextInt(10); //todo: seat senza randomness
+
+                        //Si considerano 5 sedute per ora
+                        i++;
+                        if((i % 5) == 0)
+                            actualHour++;
+
+                        Date appointmentDate = Date.from(now.atTime(actualHour, 0).atZone(TIMEZONE).toInstant());
+                        int duration = facade.findPatients("_id", patientId, user).get(0).getTherapy().getDuration();
+                        appointments.add(new AppointmentBean(patientId, appointmentDate, String.valueOf(seat), duration));
                     }
                     System.out.println(appointments);
 
-                    //Recupero primo e ultimo giorno della settimana
-                    //todo: fix
-                    calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMinimum(Calendar.DAY_OF_WEEK));
-                    Date firstDay = calendar.getTime();
-                    calendar.set(Calendar.DAY_OF_WEEK, calendar.getActualMaximum(Calendar.DAY_OF_WEEK));
-                    Date lastDay = calendar.getTime();
-
                     //Creo l'istanza del planner settimanale e la aggiungo al database
+                    Date firstDay = Date.from(firstDayOfWeek.atTime(startingHour,0).atZone(TIMEZONE).toInstant());
+                    Date lastDay = Date.from(lastDayOfWeek.atTime(startingHour,0).atZone(TIMEZONE).toInstant());
                     PlannerBean planner = new PlannerBean(firstDay, lastDay, appointments);
                     facade.insertPlanner(planner, user);
 
                     //Aggiungo l'operation result all'header
                     response.addHeader("OPERATION_RESULT","true");
+
                 }
 
                 case "deletePlanner" -> {
@@ -214,6 +223,7 @@ public class PlannerServlet extends HttpServlet {
         Format formatterYear = new SimpleDateFormat("yyyy");
         date += formatterYear.format(startDate);
 
+        System.out.println(date);
         return date;
     }
 
