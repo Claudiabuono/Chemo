@@ -172,6 +172,7 @@ public class PlannerServlet extends HttpServlet {
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
                     for (String patientId : patientIds) {
                         int seat = new Random().nextInt(10); //todo: seat senza randomness
+                        String medicineId = facade.findPatients("_id", patientId, user).get(0).getTherapy().getMedicines().get(0).getMedicineId();
 
                         //Si considerano 5 sedute per ora
                         i++;
@@ -180,7 +181,7 @@ public class PlannerServlet extends HttpServlet {
 
                         Date appointmentDate = Date.from(now.atTime(actualHour, 0).atZone(TIMEZONE).toInstant());
                         int duration = facade.findPatients("_id", patientId, user).get(0).getTherapy().getDuration();
-                        appointments.add(new AppointmentBean(patientId, appointmentDate, String.valueOf(seat), duration));
+                        appointments.add(new AppointmentBean(patientId, medicineId, appointmentDate, String.valueOf(seat), duration));
                     }
                     System.out.println(appointments);
 

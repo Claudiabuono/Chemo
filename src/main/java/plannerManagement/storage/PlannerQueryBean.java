@@ -161,7 +161,7 @@ public class PlannerQueryBean {
         ArrayList<AppointmentBean> appointments = new ArrayList<>();
 
         for(Document d : list) {
-            appointments.add(new AppointmentBean(d.getString("patientId"), d.getDate("date"), d.getString("seat"), d.getInteger("duration")));
+            appointments.add(new AppointmentBean(d.getString("patientId"), d.getString("medicineId"), d.getDate("date"), d.getString("seat"), d.getInteger("duration")));
         }
 
         return appointments;
