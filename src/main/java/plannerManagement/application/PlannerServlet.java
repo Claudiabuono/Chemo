@@ -182,12 +182,8 @@ public class PlannerServlet extends HttpServlet {
                     PlannerBean planner = new PlannerBean(firstDay, lastDay, appointments);
                     facade.insertPlanner(planner, user);
 
-                    //Aggiungo la lista di id alla request
-                    request.setAttribute("patientIds", patientIds);
-
-                    //Mando la richiesta con il dispatcher
-                    RequestDispatcher requestDispatcher = request.getRequestDispatcher("planner.jsp");
-                    requestDispatcher.forward(request, response);
+                    //Aggiungo l'operation result all'header
+                    response.addHeader("OPERATION_RESULT","true");
                 }
 
                 case "deletePlanner" -> {
