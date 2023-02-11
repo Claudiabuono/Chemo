@@ -1,15 +1,11 @@
 import random
 import json
 
-# Il modulo prende in input i pazienti sottomessi dal medico: per far comunicare Java e Python
-# utilizziamo un file condiviso tra i due linguaggi: Java scrive l'input, preso da Python, e Python
-# scrive l'output preso da Java per visualizzare lo schedule
-
-file = open('D:\\Chemo\\py\\patients.json', 'r')  # PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
+file = open('patients.json', 'r')
 patients = json.loads(file.read())
 print("Patients number: " + str(len(patients)))
 
-file = open('D:\\Chemo\\py\\medicines.json', 'r')  # PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
+file = open('medicines.json', 'r')
 medicines = json.loads(file.read())
 
 
@@ -30,8 +26,7 @@ def encodeIndividual(patientList, numSeats, numHours, numDays):
 
 
 def generation(patients, numSeats, numHours, numDays):
-    population_size = random.randrange(len(patients) + 1, 30)
-    print("Population size: " + str(population_size))
+    population_size = 50
     population = []
     newIndividual = []
     for i in range(population_size):
@@ -83,7 +78,6 @@ def medConsume(medicine, patients, totQuant):
     return totQuant
 
 
-# La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
 def countConflict(schedule):
     lista_indici_pazienti = indexPatients(schedule)
     res = []
@@ -109,24 +103,28 @@ def indexPatients(schedule):
 def crossover(ind1, ind2, numPatients):
     newIndi = []
     values = []
+    val = [0, 1]
+    prob = [.2, .8]
+    probCrossover = random.choices(val, prob)
 
-    for elem in range(int(len(ind1) / 2)):
-        if ind1[elem].index(1) not in values:
-            values.append(ind1[elem].index(1))
-            newIndi.append(ind1[elem])
+    if probCrossover[0] == 1:
+        for el in range(int(len(ind1) / 2)):
+            if ind1[el].index(1) not in values:
+                values.append(ind1[el].index(1))
+                newIndi.append(ind1[el])
 
-    for elem in ind2:
+        for el in range(len(ind2)):
+            if len(newIndi) < numPatients:
+                if ind2[el].index(1) not in values:
+                    values.append(ind2[el].index(1))
+                    newIndi.append(ind2[el])
+
         if len(newIndi) < numPatients:
-            if elem.index(1) not in values:
-                values.append(elem.index(1))
-                newIndi.append(elem)
-
-    if len(newIndi) < numPatients:
-        for i in range(numPatients):
-            default_indi = [0] * numPatients
-            if i not in values:
-                default_indi[i] = 1
-                newIndi.append(default_indi)
+            for i in range(numPatients):
+                default_indi = [0] * numPatients
+                if i not in values:
+                    default_indi[i] = 1
+                    newIndi.append(default_indi)
 
     return newIndi
 
@@ -137,20 +135,17 @@ def rouletteWheel(fitness):
     i = 0
     probabilities = []
     total_fitness = sum(fitness)  # calcolo del valore di fitness totale
+
     for value in fitness:
         probabilities.append({"position": pos,
                               "probability": value / total_fitness})  # viene creato un array dove vengono memorizzate le probabilità e gli indici di esse (questi corrispondono agli indici che gli individui hanno nell'array popolazione)
         pos += 1
 
-    print(probabilities)
-
     while i < len(fitness):  # il ciclo viene iterato tante volte quanti sono gli individui della popolazione
         win = random.choice(probabilities)  # viene estratto il vincitore
-        if win.get(
-                "position") not in winners:  # se il vincitore non è gia presente tra quelli precedentemente estratti viene aggiunto all'array
-            winners.append(win.get("position"))
+        #se il vincitore non è gia presente tra quelli precedentemente estratti viene aggiunto all'array
+        winners.append(win.get("position"))
         i += 1
-    print(winners)
     return winners
 
 
@@ -171,15 +166,20 @@ def mutation(individual):
 
 
 def algorithm():
-    population = generation(patients, 6, 5, 5)
+    population = generation(patients, 5, 5, 5)
     populationSize = len(population)
     max_fit = 0
 
+    #forse è meglio aggiungere un certo numero di possibilità da dare all'algoritmo
     while populationSize != 1:
         fit = fitness(population, patients)
         max_next = max(fit)
+        chance = 2 #Diamo all'algoritmo due possbilità per continuare a cercare una soluzione migliore nel caso in cui quella attuale sia peggiore della precedente
+
         if max_next < max_fit:
-            return best
+            chance -= 1
+            if chance == 0:
+                return best
         else:
             best = population[fit.index(max_next)]
             max_fit = max_next
@@ -191,24 +191,23 @@ def algorithm():
 
         nextGen = []
         for i in range(len(selectedIndividuals)):
-            for j in range(len(selectedIndividuals) - 1):
+            for j in range(len(selectedIndividuals)):
                 if j == i + 1:
                     newIndi = crossover(population[selectedIndividuals[i]], population[selectedIndividuals[j]],
                                         len(patients))
-                    newIndi = mutation(newIndi)
-                    nextGen.append(newIndi)
-                    newIndi = []
+                    if newIndi:
+                        newIndi = mutation(newIndi)
+                        nextGen.append(newIndi)
         population = nextGen
         populationSize = len(population)
         print(populationSize)
 
 
 population = algorithm()
-print(len(population))
 resultList = []
-for elem in population:
-    resultList.append(patients[elem.index(1)]['patientId'])
+for i in range(len(population)):
+    resultList.append(patients[population[i].index(1)]['patientId'])
 
-# PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
+#PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
 with open("D:\\Chemo\\py\\resultSchedule.json", "w") as outfile:
     json.dump(resultList, outfile, indent=4, separators=(', ', ': '))
