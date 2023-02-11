@@ -31,11 +31,11 @@
                 //Redirect alla servlet
             }
             //Se è presente recupera quelli disponibili
-            String nextPlanner = (String) sessione.getAttribute("afterVisualizedId");
-            String previousPlanner = (String) sessione.getAttribute("beforeVisualizedId");
-            String latestPlanner = (String) sessione.getAttribute("latestPlannerId");
-            PlannerBean planner = (PlannerBean) sessione.getAttribute("plannerToVisualize");
-            String weekDate = (String) sessione.getAttribute("weekDate");
+            String nextPlanner = (String) request.getAttribute("afterVisualizedId");
+            String previousPlanner = (String) request.getAttribute("beforeVisualizedId");
+            String latestPlanner = (String) request.getAttribute("latestPlannerId");
+            PlannerBean planner = (PlannerBean) request.getAttribute("plannerToVisualize");
+            String weekDate = (String) request.getAttribute("weekDate");
 
 
 %>

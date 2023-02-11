@@ -24,7 +24,7 @@ import java.util.List;
 @WebServlet("/PlannerServlet")
 public class PlannerServlet extends HttpServlet {
 
-    private static Facade facade = new Facade();
+    private static final Facade facade = new Facade();
     private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
     private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
 
@@ -44,8 +44,8 @@ public class PlannerServlet extends HttpServlet {
         if(id == null) {
             plannerToVisualize = planners.get(planners.size()-1);
 
-            int beforeLastestIndex = planners.indexOf(plannerToVisualize)-1;
-            beforeVisualizedId = planners.get(beforeLastestIndex).getId();
+            int beforeLatestIndex = planners.indexOf(plannerToVisualize)-1;
+            beforeVisualizedId = planners.get(beforeLatestIndex).getId();
             latestPlannerId = plannerToVisualize.getId();
             afterVisualizedId = "";
         } else {
@@ -67,17 +67,18 @@ public class PlannerServlet extends HttpServlet {
                 afterVisualizedId = planners.get(afterVisualizedIndex).getId();
             }
 
-            //Imposto i dati nella request
-            request.setAttribute("plannerToVisualize", plannerToVisualize);
-            request.setAttribute("latestPlannerId", latestPlannerId);
-            request.setAttribute("beforeVisualizedId", beforeVisualizedId);
-            request.setAttribute("afterVisualizedId", afterVisualizedId);
-            request.setAttribute("weekDate", getWeekDate(plannerToVisualize.getStartDate(), plannerToVisualize.getEndDate()));
-
-            //Reindirizzo alla pagina del calendario
-            getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/planner.jsp"))).forward(request, response);
-
         }
+
+        //Imposto i dati nella request
+        request.setAttribute("plannerToVisualize", plannerToVisualize);
+        request.setAttribute("latestPlannerId", latestPlannerId);
+        request.setAttribute("beforeVisualizedId", beforeVisualizedId);
+        request.setAttribute("afterVisualizedId", afterVisualizedId);
+        request.setAttribute("weekDate", getWeekDate(plannerToVisualize.getStartDate(), plannerToVisualize.getEndDate()));
+
+        //Reindirizzo alla pagina del calendario
+        getServletContext().getRequestDispatcher(response.encodeURL(response.encodeURL("/planner.jsp"))).forward(request, response);
+
     }
 
     @Override
@@ -165,7 +166,8 @@ public class PlannerServlet extends HttpServlet {
                     for (String patientId : patientIds) {
                         Date date = new Date(); //todo: data
                         int seat = 3; //todo: seat
-                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), 1)); //todo: durata appuntamento
+                        int duration = 60;  //todo: durata appuntamento
+                        appointments.add(new AppointmentBean(patientId, date, String.valueOf(seat), duration));
                     }
                     System.out.println(appointments);
 
