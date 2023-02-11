@@ -1,0 +1,15 @@
+.alert {
+    margin: 20px auto;
+    padding: 20px;
+    height: auto;
+    width: 590px;
+    border-radius: 10px;
+    color: var(--dark-text);
+    background: var(--neutral-color);
+    box-shadow: 0 4px 4px 0 var(--shadow-color), 0 4px 20px 0 var(--shadow-color);
+}
+
+.alert-warning {
+    color: var(--warning-text);
+    background: var(--warning);
+}

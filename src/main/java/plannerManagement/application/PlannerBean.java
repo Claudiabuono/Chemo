@@ -2,6 +2,8 @@ package plannerManagement.application;
 
 import plannerManagement.application.AppointmentBean;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,14 +16,19 @@ public class PlannerBean {
     public PlannerBean(){}
 
     //Non prevede l'inserimento diretto degli appuntamenti, istanziando solamente l'agenda senza popolarla
-    public PlannerBean(String id, Date startDate, Date endDate) {
-        this.id = id;
+    public PlannerBean(Date startDate, Date endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.appointments = new ArrayList<>();
     }
 
     //Prevede l'inserimento diretto degli appuntamenti, instanziando e popolando l'agenda
+
+    public PlannerBean(Date startDate, Date endDate, ArrayList<AppointmentBean> appointments) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.appointments = appointments;
+    }
 
     public PlannerBean(String id, Date startDate, Date endDate, ArrayList<AppointmentBean> appointments) {
         this.id = id;
@@ -38,8 +45,16 @@ public class PlannerBean {
         return startDate;
     }
 
+    public String getParsedStartDate() {
+        return dateParser(startDate);
+    }
+
     public Date getEndDate() {
         return endDate;
+    }
+
+    public String getParsedEndDate() {
+        return dateParser(endDate);
     }
 
     public ArrayList<AppointmentBean> getAppointments() {
@@ -70,5 +85,10 @@ public class PlannerBean {
                 ", dataFine=" + endDate +
                 ", appuntamenti=" + appointments +
                 '}';
+    }
+
+    private String dateParser(Date date) {
+        Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
     }
 }

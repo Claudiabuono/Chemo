@@ -7,10 +7,15 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import connector.DatabaseConnector;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import plannerManagement.application.AppointmentBean;
 import plannerManagement.application.PlannerBean;
 
+import javax.print.Doc;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -82,11 +87,51 @@ public class PlannerQueryBean {
 
         while(it.hasNext()){
             Document document = (Document) it.next();
-            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", AppointmentBean.class));
-            PlannerBean planner = new PlannerBean(document.getString("id"), document.getDate("startDate"), document.getDate("endDate"), appointments);
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
+            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("startDate"), document.getDate("endDate"), appointments);
             p.add(planner);
         }
         return p;
+    }
+
+    public ArrayList<PlannerBean> findAll(){
+        MongoCollection<Document> collection = getCollection();
+        FindIterable<Document> iterDoc = collection.find();
+        Iterator<Document> it = iterDoc.iterator();
+        ArrayList<PlannerBean> p = new ArrayList<>();
+
+        while(it.hasNext()){
+            Document document = (Document) it.next();
+            ArrayList<AppointmentBean> appointments = convertToArray(document.getList("appointments", Document.class));
+            PlannerBean planner = new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), appointments);
+            p.add(planner);
+        }
+        return p;
+    }
+
+    public PlannerBean findDocumentById(String id) {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Crea il filtro
+        Bson filter = Filters.eq("_id", new ObjectId(id));
+
+        //Cerca il documento
+        Document document = collection.find(filter).first();
+
+
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", Document.class)));
+    }
+
+    public PlannerBean findLastDocument() {
+        //Recupera la Collection
+        MongoCollection<Document> collection = getCollection();
+
+        //Cerca il documento
+        Document document = collection.find().sort(new Document("_id", -1)).first();
+
+
+        return new PlannerBean(document.get("_id").toString(), document.getDate("start"), document.getDate("end"), convertToArray(document.getList("appointments", Document.class)));
     }
 
     private MongoCollection<Document> getCollection(){
@@ -101,20 +146,35 @@ public class PlannerQueryBean {
     private Document createDocument(PlannerBean plannerBean){
         List<AppointmentBean> app = plannerBean.getAppointments();
 
-        Document doc = new Document("_id", plannerBean.getId())
-                .append("startDate", plannerBean.startDate)
-                .append("endDate", plannerBean.endDate)
+        ObjectId objectId = new ObjectId();
+        plannerBean.setId(objectId.toString());
+        return new Document("_id", objectId)
+                .append("start", plannerBean.startDate)
+                .append("end", plannerBean.endDate)
                 .append("appointments", app);
-
-        return doc;
     }
 
-    private ArrayList<AppointmentBean> convertToArray(List<AppointmentBean> list){
+    private ArrayList<AppointmentBean> convertToArray(List<Document> list){
+        if(list == null)
+            return null;
+
         ArrayList<AppointmentBean> appointments = new ArrayList<>();
-        for(AppointmentBean app : list){
-            appointments.add(app);
+
+        for(Document d : list) {
+            appointments.add(new AppointmentBean(d.getString("patientId"), d.getDate("date"), d.getString("seat"), d.getInteger("duration")));
         }
 
         return appointments;
+    }
+
+
+    private Date dateParser(String date) {
+        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
+        try {
+            return pattern.parse(date);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 }

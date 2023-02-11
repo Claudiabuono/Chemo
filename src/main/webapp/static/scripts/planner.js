@@ -1,7 +1,12 @@
 function addAppointments() {
-    var checkedPatients = getCheckedBoxes("patient-checkbox");
-    if (checkedPatients == null) {
+    var checkedPatients = $('input[name="patient-id"]:checked');
+    //var checkedPatients = getCheckedBoxes("patient-id");
+
+    if (!(checkedPatients.length > 0)) {
         // errore: deve essere selezionato almeno un paziente
+        bootstrap_alert.warning("Seleziona almeno un paziente");
+        window.scrollTo(0, 0);
+
     } else {
         var request = new XMLHttpRequest();
         request.open('POST', "PlannerServlet", true);
@@ -21,16 +26,20 @@ function addAppointments() {
                     redirectToPlanner();
                 } else {
                     // errore creazione agenda
-                    window.location.replace("addAppointments.jsp");
+                    window.location.replace("planner.jsp");
                 }
             }
         };
     }
 }
 
-function redirectToPlanner() {
+function redirectToPlanner(id) {
+    if (id == null) {
+        window.location.replace("PlannerServlet");
+    } else {
+        alert("Lavori in corso: redirect a planner con id non ancora disponibile.")
+    }
     // genera un redirect alla servlet paziente creando una richiesta get
-    window.location.replace("PlannerServlet");
 }
 
 function getCheckedBoxes(checkboxName) {

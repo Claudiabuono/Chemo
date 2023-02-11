@@ -65,9 +65,49 @@ public class Facade {
     /*
     OPERAZIONI CRUD PER ENTITA' PLANNER
      */
-    public ArrayList<PlannerBean> findPlanners(String chiave, String valore){
-        return plannerQueryBean.findDocument(chiave, valore);
+    public ArrayList<PlannerBean> findPlanners(String chiave, String valore, UserBean user){
+        ArrayList<PlannerBean> planners = new ArrayList<>();
+        try {
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)) {
+                if(chiave.equals("_id")) {
+                    planners.add(plannerQueryBean.findDocumentById(valore));
+                    return planners;
+                } else {
+                    return plannerQueryBean.findDocument(chiave, valore);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
+
+    public PlannerBean findLastestPlanner(UserBean user) {
+        try {
+            if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
+                return plannerQueryBean.findLastDocument();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
+    public ArrayList<PlannerBean> findAllPlanners(UserBean user) {
+        try {
+            if(isUserAuthorized(user.getUsername(), 1) || isUserAuthorized(user.getUsername(), 2))
+                return plannerQueryBean.findAll();
+            else
+                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public void updatePlanner(String id, String valId, String chiave, String valoreChiave){
         plannerQueryBean.updateDocument(id, valId, chiave, valoreChiave);
@@ -89,15 +129,26 @@ public class Facade {
 
     }
 
-    public void insertPlanner(String id, Date startDate, Date endDate, ArrayList<AppointmentBean> appointments, UserBean user){
+    public void insertPlanner(Date startDate, Date endDate, ArrayList<AppointmentBean> appointments, UserBean user){
         try{
             if(isUserAuthorized(user.getUsername(), 1)) {
-                PlannerBean planner = new PlannerBean(id, startDate, endDate, appointments);
+                PlannerBean planner = new PlannerBean(startDate, endDate, appointments);
                 plannerQueryBean.insertDocument(planner);
             }else
                 throw new Exception("Utente non autorizzato all'inserimento di un planner");
         }catch(Exception e){
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertPlanner(PlannerBean planner, UserBean user){
+        try{
+            if(isUserAuthorized(user.getUsername(), 1)) {
+                plannerQueryBean.insertDocument(planner);
+            }else
+                throw new Exception("Utente non autorizzato all'inserimento di un planner");
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 
