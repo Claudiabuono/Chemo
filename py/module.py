@@ -78,6 +78,7 @@ def medConsume(medicine, patients, totQuant):
     return totQuant
 
 
+# La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
 def countConflict(schedule):
     lista_indici_pazienti = indexPatients(schedule)
     res = []
@@ -205,7 +206,7 @@ def algorithm():
 
 population = algorithm()
 resultList = []
-for i in range(len(population)):
+for i in range(len(patients)):
     resultList.append(patients[population[i].index(1)]['patientId'])
 
 #PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
