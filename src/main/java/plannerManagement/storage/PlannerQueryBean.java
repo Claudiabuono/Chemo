@@ -138,7 +138,7 @@ public class PlannerQueryBean {
         DatabaseConnector conn = new DatabaseConnector();
         MongoDatabase db = conn.getDatabase();
 
-        MongoCollection<Document> coll = db.getCollection("agenda");
+        MongoCollection<Document> coll = db.getCollection("planner");
         System.out.println("Collection \'agenda\' recuperata con successo");
         return coll;
     }

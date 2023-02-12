@@ -23,6 +23,12 @@
     cursor: pointer;
     color: var(--accent-color);
 }
+.chevron-inactive {
+    width: 32px;
+    height: 32px;
+    cursor: default;
+    color: var(--medium-text);
+}
 #actual-week {
     margin: 0 auto;
 }

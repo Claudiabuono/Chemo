@@ -37,7 +37,7 @@ function redirectToPlanner(id) {
     if (id == null) {
         window.location.replace("PlannerServlet");
     } else {
-        alert("Lavori in corso: redirect a planner con id non ancora disponibile.")
+        window.location.replace("PlannerServlet?id="+id);
     }
     // genera un redirect alla servlet paziente creando una richiesta get
 }
