@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import connector.Facade;
+import medicinemanagement.application.MedicineBean;
+import medicinemanagement.application.PackageBean;
 import patientmanagement.application.PatientBean;
 import userManagement.application.UserBean;
 
@@ -26,6 +28,13 @@ public class PlannerServlet extends HttpServlet {
     private static final Facade facade = new Facade();
     private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
     private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
+
+    private static final String INPUT_FILE = "patients.json"; //Nome file di input
+
+    private static final String MEDICINES_FILE = "medicines.json"; //Nome file medicinali usati dal modulo di IA
+
+    private static final String OUTPUT_FILE = "resultSchedule.json"; //Nome file output
+
     private static final ZoneId TIMEZONE = ZoneId.of("Europe/Paris"); //Fuso orario usato da java.time
 
     @Override
@@ -117,16 +126,41 @@ public class PlannerServlet extends HttpServlet {
                         patientsJson.add(patientJSON);
                     }
 
-                    //Recupero il file di input
-                    String inputFileName = "patients.json";
-                    File inputFile = new File(PY_DIR, inputFileName);
-
                     //Inizializzo GSON
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                    //Recupero il file di input
+                    File inputFile = new File(PY_DIR, INPUT_FILE);
+
                     String json = gson.toJson(patientsJson, new TypeToken<List<PatientJSON>>(){}.getType());
 
                     //Scrivo nel file JSON
                     try (FileWriter writer = new FileWriter(inputFile)) {
+                        writer.append(json);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                    //Recupero tutti i medicinali con le relative quantità disponibili
+                    List<MedicinesJSON> medicinesJSONList = new ArrayList<>();
+                    for(MedicineBean medicine : facade.findAllMedicines(user)) {
+                        String medicineId = medicine.getId();
+                        int quantity = 0;
+                        for(PackageBean packageBean : medicine.getPackages()) {
+                            quantity += packageBean.getCapacity();
+                        }
+                        medicinesJSONList.add(new MedicinesJSON(medicineId,quantity));
+                        quantity = 0;
+                    }
+
+                    //Recupero il file dei medicinali
+                    File medicinesFile = new File(PY_DIR, MEDICINES_FILE);
+
+                    json = gson.toJson(medicinesJSONList, new TypeToken<List<PatientJSON>>(){}.getType());
+
+                    //Scrivo nel file JSON
+                    try (FileWriter writer = new FileWriter(medicinesFile)) {
                         writer.append(json);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -141,14 +175,13 @@ public class PlannerServlet extends HttpServlet {
                     //Se resultSchedule è vuoto quando viene effettuata la schedulazione allora la servlet va avanti per i fatti suoi prima che il modulo di IA abbia finito
                     //Non è proprio una soluzione elegante ma il tempo stringe e non credo di avere il tempo di fare qualcosa più a grana fine
                     //todo: magari se riesco a farlo un po' più a grana fine è meglio
-                    Thread.sleep(500);
+                    Thread.sleep(1500);
 
                     //Recupero la lista degli id dei pazienti restituita dal modulo
                     List<String> patientIds = null;
 
                     //Recupero il file di output
-                    String outputFileName = "resultSchedule.json";
-                    File outputFile = new File(PY_DIR, outputFileName);
+                    File outputFile = new File(PY_DIR, OUTPUT_FILE);
 
                     //Apro il file JSON contenente i risultati del modulo di IA
                     try (FileReader reader = new FileReader(outputFile)){
@@ -165,11 +198,9 @@ public class PlannerServlet extends HttpServlet {
                     LocalDate lastDayOfWeek = now.with(previousOrSame(DayOfWeek.FRIDAY));
 
                     //Popolo la lista di appuntamenti
-                    int startingHour = 10;
-                    int actualHour = startingHour;
                     int i = 0;
-                    Calendar calendar = Calendar.getInstance();
                     ArrayList<AppointmentBean> appointments = new ArrayList<>();
+                    ZonedDateTime appointmentDateTime = firstDayOfWeek.atTime(9, 0).atZone(TIMEZONE);
                     for (String patientId : patientIds) {
                         int seat = new Random().nextInt(10); //todo: seat senza randomness
                         String medicineId = facade.findPatients("_id", patientId, user).get(0).getTherapy().getMedicines().get(0).getMedicineId();
@@ -177,17 +208,18 @@ public class PlannerServlet extends HttpServlet {
                         //Si considerano 5 sedute per ora
                         i++;
                         if((i % 5) == 0)
-                            actualHour++;
+                            appointmentDateTime.plusHours(1);
 
-                        Date appointmentDate = Date.from(now.atTime(actualHour, 0).atZone(TIMEZONE).toInstant());
+
+                        Date appointmentDate = Date.from(appointmentDateTime.toInstant());
                         int duration = facade.findPatients("_id", patientId, user).get(0).getTherapy().getDuration();
                         appointments.add(new AppointmentBean(patientId, medicineId, appointmentDate, String.valueOf(seat), duration));
                     }
                     System.out.println(appointments);
 
                     //Creo l'istanza del planner settimanale e la aggiungo al database
-                    Date firstDay = Date.from(firstDayOfWeek.atTime(startingHour,0).atZone(TIMEZONE).toInstant());
-                    Date lastDay = Date.from(lastDayOfWeek.atTime(startingHour,0).atZone(TIMEZONE).toInstant());
+                    Date firstDay = Date.from(firstDayOfWeek.atTime(9,0).atZone(TIMEZONE).toInstant());
+                    Date lastDay = Date.from(lastDayOfWeek.atTime(18,0).atZone(TIMEZONE).toInstant());
                     PlannerBean planner = new PlannerBean(firstDay, lastDay, appointments);
                     facade.insertPlanner(planner, user);
 
@@ -271,8 +303,8 @@ public class PlannerServlet extends HttpServlet {
     }
 
 
-    //Inner Class che contiene i dati da passare al JSON
-    private static class PatientJSON {
+    //Inner Class che contiene i dati da passare a patients.json
+        private static class PatientJSON {
         String patientId;
         String medicineId;
         int dose;
@@ -308,6 +340,40 @@ public class PlannerServlet extends HttpServlet {
                     "patientId='" + patientId + '\'' +
                     ", medicineId='" + medicineId + '\'' +
                     ", dose=" + dose +
+                    '}';
+        }
+    }
+
+
+    //Inner Class che contiene i dati da passare a medicines.json
+    private static class MedicinesJSON {
+        private String medicineId;
+        private int quantity;
+
+        //Costruttore
+
+        public MedicinesJSON(String medicineId, int quantity) {
+            this.medicineId = medicineId;
+            this.quantity = quantity;
+        }
+
+        //Getters
+
+        public String getMedicineId() {
+            return medicineId;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        //toString
+
+        @Override
+        public String toString() {
+            return "MedicinesJSON{" +
+                    "medicineId='" + medicineId + '\'' +
+                    ", quantity=" + quantity +
                     '}';
         }
     }
