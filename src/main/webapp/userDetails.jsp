@@ -33,6 +33,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="user-data-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Dati personali</h1>

@@ -6,22 +6,23 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8"
          import="userManagement.application.UserBean"
-         import="plannerManagement.application.PlannerBean"%>
-<%@ page import="plannerManagement.application.AppointmentBean"%>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.Format" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="java.time.LocalDate" %>
-<%@ page import="java.time.ZoneId" %>
-<%@ page import="patientmanagement.application.PatientBean" %>
-<%@ page import="medicinemanagement.application.MedicineBean" %>
-<%@ page import="connector.Facade" %>
+         import="plannerManagement.application.PlannerBean"
+         import="plannerManagement.application.AppointmentBean"
+         import="java.util.Date"
+         import="java.text.Format"
+         import="java.text.SimpleDateFormat"
+         import="java.time.LocalTime"
+         import="java.time.LocalDate"
+         import="java.time.ZoneId"
+         import="patientmanagement.application.PatientBean"
+         import="medicinemanagement.application.MedicineBean"
+         import="connector.Facade"
+%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Chemo | Calendario</title>
+    <title>Chemo Calendario</title>
     <link rel="stylesheet" href="./static/styles/planner.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
@@ -65,6 +66,7 @@
     <jsp:include page="static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="user-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Calendario sedute</h1>

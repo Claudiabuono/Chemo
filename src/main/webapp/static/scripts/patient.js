@@ -226,6 +226,7 @@ function addPatient() {
                     redirectToPatientDetails(patientID);
                 } else {
                     //errore creazione paziente
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };
@@ -288,7 +289,7 @@ function sendTherapyData(body){
                 redirectToPatientDetails(patientID);
             } else {
                 //errore aggiunta terapia
-                console.log(request.getResponseHeader('errorMessage'))
+                showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
             }
         }
     };
@@ -362,9 +363,7 @@ function submitUpdatedStatus(id){
                     redirectToPatientDetails(id);
                 } else {
                     //errore aggiunta terapia
-                    console.log("Errore modifica stato");
-                    //recupero id dalla risposta
-                    redirectToPatientDetails(id);
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };

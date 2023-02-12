@@ -4,8 +4,7 @@ function addAppointments() {
 
     if (!(checkedPatients.length > 0)) {
         // errore: deve essere selezionato almeno un paziente
-        bootstrap_alert.warning("Seleziona almeno un paziente");
-        window.scrollTo(0, 0);
+        showAlertWarning("Seleziona almeno un paziente");
 
     } else {
         var request = new XMLHttpRequest();
@@ -26,7 +25,7 @@ function addAppointments() {
                     redirectToPlanner();
                 } else {
                     // errore creazione agenda
-                    window.location.replace("planner.jsp");
+                    showAlertDanger("Creazione nuova agenda fallita.");
                 }
             }
         };

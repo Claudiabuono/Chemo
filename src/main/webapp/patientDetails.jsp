@@ -46,6 +46,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="patient-data-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Scheda paziente</h1>

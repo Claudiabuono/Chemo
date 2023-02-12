@@ -58,7 +58,7 @@ public class MedicineServlet extends HttpServlet {
                     //Controllo di validità
                     if(!(medicineValidation(medicine))) {
                         response.addHeader("OPERATION_RESULT","false");
-                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                        response.addHeader("ERROR_MESSAGE","Aggiunta medicinale fallita: i dati inseriti non sono validi.");
                     } else {
                         facade.insertMedicine(medicine, user);
 
@@ -80,7 +80,8 @@ public class MedicineServlet extends HttpServlet {
                     //Controllo validazione
                     if (!packageValidation(medicinePackage)) {
                         response.addHeader("OPERATION_RESULT","false");
-                        request.setAttribute("errorMessage", "I dati inseriti non sono validi");
+                        response.addHeader("ERROR_MESSAGE","Aggiunta confezione fallita: i dati inseriti non sono validi.");
+
                     } else {
                         // Inserisco la confezione nel medicinale
                         facade.insertMedicinePackage(medicineId, medicinePackage, user);

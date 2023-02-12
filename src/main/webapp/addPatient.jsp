@@ -35,6 +35,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="add-patient-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Aggiunta paziente</h1>

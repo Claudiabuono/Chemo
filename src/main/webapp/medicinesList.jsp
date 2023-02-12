@@ -32,6 +32,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="medicines-list-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Medicinali</h1>

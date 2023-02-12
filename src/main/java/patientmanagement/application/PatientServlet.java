@@ -62,7 +62,7 @@ public class PatientServlet extends HttpServlet {
 
                     if (!patientValidation(patient)) {
                         response.addHeader("OPERATION_RESULT","false");
-                        request.setAttribute("errorMessage","I dati inseriti non sono validi.");
+                        response.addHeader("ERROR_MESSAGE","I dati inseriti non sono validi.");
                     } else {
                         patient = facade.insertPatient(patient,user);
 
@@ -101,7 +101,7 @@ public class PatientServlet extends HttpServlet {
 
                     if (!therapyValidation(condition, therapy)) {
                         response.addHeader("OPERATION_RESULT","false");
-                        request.setAttribute("errorMessage","I dati inseriti non sono validi.");
+                        response.addHeader("ERROR_MESSAGE","I dati inseriti non sono validi.");
                     } else {
                         //Aggiorno il profilo paziente con la malattia
                         facade.updatePatient("_id", patientId, "condition", request.getParameter("condition"), user);
@@ -123,6 +123,7 @@ public class PatientServlet extends HttpServlet {
                     if (patients.get(0).getTherapy() == null || request.getParameter("status") == null) {
                         //se non esiste c'è un errore e l'operazione fallisce
                         operationResult = "false";
+                        response.addHeader("ERROR_MESSAGE","Modifica stato fallita.");
                     } else {
                         boolean patientStatus = Boolean.parseBoolean(request.getParameter("status"));
                         //se esiste viene effettuata la modifica
