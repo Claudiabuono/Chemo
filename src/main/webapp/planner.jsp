@@ -9,15 +9,11 @@
          import="plannerManagement.application.PlannerBean"%>
 <%@ page import="plannerManagement.application.AppointmentBean"%>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.text.Format" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.text.DateFormat" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDate" %>
 <%@ page import="java.time.ZoneId" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="patientmanagement.application.PatientBean" %>
 <%@ page import="medicinemanagement.application.MedicineBean" %>
 <%@ page import="connector.Facade" %>
@@ -27,6 +23,8 @@
     <meta charset="UTF-8">
     <title>Chemo | Calendario</title>
     <link rel="stylesheet" href="./static/styles/planner.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 <body>
 <%
@@ -50,7 +48,7 @@
             PlannerBean planner = (PlannerBean) request.getAttribute("plannerToVisualize");
             String weekDate = (String) request.getAttribute("weekDate");
 
-            Facade facade = null;
+            Facade facade = new Facade();
 
             // Estrapolazione di giorno, mese e anno dalla data
             Date slotFullDate = planner.getStartDate();
@@ -95,7 +93,7 @@
                     <%
                         }
                     %>
-                    <h2 id="actual-week"><%=weekDate%></h2>
+                    <h3 id="actual-week"><%=weekDate%></h3>
                     <%
                         if (nextPlanner.equals("")) {
                     %>
@@ -129,24 +127,24 @@
                     </div>
                     <div id="planner-days-row" class="planner-row box">
                         <div class="planner-column">
-                            <h3 class="planner-day-name">Lunedì</h3>
-                            <h3 class="planner-day-number"><%=calendarDay%></h3>
+                            <h5 class="planner-day-name">Lunedì</h5>
+                            <h5 class="planner-day-number"><%=calendarDay%></h5>
                         </div>
                         <div class="planner-column">
-                            <h3 class="planner-day-name">Martedì</h3>
-                            <h3 class="planner-day-number"><%=calendarDay+1%></h3>
+                            <h5 class="planner-day-name">Martedì</h5>
+                            <h5 class="planner-day-number"><%=calendarDay+1%></h5>
                         </div>
                         <div class="planner-column">
-                            <h3 class="planner-day-name">Mercoledì</h3>
-                            <h3 class="planner-day-number"><%=calendarDay+2%></h3>
+                            <h5 class="planner-day-name">Mercoledì</h5>
+                            <h5 class="planner-day-number"><%=calendarDay+2%></h5>
                         </div>
                         <div class="planner-column">
-                            <h3 class="planner-day-name">Giovedì</h3>
-                            <h3 class="planner-day-number"><%=calendarDay+3%></h3>
+                            <h5 class="planner-day-name">Giovedì</h5>
+                            <h5 class="planner-day-number"><%=calendarDay+3%></h5>
                         </div>
                         <div class="planner-column">
-                            <h3 class="planner-day-name">Venerdì</h3>
-                            <h3 class="planner-day-number"><%=calendarDay+4%></h3>
+                            <h5 class="planner-day-name">Venerdì</h5>
+                            <h5 class="planner-day-number"><%=calendarDay+4%></h5>
                         </div>
                     </div>
                     <div class="planner-column planner-scroll">
@@ -182,7 +180,7 @@
                     %>
                     <div id="planner-<%=i%>-row" class="planner-row">
                         <div class="planner-column planner-time">
-                            <h3 class="time"><%=hours%>:<%=minutes%></h3>
+                            <h5 class="time"><%=hours%>:<%=minutes%></h5>
                         </div>
                         <div id="planner-<%=hours%><%=minutes%>-row" class="planner-row appointments-row">
                             <%
@@ -203,10 +201,13 @@
                                         // Recupero dei dati dell'appuntamento
                                         // Recupero data
                                         appointmentDate = LocalDate.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
+                                        System.out.println("Data appuntamento: " + appointmentDate);
                                         // Recupero orario inizio
                                         appointmentStart = LocalTime.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
+                                        System.out.println("Inizio appuntamento: " + appointmentStart);
                                         // Recupero orario fine
                                         appointmentEnd = appointmentStart.plusMinutes(appointment.getDuration());
+                                        System.out.println("Fine appuntamento: " + appointmentEnd);
                                         if (appointmentDate.equals(slotDate) &&
                                                 (appointmentStart.isAfter(slotTimeStart) || appointmentStart.equals(slotTimeStart)) &&
                                                 (appointmentEnd.isBefore(slotTimeEnd) || appointmentEnd.equals(slotTimeEnd))) {
@@ -226,7 +227,8 @@
                             <%
                                 } else {
                             %>
-                            <div class="planner-column planner-appointment">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="planner-column planner-appointment" data-bs-toggle="modal" data-bs-target="#slot-info-<%=i%>-<%=j%>">
                                 <div class="row">
                                     <div class="icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -235,12 +237,26 @@
                                     </div>
                                     <h3 class="appointment-patients-number"><%=slotNumber%></h3>
                                     <div class="hidden">
-                                        <div id="slot-i-j-patients">
-                                            <%
-                                                if (user.getType() == 1) {
-                                            %>
-                                            <h3>Pazienti</h3>
-                                            <%
+
+                                    </div>
+                                </div>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="slot-info-<%=i%>-<%=j%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Informazioni appuntamento</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div id="slot-i-j-patients">
+                                                <%
+                                                    if (user.getType() == 1) {
+                                                %>
+                                                <h3>Pazienti</h3>
+                                                <%
                                                     PatientBean patient;
                                                     for (AppointmentBean appointment:
                                                             planner.getAppointments()) {
@@ -257,41 +273,46 @@
                                                             //Recupero il paziente tramite l'id
                                                             patient = facade.findPatients("_id", appointment.getIdPatient(), user).get(0);
                                                             //Aggiungo i dati del paziente alla pagina
-                                            %>
-                                            <p><%=patient.getName()%> <%=patient.getSurname()%> - Poltrona <%=appointment.getChair()%> - <%=appointmentStart%>-<%=appointmentEnd%></p>
-                                            <%
+                                                %>
+                                                <p><%=patient.getName()%> <%=patient.getSurname()%> - Poltrona <%=appointment.getChair()%> - <%=appointmentStart%>-<%=appointmentEnd%></p>
+                                                <%
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            %>
-                                        </div>
-                                        <div id="slot-i-j-medicines">
-                                            <h3>Medicinali</h3>
-                                            <%
-                                                MedicineBean medicine;
-                                                for (AppointmentBean appointment:
-                                                        planner.getAppointments()) {
-                                                    // Recupero dei dati dell'appuntamento
-                                                    // Recupero data
-                                                    appointmentDate = LocalDate.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
-                                                    // Recupero orario inizio
-                                                    appointmentStart = LocalTime.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
-                                                    // Recupero orario fine
-                                                    appointmentEnd = appointmentStart.plusMinutes(appointment.getDuration());
-                                                    if (appointmentDate.equals(slotDate) &&
-                                                            (appointmentStart.isAfter(slotTimeStart) || appointmentStart.equals(slotTimeStart)) &&
-                                                            (appointmentEnd.isBefore(slotTimeEnd) || appointmentEnd.equals(slotTimeEnd))) {
-                                                        //Recupero il medicinale tramite l'id
-                                                        medicine = facade.findMedicines("_id", appointment.getIdMedicine(), user).get(0);
-                                                        //Aggiungo i dati del medicinale alla pagina
-                                            %>
-                                            <p><%=medicine.getName()%> - Poltrona <%=appointment.getChair()%></p>
-                                            <%
+                                                %>
+                                            </div>
+                                            <div id="slot-i-j-medicines">
+                                                <h3>Medicinali</h3>
+                                                <%
+                                                    MedicineBean medicine;
+                                                    for (AppointmentBean appointment:
+                                                            planner.getAppointments()) {
+                                                        // Recupero dei dati dell'appuntamento
+                                                        // Recupero data
+                                                        appointmentDate = LocalDate.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
+                                                        // Recupero orario inizio
+                                                        appointmentStart = LocalTime.ofInstant(appointment.getDate().toInstant(), ZoneId.of("Europe/Paris"));
+                                                        // Recupero orario fine
+                                                        appointmentEnd = appointmentStart.plusMinutes(appointment.getDuration());
+                                                        if (appointmentDate.equals(slotDate) &&
+                                                                (appointmentStart.isAfter(slotTimeStart) || appointmentStart.equals(slotTimeStart)) &&
+                                                                (appointmentEnd.isBefore(slotTimeEnd) || appointmentEnd.equals(slotTimeEnd))) {
+                                                            //Recupero il medicinale tramite l'id
+                                                            medicine = facade.findMedicines("_id", appointment.getIdMedicine(), user).get(0);
+                                                            //Aggiungo i dati del medicinale alla pagina
+                                                %>
+                                                <p><%=medicine.getName()%> - Poltrona <%=appointment.getChair()%></p>
+                                                <%
+                                                        }
                                                     }
-                                                }
-                                            %>
+                                                %>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <%

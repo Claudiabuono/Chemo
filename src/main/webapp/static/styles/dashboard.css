@@ -6,8 +6,8 @@
 .grid-item {
     margin: 0;
     padding: 9.2px;
-    height: 150px;
-    width: 150px;
+    height: 168px;
+    width: 168px;
     border-radius: 10px;
     border: 1px solid var(--neutral-color);
     display: flex;

@@ -15,6 +15,7 @@
     <meta charset="UTF-8">
     <title>Chemo Nuove sedute</title>
     <link rel="stylesheet" href="./static/styles/checkbox.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 <%
@@ -76,7 +77,7 @@
                         </div >
                     </div>
                     <div class="row">
-                        <h3 class="left"><%=patient.getCondition()%></h3>
+                        <h4 class="left"><%=patient.getCondition()%></h4>
                         <p class="right">Numero sedute: <%=patient.getTherapy().getSessions()%></p>
                     </div>
                 </div>
