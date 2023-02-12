@@ -136,7 +136,6 @@
                         <p id="package-idconfezione-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
-                <label for="id-package-status">Stato della confezione</label>
                 <div class="input-fields-row">
                     <div id="status-icon" class="icon <%=packageStatus%>">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
@@ -144,6 +143,7 @@
                         </svg>
                     </div>
                     <div class="field">
+                        <label for="id-package-status">Stato della confezione</label>
                         <select id="id-package-status" class="input-field inactive" name="status">
                             <%
                                 if (medicinePackage.getStatus()){
