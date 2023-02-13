@@ -27,6 +27,7 @@ public class PlannerServlet extends HttpServlet {
 
     private static final Facade facade = new Facade();
 
+    //Modificare il valore di questo campo secondo quanto riportato nel manuale di installazione
     private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
 
     private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
@@ -127,8 +128,6 @@ public class PlannerServlet extends HttpServlet {
             if ("addAppointments".equals(action)) {
                 //Recupero il numero di pazienti dalla request
                 int patientNumber = Integer.parseInt(request.getParameter("patientsNumber"));
-
-                System.out.println("PatientNumber: " + patientNumber);
 
                 //Inserisco ogni paziente nell'array di PatientJSON
                 List<PatientJSON> patientsJson = new ArrayList<>();
@@ -233,7 +232,6 @@ public class PlannerServlet extends HttpServlet {
                     int duration = facade.findPatients("_id", patientId, user).get(0).getTherapy().getDuration();
                     appointments.add(new AppointmentBean(patientId, medicineId, appointmentDate, String.valueOf(seat), duration));
                 }
-                System.out.println(appointments);
 
                 //Creo l'istanza del planner settimanale e la aggiungo al database
                 Date firstDay = Date.from(firstDayOfWeek.atTime(9, 0).atZone(TIMEZONE).toInstant());
@@ -278,7 +276,6 @@ public class PlannerServlet extends HttpServlet {
         Format formatterYear = new SimpleDateFormat("yyyy");
         date += formatterYear.format(startDate);
 
-        System.out.println(date);
         return date;
     }
 
