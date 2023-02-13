@@ -83,7 +83,7 @@ public class Facade {
         return null;
     }
 
-    public PlannerBean findLastestPlanner(UserBean user) {
+    public PlannerBean findLatestPlanner(UserBean user) {
         try {
             if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
                 return plannerQueryBean.findLastDocument();

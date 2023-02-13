@@ -191,22 +191,24 @@ public class PlannerServlet extends HttpServlet {
                 //Inizializzo la lista dei pazienti di output
                 List<String> patientIds = null;
 
-                //Faccio eseguire il processo del modulo di IA
-                Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", PYTHON_FILE_PATH});
+                while (patientIds == null) {
+                    //Faccio eseguire il processo del modulo di IA
+                    Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", PYTHON_FILE_PATH});
 
-                //Attendo che il processo di python abbia finito
-                pythonProcess.waitFor();
+                    //Attendo che il processo di python abbia finito
+                    pythonProcess.waitFor();
 
-                //Recupero il file di output
-                File outputFile = new File(PY_DIR, OUTPUT_FILE);
+                    //Recupero il file di output
+                    File outputFile = new File(PY_DIR, OUTPUT_FILE);
 
-                //Apro il file JSON contenente i risultati del modulo di IA
-                try (FileReader reader = new FileReader(outputFile)) {
+                    //Apro il file JSON contenente i risultati del modulo di IA
+                    try (FileReader reader = new FileReader(outputFile)) {
 
-                    //Converto l'array di JSON in una lista di String
-                    patientIds = gson.fromJson(reader, new TypeToken<List<String>>() {}.getType());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        //Converto l'array di JSON in una lista di String
+                        patientIds = gson.fromJson(reader, new TypeToken<List<String>>() {}.getType());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 //Recupero primo e ultimo giorno della settimana
@@ -219,7 +221,7 @@ public class PlannerServlet extends HttpServlet {
                 ArrayList<AppointmentBean> appointments = new ArrayList<>();
                 ZonedDateTime appointmentDateTime = firstDayOfWeek.atTime(9, 0).atZone(TIMEZONE);
                 for (String patientId : patientIds) {
-                    int seat = i % 5;
+                    int seat = (i % 5)+1;
                     String medicineId = facade.findPatients("_id", patientId, user).get(0).getTherapy().getMedicines().get(0).getMedicineId();
 
                     //Si considerano 5 sedute per ora

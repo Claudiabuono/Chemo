@@ -39,7 +39,7 @@ public class PatientQueryBean {
         }else if(patient.getTaxCode().length() != 16){
             System.out.println("ERROR: taxcode lenght incorrect!");
             return false;
-        }else if(patient.getPhoneNumber().length() != 10){
+        }else if(patient.getPhoneNumber().length() > 18){
             System.out.println("ERROR: phoneNumber lenght incorrect!");
             return false;
         }else if(patient.getNotes().length() > 255){

@@ -149,8 +149,8 @@ public class PlannerQueryBean {
         ObjectId objectId = new ObjectId();
         plannerBean.setId(objectId.toString());
         return new Document("_id", objectId)
-                .append("start", plannerBean.startDate)
-                .append("end", plannerBean.endDate)
+                .append("start", plannerBean.getStartDate())
+                .append("end", plannerBean.getEndDate())
                 .append("appointments", app);
     }
 
@@ -167,14 +167,4 @@ public class PlannerQueryBean {
         return appointments;
     }
 
-
-    private Date dateParser(String date) {
-        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
-        try {
-            return pattern.parse(date);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
 }
