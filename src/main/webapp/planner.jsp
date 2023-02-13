@@ -49,6 +49,9 @@
             PlannerBean planner = (PlannerBean) request.getAttribute("plannerToVisualize");
             String weekDate = (String) request.getAttribute("weekDate");
 
+            System.out.println("Planner in frontend: "+planner);
+
+
             Facade facade = new Facade();
 
             // Estrapolazione di giorno, mese e anno dalla data
@@ -74,7 +77,7 @@
         </div>
         <div id="planner-content">
             <div id="planner-top-bar" class="box-in">
-                <input type="button" id="today-button" class="button-secondary-m" value="Oggi" onclick="redirectToPlanner('<%=latestPlanner%>')">
+                <input type="button" id="today-button" class="button-secondary-m" value="Oggi" onclick="redirectToPlanner('<%=latestPlanner%>', 'latest')">
                 <div id="week-selector">
                     <%
                         if (previousPlanner.equals("")) {
@@ -87,7 +90,7 @@
                     <%
                     } else {
                     %>
-                    <div id="previous-week" class="icon chevron" onclick="redirectToPlanner('<%=previousPlanner%>')">
+                    <div id="previous-week" class="icon chevron" onclick="redirectToPlanner('<%=previousPlanner%>', 'prev')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-chevron-left" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
                         </svg>
@@ -107,7 +110,7 @@
                     <%
                         } else {
                     %>
-                    <div id="next-week" class="icon chevron" onclick="redirectToPlanner('<%=nextPlanner%>')">
+                    <div id="next-week" class="icon chevron" onclick="redirectToPlanner('<%=nextPlanner%>', 'next')">
                         <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-chevron-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                         </svg>

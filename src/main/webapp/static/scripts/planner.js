@@ -32,11 +32,11 @@ function addAppointments() {
     }
 }
 
-function redirectToPlanner(id) {
+function redirectToPlanner(id, buttonPressed) {
     if (id == null) {
         window.location.replace("PlannerServlet");
     } else {
-        window.location.replace("PlannerServlet?id="+id);
+        window.location.replace("PlannerServlet?id="+id+"&buttonPressed="+buttonPressed);
     }
     // genera un redirect alla servlet paziente creando una richiesta get
 }
