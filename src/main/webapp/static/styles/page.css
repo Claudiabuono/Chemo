@@ -297,5 +297,5 @@ a:visited:hover {
     padding: 5px 15px;
     height: 40px;
     width: auto;
-    border-radius: 25px;
+    border-radius: 10px !important;
 }
