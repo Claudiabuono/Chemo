@@ -51,7 +51,13 @@
                     <input type="button" id="delete-medicine-button" class="button-tertiary-m rounded edit-button" value="Elimina medicinale">
                     <input type="button" id="save-medicine-button" class="button-primary-m edit-button save-button" value="Salva">
                     --%>
+                    <%
+                        if (user.getType() == 2) {
+                    %>
                     <input type="button" id="edit-medicine-data-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editMedicineButton()">
+                    <%
+                        }
+                    %>
                 </div>
             </div>
             <div class="input-fields-row">
@@ -72,7 +78,13 @@
         <div class="title-section">
             <h2 class="title">Magazzino</h2>
         </div>
+        <%
+            if (user.getType() == 2) {
+        %>
         <input type="button" id="new-package-button" class="button-primary-m submit-button" value="Aggiungi confezione" onclick="addPackageForm()">
+        <%
+            }
+        %>
         <div id="new-package-form" class="box hidden">
             <div class="form">
                 <div class="title-section">
@@ -121,7 +133,13 @@
                         <input type="button" id="delete-package-button" class="button-tertiary-m rounded edit-button" value="Elimina confezione">
                         <input type="button" id="save-package-button" class="button-primary-m edit-button" value="Salva">
                         --%>
+                        <%
+                            if (user.getType() == 2) {
+                        %>
                         <input type="button" id="edit-package-data-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editPackageButton('id')">
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
                 <div class="input-fields-row">
