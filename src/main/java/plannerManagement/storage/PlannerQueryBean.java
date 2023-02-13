@@ -71,9 +71,9 @@ public class PlannerQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String chiave, String valoreChiave){
+    public void updateDocument(String id, String valId, String chiave, Object valoreChiave){
         MongoCollection<Document> collection = getCollection();
-        collection.updateOne(Filters.eq(id, valId), Updates.set(chiave, valoreChiave));
+        collection.updateOne(Filters.eq(id, new ObjectId(valId)), Updates.set(chiave, valoreChiave));
 
         System.out.println("Modifica documento avvenuta con successo!");
     }
@@ -149,8 +149,8 @@ public class PlannerQueryBean {
         ObjectId objectId = new ObjectId();
         plannerBean.setId(objectId.toString());
         return new Document("_id", objectId)
-                .append("start", plannerBean.startDate)
-                .append("end", plannerBean.endDate)
+                .append("start", plannerBean.getStartDate())
+                .append("end", plannerBean.getEndDate())
                 .append("appointments", app);
     }
 
@@ -167,14 +167,4 @@ public class PlannerQueryBean {
         return appointments;
     }
 
-
-    private Date dateParser(String date) {
-        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
-        try {
-            return pattern.parse(date);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
 }

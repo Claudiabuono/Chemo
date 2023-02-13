@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class PlannerBean {
-    public String id;
-    public Date startDate;
-    public Date endDate;
-    public ArrayList<AppointmentBean> appointments;
+    private String id;
+    private Date startDate;
+    private Date endDate;
+    private ArrayList<AppointmentBean> appointments;
 
     public PlannerBean(){}
 
