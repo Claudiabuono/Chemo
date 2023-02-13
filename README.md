@@ -31,7 +31,7 @@ Per l'utilizzo del sistema software è necessario disporre di:
 
 ## Installazione
 
-Per effettuare l'installazione fare riferimento al <a href="https://github.com/Claudiabuono/Chemo/blob/master/documentation/2022_MDI_20C13.pdf">manuale d'installazione</a> presente nella <a href="https://github.com/Claudiabuono/Chemo/tree/master/documentation">sezione di documentazione</a>.
+Per effettuare l'installazione fare riferimento al <a href="https://github.com/Claudiabuono/Chemo/blob/master/documentation/2022_MDI_C13.pdf">manuale d'installazione</a> presente nella <a href="https://github.com/Claudiabuono/Chemo/tree/master/documentation">sezione di documentazione</a>.
 
 
 ## Autori
