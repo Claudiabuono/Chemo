@@ -13,6 +13,7 @@
 <head>
     <title>Chemo | Medicinali</title>
     <script src="./static/scripts/search.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 <%
@@ -31,6 +32,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="medicines-list-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Medicinali</h1>
@@ -104,7 +106,7 @@
                         </div>
                     </div>
                     <div class="column">
-                        <h3 class="result-title left">Ingredienti</h3>
+                        <h4 class="result-title left">Ingredienti</h4>
                         <p class="left"><%=medicine.getIngredients()%></p>
                     </div>
                     <div class="row">

@@ -4,8 +4,7 @@ function addAppointments() {
 
     if (!(checkedPatients.length > 0)) {
         // errore: deve essere selezionato almeno un paziente
-        bootstrap_alert.warning("Seleziona almeno un paziente");
-        window.scrollTo(0, 0);
+        showAlertWarning("Seleziona almeno un paziente");
 
     } else {
         var request = new XMLHttpRequest();
@@ -26,18 +25,18 @@ function addAppointments() {
                     redirectToPlanner();
                 } else {
                     // errore creazione agenda
-                    window.location.replace("planner.jsp");
+                    showAlertDanger("Creazione nuova agenda fallita.");
                 }
             }
         };
     }
 }
 
-function redirectToPlanner(id) {
+function redirectToPlanner(id, buttonPressed) {
     if (id == null) {
         window.location.replace("PlannerServlet");
     } else {
-        alert("Lavori in corso: redirect a planner con id non ancora disponibile.")
+        window.location.replace("PlannerServlet?id="+id+"&buttonPressed="+buttonPressed);
     }
     // genera un redirect alla servlet paziente creando una richiesta get
 }

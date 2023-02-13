@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Chemo</title>
     <link rel="stylesheet" href="./static/styles/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 <header>
@@ -15,7 +16,7 @@
         <div id="picture-container">
             <img src="./static/images/ruggi-welcome.jpg" alt="Foto ospedale Ruggi">
             <div class="text secondary">
-                <h3 class="pic-title">San Giovanni di Dio Ruggi d'Aragona</h3>
+                <h5 class="pic-title">San Giovanni di Dio Ruggi d'Aragona</h5>
             </div>
             <div class="text main">
                 <h1 class="pic-title">La piattaforma Chemo</h1>

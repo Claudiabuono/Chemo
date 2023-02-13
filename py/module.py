@@ -1,11 +1,12 @@
+import os
 import random
 import json
 
-file = open('patients.json', 'r')
+file = open(os.path.dirname(os.path.realpath(__file__)) + '\\patients.json', 'r')
 patients = json.loads(file.read())
 print("Patients number: " + str(len(patients)))
 
-file = open('medicines.json', 'r')
+file = open(os.path.dirname(os.path.realpath(__file__)) + '\\medicines.json', 'r')
 medicines = json.loads(file.read())
 
 
@@ -78,6 +79,7 @@ def medConsume(medicine, patients, totQuant):
     return totQuant
 
 
+# La prima generazione di soluzioni, generate in modo casaule, è pessima: non esistono schedulazioni che considerano tutti gli individui
 def countConflict(schedule):
     lista_indici_pazienti = indexPatients(schedule)
     res = []
@@ -171,7 +173,7 @@ def algorithm():
     max_fit = 0
 
     #forse è meglio aggiungere un certo numero di possibilità da dare all'algoritmo
-    while populationSize != 1:
+    while populationSize > 0:
         fit = fitness(population, patients)
         max_next = max(fit)
         chance = 2 #Diamo all'algoritmo due possbilità per continuare a cercare una soluzione migliore nel caso in cui quella attuale sia peggiore della precedente
@@ -205,9 +207,9 @@ def algorithm():
 
 population = algorithm()
 resultList = []
-for i in range(len(population)):
+for i in range(len(patients)):
     resultList.append(patients[population[i].index(1)]['patientId'])
 
-#PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
-with open("D:\\Chemo\\py\\resultSchedule.json", "w") as outfile:
+#  PATH ASSOLUTO, MODIFICARE CON PATH RELATIVO APPENA POSSIBILE
+with open(os.path.dirname(os.path.realpath(__file__)) + "\\resultSchedule.json", "w") as outfile:
     json.dump(resultList, outfile, indent=4, separators=(', ', ': '))

@@ -23,10 +23,12 @@
     --accent-shadow-color: rgba(0, 89, 179, 0.2);
     --transparent: rgba(0, 0, 0, 0);
     /*Colours fot status*/
-    --avaliable: green;
-    --unavaliable: red;
+    --avaliable: #099f09;
+    --unavaliable: #9d0b0b;
     --warning: #ffff4b;
     --warning-text: #727224;
+    --danger: #9d0b0b;
+    --danger-text: #4f0606;
 }
 
 body {
@@ -79,9 +81,16 @@ a:visited:hover {
 }
 
 .row {
+    padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: row;
     width: 100%;
+}
+.row > *{
+    padding: 0;
+    margin: auto;
+    width: auto;
 }
 
 .column {
@@ -137,13 +146,16 @@ a:visited:hover {
 
 
 #page-content > .box {
-    width: 590px;
+    width: 630px;
+}
+#page-content > #alert-box {
+    width: 630px;
 }
 #page-content > #login-box {
-    width: 490px;
+    width: 520px;
 }
 #page-content > #login-error {
-    width: 490px;
+    width: 520px;
 }
 
 #box-name-row {
@@ -153,11 +165,17 @@ a:visited:hover {
 #box-name-row .title {
     margin-top: 0;
     margin-bottom: 0;
+    margin-left: 0;
+    font-weight: 600;
 }
 
 #box-name-row #user-details-link {
     margin-left: auto;
     margin-right: 10px;
+}
+#box-name-row #user-logout-link {
+    margin-left: 0;
+    margin-right: 0;
 }
 #box-name-row button {
     padding: 0;
@@ -181,6 +199,7 @@ a:visited:hover {
 }
 
 .icon {
+    padding: 0;
     width: 42px;
     height: 42px;
     display: flex;
@@ -190,6 +209,12 @@ a:visited:hover {
     fill: currentColor;
 }
 
+#status-icon {
+    margin: auto 20px auto 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 
 
 .button-primary-m {
@@ -227,7 +252,7 @@ a:visited:hover {
     padding: 13px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: small;
+    font-size: medium;
     font-weight: bold;
     color: var(--accent-color);
     background: var(--neutral-color);
@@ -259,7 +284,7 @@ a:visited:hover {
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    font-size: small;
+    font-size: medium;
     font-weight: bold;
     color: var(--light-text);
     background:  var(--secondary-color);
@@ -272,5 +297,5 @@ a:visited:hover {
     padding: 5px 15px;
     height: 40px;
     width: auto;
-    border-radius: 25px;
+    border-radius: 10px !important;
 }

@@ -14,6 +14,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemo Scheda medicinale</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body>
 <%
@@ -36,6 +37,7 @@
     <jsp:include page="./static/templates/userHeaderLogged.html"/>
 </header>
 <div id="page-content">
+    <div id="alert-box"></div>
     <div id="medicine-data-box" class="box">
         <div id="box-name-row" class="row">
             <h1 class="title">Scheda medicinale</h1>
@@ -49,7 +51,13 @@
                     <input type="button" id="delete-medicine-button" class="button-tertiary-m rounded edit-button" value="Elimina medicinale">
                     <input type="button" id="save-medicine-button" class="button-primary-m edit-button save-button" value="Salva">
                     --%>
+                    <%
+                        if (user.getType() == 2) {
+                    %>
                     <input type="button" id="edit-medicine-data-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editMedicineButton()">
+                    <%
+                        }
+                    %>
                 </div>
             </div>
             <div class="input-fields-row">
@@ -70,7 +78,13 @@
         <div class="title-section">
             <h2 class="title">Magazzino</h2>
         </div>
+        <%
+            if (user.getType() == 2) {
+        %>
         <input type="button" id="new-package-button" class="button-primary-m submit-button" value="Aggiungi confezione" onclick="addPackageForm()">
+        <%
+            }
+        %>
         <div id="new-package-form" class="box hidden">
             <div class="form">
                 <div class="title-section">
@@ -119,7 +133,13 @@
                         <input type="button" id="delete-package-button" class="button-tertiary-m rounded edit-button" value="Elimina confezione">
                         <input type="button" id="save-package-button" class="button-primary-m edit-button" value="Salva">
                         --%>
+                        <%
+                            if (user.getType() == 2) {
+                        %>
                         <input type="button" id="edit-package-data-button" class="button-secondary-s rounded edit-button" value="Modifica" onclick="editPackageButton('id')">
+                        <%
+                            }
+                        %>
                     </div>
                 </div>
                 <div class="input-fields-row">
@@ -134,7 +154,6 @@
                         <p id="package-idconfezione-expiry-date-validity" class="validity-paragraph status-unavailable"></p>
                     </div>
                 </div>
-                <label for="id-package-status">Stato della confezione</label>
                 <div class="input-fields-row">
                     <div id="status-icon" class="icon <%=packageStatus%>">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-capsule" viewBox="0 0 16 16">
@@ -142,6 +161,7 @@
                         </svg>
                     </div>
                     <div class="field">
+                        <label for="id-package-status">Stato della confezione</label>
                         <select id="id-package-status" class="input-field inactive" name="status">
                             <%
                                 if (medicinePackage.getStatus()){

@@ -116,6 +116,7 @@ function addMedicine() {
                     redirectToMedicineDetails(medicineID);
                 } else {
                     //errore creazione paziente
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };
@@ -146,6 +147,7 @@ function addPackage(id) {
                     redirectToMedicineDetails(id);
                 } else {
                     //errore creazione paziente
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };

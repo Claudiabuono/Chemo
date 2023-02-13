@@ -65,15 +65,15 @@ public class Facade {
     /*
     OPERAZIONI CRUD PER ENTITA' PLANNER
      */
-    public ArrayList<PlannerBean> findPlanners(String chiave, String valore, UserBean user){
+    public ArrayList<PlannerBean> findPlanners(String chiave, Object valore, UserBean user){
         ArrayList<PlannerBean> planners = new ArrayList<>();
         try {
             if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1)) {
                 if(chiave.equals("_id")) {
-                    planners.add(plannerQueryBean.findDocumentById(valore));
+                    planners.add(plannerQueryBean.findDocumentById((String )valore));
                     return planners;
                 } else {
-                    return plannerQueryBean.findDocument(chiave, valore);
+                    return plannerQueryBean.findDocument(chiave, (String) valore);
                 }
             }
         } catch (Exception e) {
@@ -83,7 +83,7 @@ public class Facade {
         return null;
     }
 
-    public PlannerBean findLastestPlanner(UserBean user) {
+    public PlannerBean findLatestPlanner(UserBean user) {
         try {
             if(isUserAuthorized(user.getUsername(), 2) || isUserAuthorized(user.getUsername(), 1))
                 return plannerQueryBean.findLastDocument();
@@ -100,7 +100,7 @@ public class Facade {
             if(isUserAuthorized(user.getUsername(), 1) || isUserAuthorized(user.getUsername(), 2))
                 return plannerQueryBean.findAll();
             else
-                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+                throw new Exception("Utente non autorizzato alla modifica dei planner");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,8 +109,15 @@ public class Facade {
     }
 
 
-    public void updatePlanner(String id, String valId, String chiave, String valoreChiave){
-        plannerQueryBean.updateDocument(id, valId, chiave, valoreChiave);
+    public void updatePlanner(String id, String valId, String chiave, Object valoreChiave, UserBean user){
+        try {
+            if(isUserAuthorized(user.getUsername(), 1))
+                plannerQueryBean.updateDocument(id, valId, chiave, valoreChiave);
+            else
+                throw new Exception("Utente non autorizzato alla modifica di medicinali");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void deletePlanner(String chiave, String valore){

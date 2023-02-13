@@ -71,9 +71,9 @@ public class PlannerQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String chiave, String valoreChiave){
+    public void updateDocument(String id, String valId, String chiave, Object valoreChiave){
         MongoCollection<Document> collection = getCollection();
-        collection.updateOne(Filters.eq(id, valId), Updates.set(chiave, valoreChiave));
+        collection.updateOne(Filters.eq(id, new ObjectId(valId)), Updates.set(chiave, valoreChiave));
 
         System.out.println("Modifica documento avvenuta con successo!");
     }
@@ -138,7 +138,7 @@ public class PlannerQueryBean {
         DatabaseConnector conn = new DatabaseConnector();
         MongoDatabase db = conn.getDatabase();
 
-        MongoCollection<Document> coll = db.getCollection("agenda");
+        MongoCollection<Document> coll = db.getCollection("planner");
         System.out.println("Collection \'agenda\' recuperata con successo");
         return coll;
     }
@@ -149,8 +149,8 @@ public class PlannerQueryBean {
         ObjectId objectId = new ObjectId();
         plannerBean.setId(objectId.toString());
         return new Document("_id", objectId)
-                .append("start", plannerBean.startDate)
-                .append("end", plannerBean.endDate)
+                .append("start", plannerBean.getStartDate())
+                .append("end", plannerBean.getEndDate())
                 .append("appointments", app);
     }
 
@@ -161,20 +161,10 @@ public class PlannerQueryBean {
         ArrayList<AppointmentBean> appointments = new ArrayList<>();
 
         for(Document d : list) {
-            appointments.add(new AppointmentBean(d.getString("patientId"), d.getDate("date"), d.getString("seat"), d.getInteger("duration")));
+            appointments.add(new AppointmentBean(d.getString("idPatient"), d.getString("idMedicine"), d.getDate("date"), d.getString("chair"), d.getInteger("duration")));
         }
 
         return appointments;
     }
 
-
-    private Date dateParser(String date) {
-        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
-        try {
-            return pattern.parse(date);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
 }

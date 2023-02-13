@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class AppointmentBean {
     private String idPatient;
+    private String idMedicine;
     private Date date;
     private String chair;
 
@@ -11,8 +12,9 @@ public class AppointmentBean {
 
     public AppointmentBean() {}
 
-    public AppointmentBean(String idPatient, Date date, String chair, int duration) {
+    public AppointmentBean(String idPatient, String idMedicine ,Date date, String chair, int duration) {
         this.idPatient = idPatient;
+        this.idMedicine = idMedicine;
         this.date = date;
         this.chair = chair;
         this.duration = duration;
@@ -34,6 +36,10 @@ public class AppointmentBean {
         return duration;
     }
 
+    public String getIdMedicine() {
+        return idMedicine;
+    }
+
     public void setIdPatient(String idPatient) {
         this.idPatient = idPatient;
     }
@@ -50,10 +56,15 @@ public class AppointmentBean {
         this.duration = duration;
     }
 
+    public void setIdMedicine(String idMedicine) {
+        this.idMedicine = idMedicine;
+    }
+
     @Override
     public String toString() {
         return "AppointmentBean{" +
                 "idPatient='" + idPatient + '\'' +
+                ", idMedicine='" + idMedicine + '\'' +
                 ", date=" + date +
                 ", chair='" + chair + '\'' +
                 ", duration=" + duration +

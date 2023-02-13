@@ -41,7 +41,7 @@ function validatePatientData(patient){
         document.getElementById("notes-validity").innerHTML = "Formato errato";
         validity = false;
     } else {
-        document.getElementById("phone-number-validity").innerHTML = "";
+        document.getElementById("notes-validity").innerHTML = "";
     }
     return validity;
 }
@@ -226,6 +226,7 @@ function addPatient() {
                     redirectToPatientDetails(patientID);
                 } else {
                     //errore creazione paziente
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };
@@ -248,6 +249,7 @@ function addTherapy(id) {
         medicine.id = document.getElementById("medicine-name-item-" + i).value;
         medicine.dose = document.getElementById("medicine-dose-item-" + i).value;
         medicines[i] = medicine;
+        console.log("Aggiunto medicinale " + medicines[i].id + " - " + medicines[i].dose);
     }
 
     const therapy = {
@@ -288,7 +290,7 @@ function sendTherapyData(body){
                 redirectToPatientDetails(patientID);
             } else {
                 //errore aggiunta terapia
-                console.log(request.getResponseHeader('errorMessage'))
+                showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
             }
         }
     };
@@ -300,12 +302,17 @@ function submitUpdatedTherapy(id) {
     const duration = document.getElementById("sessions-duration").value;
     const sessions = document.getElementById("sessions-number").value;
     const medicinesNumber = document.getElementById("medicines-number").innerHTML;
+
     let medicines = [];
-    let therapyMedicine = [];
     for (let i = 0; i < medicinesNumber; i++) {
-        therapyMedicine[0] = document.getElementById("medicine-name-item-" + i).value;
-        therapyMedicine[1] = document.getElementById("medicine-dose-item-" + i).value;
-        medicines[i] = therapyMedicine;
+        var medicine = {
+            id: "",
+            dose: ""
+        };
+        medicine.id = document.getElementById("medicine-name-item-" + i).value;
+        medicine.dose = document.getElementById("medicine-dose-item-" + i).value;
+        medicines[i] = medicine;
+        console.log("Modificato medicinale " + medicines[i].id + " - " + medicines[i].dose);
     }
 
     const therapy = {
@@ -316,14 +323,15 @@ function submitUpdatedTherapy(id) {
         medicinesNumber: medicinesNumber,
         medicines: medicines
     };
+    console.log("Medicines: "+ medicines[0].id + " " + medicines[0].dose);
 
     if (validateTherapyData(therapy)) {
         //i campi hanno tutti il formato corretto
         var body = "action=completePatientProfile&id=" + id +"&condition=" + condition + "&frequency=" +
             frequency + "&duration=" + duration + "&sessions=" + sessions +"&medicinesNumber=" + medicinesNumber;
         for (let i = 0; i < medicinesNumber; i++) {
-            body += "&medicineId" + i + "=" + medicines[i][0];
-            body += "&medicineDose" + i + "=" + medicines[i][1];
+            body += "&medicineId" + i + "=" + medicines[i].id;
+            body += "&medicineDose" + i + "=" + medicines[i].dose;
         }
         sendTherapyData(body)
     }
@@ -362,9 +370,7 @@ function submitUpdatedStatus(id){
                     redirectToPatientDetails(id);
                 } else {
                     //errore aggiunta terapia
-                    console.log("Errore modifica stato");
-                    //recupero id dalla risposta
-                    redirectToPatientDetails(id);
+                    showAlertDanger(request.getResponseHeader('ERROR_MESSAGE'));
                 }
             }
         };
