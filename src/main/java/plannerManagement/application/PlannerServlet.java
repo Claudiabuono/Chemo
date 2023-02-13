@@ -41,6 +41,8 @@ public class PlannerServlet extends HttpServlet {
 
     private static final ZoneId TIMEZONE = ZoneId.systemDefault(); //Fuso orario relativo al sistema
 
+
+    int plannerIndex = 0;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Recupero l'utente dalla sessione
@@ -48,39 +50,57 @@ public class PlannerServlet extends HttpServlet {
 
         //Recupero l'id dalla request
         String id = request.getParameter("id");
-        System.out.println("id: "+id);
+        String buttonPressed = request.getParameter("buttonPressed");
 
         ArrayList<PlannerBean> planners = facade.findAllPlanners(user);
-        System.out.println("Retrieved: "+planners.size()+" planners");
-        PlannerBean plannerToVisualize;
-        String beforeVisualizedId, latestPlannerId, afterVisualizedId;
+        PlannerBean plannerToVisualize = null;
+        PlannerBean latestPlanner = planners.get(planners.size()-1);
+        String beforeVisualizedId = null, latestPlannerId = null, afterVisualizedId = null;
+
 
         if(id == null) {
-            plannerToVisualize = planners.get(planners.size()-1);
+            plannerIndex = planners.size() -1;
+            plannerToVisualize = planners.get(plannerIndex);
 
-            int beforeLatestIndex = planners.indexOf(plannerToVisualize)-1;
-            beforeVisualizedId = planners.get(beforeLatestIndex).getId();
+            beforeVisualizedId = planners.get(plannerIndex -1).getId();
             latestPlannerId = plannerToVisualize.getId();
             afterVisualizedId = "";
         } else {
-            plannerToVisualize = facade.findPlanners("_id", id, user).get(0);
-            PlannerBean latestPlanner = planners.get(planners.size()-1);
-            latestPlannerId = latestPlanner.getId();
 
-            if(plannerToVisualize.equals(latestPlanner)) {
-                int beforeLatestIndex = planners.indexOf(plannerToVisualize)-1;
-                beforeVisualizedId = planners.get(beforeLatestIndex).getId();
-                afterVisualizedId = "";
-            } else if(plannerToVisualize.equals(planners.get(0))) {
-                beforeVisualizedId = "";
-                afterVisualizedId = planners.get(1).getId();
-            } else {
-                int beforeVisualizedIndex = planners.indexOf(plannerToVisualize) -1;
-                int afterVisualizedIndex = planners.indexOf(plannerToVisualize) +1;
-                beforeVisualizedId = planners.get(beforeVisualizedIndex).getId();
-                afterVisualizedId = planners.get(afterVisualizedIndex).getId();
+            switch (buttonPressed) {
+                case "latest" -> {
+                    plannerIndex = planners.size()-1;
+                    plannerToVisualize = latestPlanner;
+                    beforeVisualizedId = planners.get(plannerIndex -1).getId();
+                    latestPlannerId = plannerToVisualize.getId();
+                    afterVisualizedId = "";
+                }
+
+                case "prev" -> {
+                    plannerIndex--;
+                    plannerToVisualize = planners.get(plannerIndex);
+                    if(plannerIndex == 0) {
+                        beforeVisualizedId = "";
+                        afterVisualizedId = planners.get(1).getId();
+                    } else {
+                        beforeVisualizedId = planners.get(plannerIndex-1).getId();
+                        afterVisualizedId = planners.get(plannerIndex+1).getId();
+                    }
+                }
+
+                case "next" -> {
+                    plannerIndex++;
+                    plannerToVisualize = planners.get(plannerIndex);
+                    if(plannerIndex == planners.size()-1) {
+                        afterVisualizedId = "";
+                        beforeVisualizedId = planners.get(plannerIndex-1).getId();
+                    } else {
+                        beforeVisualizedId = planners.get(plannerIndex-1).getId();
+                        afterVisualizedId = planners.get(plannerIndex+1).getId();
+                    }
+                }
+
             }
-
         }
 
         //Imposto i dati nella request
