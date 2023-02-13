@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
 
+import static java.time.temporal.TemporalAdjusters.nextOrSame;
 import static java.time.temporal.TemporalAdjusters.previousOrSame;
 
 @WebServlet("/PlannerServlet")
@@ -211,13 +212,26 @@ public class PlannerServlet extends HttpServlet {
                     }
                 }
 
-                //Recupero primo e ultimo giorno della settimana
+                //Recupero la data in cui è stata fatta la richiesta
                 LocalDate now = LocalDate.now(TIMEZONE);
+
+                //Calcolo primo e ultimo giorno della settimana corrente
                 LocalDate firstDayOfWeek = now.with(previousOrSame(DayOfWeek.MONDAY));
-                LocalDate lastDayOfWeek = now.with(previousOrSame(DayOfWeek.FRIDAY));
+                LocalDate lastDayOfWeek = now.with(nextOrSame(DayOfWeek.FRIDAY));
+
+                //Recupero l'ultimo planner presente nel db
+                PlannerBean latestPlanner = facade.findLatestPlanner(user);
+
+                //Se siamo al venerdì, è necessario schedulare per la settimana successiva
+                ZonedDateTime latestPlannerEndDate = latestPlanner.getEndDate().toInstant().atZone(TIMEZONE);
+                if(now.atTime(LocalTime.now()).atZone(TIMEZONE).isAfter(latestPlannerEndDate)) {
+                    firstDayOfWeek = firstDayOfWeek.plusWeeks(1);
+                    lastDayOfWeek = lastDayOfWeek.plusWeeks(1);
+                }
+
 
                 //Popolo la lista di appuntamenti
-                int i = 1;
+                int i = 0;
                 ArrayList<AppointmentBean> appointments = new ArrayList<>();
                 ZonedDateTime appointmentDateTime = firstDayOfWeek.atTime(9, 0).atZone(TIMEZONE);
                 for (String patientId : patientIds) {
@@ -235,11 +249,21 @@ public class PlannerServlet extends HttpServlet {
                     appointments.add(new AppointmentBean(patientId, medicineId, appointmentDate, String.valueOf(seat), duration));
                 }
 
-                //Creo l'istanza del planner settimanale e la aggiungo al database
+                //Converto primo e ultimo giorno della settimana in Date
                 Date firstDay = Date.from(firstDayOfWeek.atTime(9, 0).atZone(TIMEZONE).toInstant());
-                Date lastDay = Date.from(lastDayOfWeek.atTime(18, 0).atZone(TIMEZONE).toInstant());
+                Date lastDay = Date.from(lastDayOfWeek.atTime(15, 0).atZone(TIMEZONE).toInstant());
+
+                //Creo il planner da inserire nel database
                 PlannerBean planner = new PlannerBean(firstDay, lastDay, appointments);
-                facade.insertPlanner(planner, user);
+
+                //Se è già presente un planner per la settimana corrente allora va sovrascritto, altrimenti va inserito normalmente
+                if(firstDay.equals(latestPlanner.getStartDate())) {
+                    facade.updatePlanner("_id", planner.getId(), "start", planner.getStartDate(), user);
+                    facade.updatePlanner("_id", planner.getId(), "end", planner.getEndDate(), user);
+                    facade.updatePlanner("_id", planner.getId(), "appointments", planner.getAppointments(), user);
+                }
+                else
+                    facade.insertPlanner(planner, user);
 
                 //Aggiungo l'operation result all'header
                 response.addHeader("OPERATION_RESULT", "true");

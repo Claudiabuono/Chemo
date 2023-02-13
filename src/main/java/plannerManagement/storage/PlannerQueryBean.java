@@ -71,9 +71,9 @@ public class PlannerQueryBean {
     }
 
     //Modifica di un documento
-    public void updateDocument(String id, String valId, String chiave, String valoreChiave){
+    public void updateDocument(String id, String valId, String chiave, Object valoreChiave){
         MongoCollection<Document> collection = getCollection();
-        collection.updateOne(Filters.eq(id, valId), Updates.set(chiave, valoreChiave));
+        collection.updateOne(Filters.eq(id, new ObjectId(valId)), Updates.set(chiave, valoreChiave));
 
         System.out.println("Modifica documento avvenuta con successo!");
     }
