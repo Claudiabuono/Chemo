@@ -192,24 +192,22 @@ public class PlannerServlet extends HttpServlet {
                 //Inizializzo la lista dei pazienti di output
                 List<String> patientIds = null;
 
-                while (patientIds == null) {
-                    //Faccio eseguire il processo del modulo di IA
-                    Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", PYTHON_FILE_PATH});
+                //Faccio eseguire il processo del modulo di IA
+                Process pythonProcess = Runtime.getRuntime().exec(new String[]{"py", PYTHON_FILE_PATH});
 
-                    //Attendo che il processo di python abbia finito
-                    pythonProcess.waitFor();
+                //Attendo che il processo di python abbia finito
+                pythonProcess.waitFor();
 
-                    //Recupero il file di output
-                    File outputFile = new File(PY_DIR, OUTPUT_FILE);
+                //Recupero il file di output
+                File outputFile = new File(PY_DIR, OUTPUT_FILE);
 
-                    //Apro il file JSON contenente i risultati del modulo di IA
-                    try (FileReader reader = new FileReader(outputFile)) {
+                //Apro il file JSON contenente i risultati del modulo di IA
+                try (FileReader reader = new FileReader(outputFile)) {
 
-                        //Converto l'array di JSON in una lista di String
-                        patientIds = gson.fromJson(reader, new TypeToken<List<String>>() {}.getType());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    //Converto l'array di JSON in una lista di String
+                    patientIds = gson.fromJson(reader, new TypeToken<List<String>>() {}.getType());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                 //Recupero primo e ultimo giorno della settimana

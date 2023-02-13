@@ -173,7 +173,7 @@ def algorithm():
     max_fit = 0
 
     #forse è meglio aggiungere un certo numero di possibilità da dare all'algoritmo
-    while populationSize != 1:
+    while populationSize > 0:
         fit = fitness(population, patients)
         max_next = max(fit)
         chance = 2 #Diamo all'algoritmo due possbilità per continuare a cercare una soluzione migliore nel caso in cui quella attuale sia peggiore della precedente
