@@ -28,7 +28,7 @@ public class PlannerServlet extends HttpServlet {
     private static final Facade facade = new Facade();
 
     //Modificare il valore di questo campo secondo quanto riportato nel manuale di installazione
-    private static final String PY_DIR_PATH = "D:\\Chemo\\py\\"; //Path assoluto della directory "py"
+    private static final String PY_DIR_PATH = "C:\\Users\\anton\\IdeaProjects\\Chemo\\py\\"; //Path assoluto della directory "py"
 
     private static final File PY_DIR = new File(PY_DIR_PATH); //Directory "py"
 
