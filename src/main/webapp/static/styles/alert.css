@@ -2,7 +2,7 @@
     margin: 20px auto;
     padding: 20px;
     height: auto;
-    width: 590px;
+    width: 100%;
     border-radius: 10px;
     color: var(--dark-text);
     background: var(--neutral-color);
@@ -12,4 +12,10 @@
 .alert-warning {
     color: var(--warning-text);
     background: var(--warning);
+}
+
+.alert-danger {
+    color: var(--danger-text);
+    background: var(--danger);
+    border: var(--danger);
 }

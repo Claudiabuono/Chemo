@@ -23,10 +23,12 @@
     --accent-shadow-color: rgba(0, 89, 179, 0.2);
     --transparent: rgba(0, 0, 0, 0);
     /*Colours fot status*/
-    --avaliable: green;
-    --unavaliable: red;
+    --avaliable: #099f09;
+    --unavaliable: #9d0b0b;
     --warning: #ffff4b;
     --warning-text: #727224;
+    --danger: #9d0b0b;
+    --danger-text: #4f0606;
 }
 
 body {
@@ -144,6 +146,9 @@ a:visited:hover {
 
 
 #page-content > .box {
+    width: 630px;
+}
+#page-content > #alert-box {
     width: 630px;
 }
 #page-content > #login-box {
